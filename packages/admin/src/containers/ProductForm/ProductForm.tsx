@@ -1,0 +1,758 @@
+import React, { useState, useCallback } from 'react';
+import CKEditor from "react-ckeditor-component";
+import { useForm } from 'react-hook-form';
+import {getURl} from '../../utils'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import uuidv4 from 'uuid/v4';
+import gql from 'graphql-tag';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { Scrollbars } from 'react-custom-scrollbars';
+import { useDrawerDispatch } from '../../context/DrawerContext';
+import Uploader from '../../components/Uploader/Uploader1';
+import Button, { KIND } from '../../components/Button/Button';
+import DrawerBox from '../../components/DrawerBox/DrawerBox';
+import { Row, Col } from '../../components/FlexBox/FlexBox';
+import Input from '../../components/Input/Input';
+import { Textarea } from '../../components/Textarea/Textarea';
+import Select from '../../components/Select/Select';
+import { FormFields, FormLabel } from '../../components/FormFields/FormFields';
+
+import { useStyletron } from 'baseui';
+import { Combobox, SIZE } from 'baseui/combobox';
+import { FormControl } from 'baseui/form-control';
+import {
+  Form,
+  DrawerTitleWrapper,
+  DrawerTitle,
+  FieldDetails,
+  ButtonGroup,
+} from '../DrawerItems/DrawerItems.style';
+
+
+
+const GET_PRODUCTS = gql`
+query getCategory($filter_category_id:Int){
+  getCategory(category_id:$filter_category_id,filter_by_name: null){
+    id
+    image
+    name
+    slug
+    type
+    subcategories {
+      id
+      name
+      slug
+      position
+      is_searchable
+      parent_id
+  
+    
+}
+  },
+    getBrand(filter_text: null){
+        name
+    },
+      getProductVariations{
+              id
+              variation_name
+          
+      }
+  
+
+}`
+
+
+const CREATE_PRODUCT = gql`
+  mutation createProduct($brand:String!,$name:String!,$file:[Upload],$price:Float!,$unit:String,$description:String!,$actual_size:String!,$nominal_size:String!,$variation:String,$variation_price:String, $selling_price:Float,$category_id:Int!,$qty:Int!,$sub_category_id:Int!) {  
+      createProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,nominal_size:$nominal_size,variation:$variation,variation_price:$variation_price,selling_price:$selling_price,qty:$qty,category_id:$category_id,sub_category_id:$sub_category_id)
+         }`;
+
+type Props = any;
+
+const AddProduct: React.FC<Props> = props => {
+  const dispatch = useDrawerDispatch();
+  const closeDrawer = useCallback(() => dispatch({ type: 'CLOSE_DRAWER' }), [
+    dispatch,
+  ]);
+  const { register, handleSubmit, setValue } = useForm();
+  const [type, setType] = useState([]);
+  const [variation, setVariations] = useState({ });
+  let [variation_price, setVariationsPrice] = useState({});
+  const [tag, setTag] = useState([]);
+  const [description, setDescription] = useState('');
+  const [content,setContent] = useState({content:""})
+  const [css] = useStyletron();
+  const [brands, setBrands] = React.useState([]);
+  const [files, setFiles] = React.useState([]);
+  
+
+
+
+
+  React.useEffect(() => {
+    register({ name: 'type', required: true });
+    register({ name: 'categories', required: true });
+    register({ name: 'image', required: true });
+    register({ name: 'description' });
+  }, [register]);
+
+
+  const handleDescriptionChange = e => {
+    const value = e.target.value;
+    setValue('description', value);
+    setDescription(value);
+  };
+
+  const [createProduct] = useMutation(CREATE_PRODUCT)
+
+  const { data, refetch } = useQuery(GET_PRODUCTS, {
+    variables: { filter_category_id: null, filter_by_name: null }
+  })
+
+
+  const categories = data && data.getCategory.filter(item => item.parent_id == null)
+  const brandsOptions = data && data.getBrand.map(item => { return item })
+  const Subcategories = []
+  data && data.getCategory.map(
+    item => item.subcategories.map(
+      item => Subcategories.push(item)
+    ))
+
+
+
+  const handleMultiChange = ({ value }) => {
+    setValue('categories', value);
+    console.log(value)
+    setTag(value);
+  };
+
+  const handleTypeChange = ({ value }) => {
+    console.log("value", value)
+    // setValue('type', value);
+    setType(value)
+    refetch({
+      // filter_category_id: value.length ? value[0].id : null,
+      filter_category_id:  null,
+      filter_by_name: null
+    });
+  };
+
+  const getSubCategory = (Subcategories)=>{
+    const sub = type.length>0?data && Subcategories.filter(item=>item.parent_id==type[0].id):""
+    console.log("dataaaaaa",sub)
+    return sub
+  }
+// getSubCategory(data && Subcategories)
+
+  const handleVariationChange = ({ value }, _id) => {
+    // console.log("variation", value)
+    setVariations({
+      ...variation,
+      [_id]: {
+        ...value[0]
+      }
+
+    });
+
+  };
+  const handlePriceChange = (e, _id) => {
+    // console.log("change", e.target.name, e.target.value)
+    let newvalue = e.target.value
+    setVariationsPrice({
+      ...variation_price,
+      [_id]: {
+        newvalue
+      }
+    })
+  }
+
+  const SelectChange = (e) => {
+    // console.log("value", e.target.value)
+    // setValue('type', value);
+    setBrands(e.target.value)
+
+  };
+  const handleUploader = files => {
+    // console.log("files",files)
+    // setValue('image', files[0]);
+    // console.log("filessssss",files)
+    // setFiles((previous)=>[...previous,{id : 22,image:files[0].image}])
+
+    setFiles((previous)=>[...previous,files[0]])
+
+
+  };
+  const  onChange = (evt)=>{
+    // console.log("onChange fired with event info: ", evt);
+    var newContent = evt.editor.getData();
+    setContent({
+      content: newContent
+    })
+    setDescription(evt.editor.getData())
+
+  }
+  
+  const  onBlur= (evt)=>{
+    console.log("onBlur event called with event info: ", evt);
+  }
+  
+  const afterPaste = (evt)=>{
+    console.log("afterPaste event called with event info: ", evt);
+  }
+  const onSubmit = async data => {
+
+
+    let variationsData = []
+    let variationPrice = []
+    for (const property in variation) {
+      variationsData.push(variation[property].id)
+    }
+    for (const property in variation_price) {
+      variationPrice.push(parseFloat(variation_price[property].newvalue))
+    }
+    console.log("filesssss", files)
+    console.log("dataaa", variationPrice)
+
+
+
+
+    try {
+      const result = await createProduct({
+        variables: {
+          brand: brands,
+          name: data.name,
+          description: description,
+          actual_size: data.actual_size,
+          nominal_size: data.nominal_size,
+          file: files?files:null,
+          price: data.price,
+          unit: "",
+          selling_price: data.salePrice ? data.salePrice : 0.0,
+          qty: data.quantity,
+          variation: variationsData.length > 0 ? JSON.stringify(variationsData) : "",
+          variation_price: variationPrice.length > 0 ? JSON.stringify(variationPrice) : "",
+          category_id: type[0].id,
+          sub_category_id: tag[0].id
+
+        }
+      });
+      if (result) {
+        // if (result.data.deleteUser.status == 200) {
+        toast.success(`🦄  "Product Created Successfully" `, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+
+        })
+
+      }
+
+      else {
+
+        toast.error(`🦄 SomeThing Went Wrong`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+
+
+      }
+
+      closeDrawer();
+      setTimeout(() => {
+
+        window.location.reload()
+
+      }, 2000);
+
+    } catch (error) {
+      console.log("error", error)
+      toast.error(`🦄 SomeThing Went Wrong`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+
+
+    }
+  };
+  
+
+
+  console.log("after add", files)
+  // console.log("after add", variation_price)
+
+  return (
+    <>
+      <DrawerTitleWrapper>
+        <DrawerTitle>Add Product</DrawerTitle>
+      </DrawerTitleWrapper>
+
+      <Form onSubmit={handleSubmit(onSubmit)} style={{ height: '100%' }}>
+        <Scrollbars
+          autoHide
+          renderView={props => (
+            <div {...props} style={{ ...props.style, overflowX: 'hidden' }} />
+          )}
+          renderTrackHorizontal={props => (
+            <div
+              {...props}
+              style={{ display: 'none' }}
+              className="track-horizontal"
+            />
+          )}
+        >
+          <Row>
+            <Col lg={4}>
+              <FieldDetails>Upload your Product image here</FieldDetails>
+            </Col>
+            <Col lg={8}>
+              <DrawerBox
+                overrides={{
+                  Block: {
+                    style: {
+                      width: '100%',
+                      height: 'auto',
+                      padding: '30px',
+                      borderRadius: '3px',
+                      backgroundColor: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    },
+                  },
+                }}
+              >
+                <Uploader onChange={handleUploader} multi={true} required={true} />
+
+              </DrawerBox>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col lg={4}>
+              <FieldDetails>
+                Add your Product description and necessary information from here
+              </FieldDetails>
+            </Col>
+
+            <Col lg={8}>
+              <DrawerBox>
+                <FormFields>
+                  <FormLabel>Name</FormLabel>
+                  <Input
+                    inputRef={register({ required: true })}
+                    name="name"
+                    required="true"
+                  />
+                </FormFields>
+
+                <FormFields>
+                  <FormLabel >Brand Name </FormLabel>
+                  <input type="text" list="data" className="form-control brand-flied" onChange={(value) => SelectChange(value)} />
+
+                  <datalist id="data">
+                    {data && brandsOptions.map((item, key) =>
+                      <option key={key} value={item.name} />
+                    )}
+                  </datalist>
+
+
+
+
+
+                </FormFields>
+
+
+
+
+                <FormFields>
+                  <FormLabel>Description</FormLabel>
+                  {/* <Textarea
+                    value={description}
+                    onChange={handleDescriptionChange}
+                    required="true"
+                  /> */}
+                </FormFields>
+
+                <CKEditor 
+              activeClass="p10" 
+              content={content.content} 
+              events={{
+                "blur": onBlur,
+                "afterPaste":afterPaste,
+                "change": onChange
+              }}
+             />
+
+                <FormFields>
+                  <FormLabel>Actual Size</FormLabel>
+                  <Input
+                    inputRef={register({ required: true })}
+                    name="actual_size"
+                    required="true"
+                  />
+                </FormFields>
+                <FormFields>
+                  <FormLabel>Nominal Size</FormLabel>
+                  <Input
+                    inputRef={register({ required: true })}
+                    name="nominal_size"
+                    required="true"
+                  />
+                </FormFields>
+                {/* <FormFields>
+                  <FormLabel>Unit</FormLabel>
+                  <Input type="text" inputRef={register} name="unit" required="true" />
+                </FormFields> */}
+
+                <FormFields>
+                  <FormLabel>Price</FormLabel>
+                  <Input
+                    type="number"
+                    step="any"
+                    min="0"
+                    inputRef={register({ required: true })}
+                    name="price"
+                    required="true"
+                  />
+                </FormFields>
+                <FormFields>
+
+                  <FormLabel>Variations</FormLabel>
+                  <Select
+
+                    options={data && data.getProductVariations}
+                    labelKey="variation_name"
+                    valueKey="id"
+                    // placeholder="Variations"
+                    value={variation["1"]}
+                    searchable={false}
+                    onChange={(e) => handleVariationChange(e, "1")}
+                    overrides={{
+                      Placeholder: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      DropdownListItem: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      OptionContent: {
+                        style: ({ $theme, $selected }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $selected
+                              ? $theme.colors.textDark
+                              : $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      SingleValue: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      Popover: {
+                        props: {
+                          overrides: {
+                            Body: {
+                              style: { zIndex: 5 },
+                            },
+                          },
+                        },
+                      },
+                    }
+
+                    }
+
+                  />
+                </FormFields>
+
+                <FormFields>
+                  <FormLabel>Enter Variation Price</FormLabel>
+
+
+                  <Input type="number" inputRef={register} name="variation_price" disabled={Object.keys(variation).length > 0 ? "" : "disabled"} onChange={(e) => { handlePriceChange(e, "1") }} step="any"
+                    min="0" />
+                </FormFields>
+
+                <FormFields>
+
+                  <FormLabel>Variations</FormLabel>
+                  <Select
+
+                    options={data && data.getProductVariations}
+                    labelKey="variation_name"
+
+                    valueKey="id"
+                    // placeholder="Variations"
+                    value={variation["2"]}
+                    searchable={false}
+                    onChange={(e) => handleVariationChange(e, "2")}
+                    overrides={{
+                      Placeholder: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      DropdownListItem: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      OptionContent: {
+                        style: ({ $theme, $selected }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $selected
+                              ? $theme.colors.textDark
+                              : $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      SingleValue: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      Popover: {
+                        props: {
+                          overrides: {
+                            Body: {
+                              style: { zIndex: 5 },
+                            },
+                          },
+                        },
+                      },
+                    }
+
+                    }
+
+                  />
+                </FormFields>
+
+                <FormFields>
+                  <FormLabel>Enter Variation Price</FormLabel>
+
+
+                  <Input type="number" inputRef={register} name="variation_price" disabled={Object.keys(variation).length > 0 ? "" : "disabled"} onChange={(e) => { handlePriceChange(e, "2") }} step="any"
+                    min="0" />
+                </FormFields>
+
+
+
+
+                <FormFields>
+                  <FormLabel>Sale Price</FormLabel>
+                  <Input type="number" inputRef={register} name="salePrice" step="any"
+                    min="0" />
+                </FormFields>
+
+                {/* <FormFields>
+                  <FormLabel>Discount In Percent</FormLabel>
+                  <Input
+                    type="number"
+                    inputRef={register}
+                    name="discountInPercent"
+                  />
+                </FormFields> */}
+                {/* 
+                    { CreatUI()}
+                    { CreatUI()}
+                    { CreatUI()} */}
+
+                {/* <input type='button' value='add more' onClick={()=>setCount()}/> */}
+                <FormFields>
+                  <FormLabel>Product Quantity</FormLabel>
+                  <Input
+                    type="number"
+                    min="0"
+                    inputRef={register({ required: true })}
+                    name="quantity"
+                  />
+                </FormFields>
+
+
+                <FormFields>
+                  <FormLabel>Type</FormLabel>
+                  <Select
+
+                    options={data && categories}
+                    labelKey="name"
+                    valueKey="id"
+                    required
+                    placeholder="Product Type"
+                    value={type}
+                    searchable={false}
+                    onChange={handleTypeChange}
+                    overrides={{
+                      Placeholder: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      DropdownListItem: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      OptionContent: {
+                        style: ({ $theme, $selected }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $selected
+                              ? $theme.colors.textDark
+                              : $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      SingleValue: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      Popover: {
+                        props: {
+                          overrides: {
+                            Body: {
+                              style: { zIndex: 5 },
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
+                </FormFields>
+
+                <FormFields>
+                  <FormLabel>Categories</FormLabel>
+                  <Select
+                    options={data &&getSubCategory(Subcategories)}
+                    labelKey="name"
+                    valueKey="id"
+                    placeholder="Product Tag"
+                    value={tag}
+                    required
+                    onChange={handleMultiChange}
+                    overrides={{
+                      Placeholder: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      DropdownListItem: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      Popover: {
+                        props: {
+                          overrides: {
+                            Body: {
+                              style: { zIndex: 5 },
+                            },
+                          },
+                        },
+                      },
+                    }}
+                    multi
+                  />
+                </FormFields>
+              </DrawerBox>
+            </Col>
+          </Row>
+        </Scrollbars>
+
+        <ButtonGroup>
+          <Button
+            kind={KIND.minimal}
+            onClick={closeDrawer}
+            overrides={{
+              BaseButton: {
+                style: ({ $theme }) => ({
+                  width: '50%',
+                  borderTopLeftRadius: '3px',
+                  borderTopRightRadius: '3px',
+                  borderBottomRightRadius: '3px',
+                  borderBottomLeftRadius: '3px',
+                  marginRight: '15px',
+                  color: $theme.colors.red400,
+                }),
+              },
+            }}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            type="submit"
+            overrides={{
+              BaseButton: {
+                style: ({ $theme }) => ({
+                  width: '50%',
+                  borderTopLeftRadius: '3px',
+                  borderTopRightRadius: '3px',
+                  borderBottomRightRadius: '3px',
+                  borderBottomLeftRadius: '3px',
+                }),
+              },
+            }}
+          >
+            Create Product
+          </Button>
+        </ButtonGroup>
+      </Form>
+    </>
+  );
+};
+
+export default AddProduct;

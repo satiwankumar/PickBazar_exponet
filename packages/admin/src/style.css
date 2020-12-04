@@ -1,0 +1,37 @@
+button.cat-del-btn {
+    width: 100%;
+    background: #ca0404;
+    height: 50px;
+}
+button.cat-del-btn .fa {
+    margin: 0;
+}
+
+button.cat-del-btn:hover {
+    background: red;
+}
+
+button.cat-del-btn .ae.fa {
+    margin: 0;
+}
+.brand-flied {
+    background: #eeeeee;
+    color: #161f6a;
+    font-weight: 700;
+    font-size: 17px;
+    border: 0;
+    padding: 0 15px;
+    height: 45px;
+}
+button.add-pro-btn {padding: 10px;}
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+    .add-pro-btn {margin: 20px 0 0 0;}
+
+}
+
+
+@media (max-width: 375px) {
+
+}
