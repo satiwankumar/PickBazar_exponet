@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { styled } from 'baseui';
-import {getURl} from '../../utils'
+
 import { UploadIcon } from '../AllSvgIcon';
 
 const Text = styled('span', ({ $theme }) => ({

@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { styled } from 'baseui';
-import {getURl} from '../../utils'
+import {getURl} from '../../utils.js'
 
 import { UploadIcon } from '../AllSvgIcon';
-
 const Text = styled('span', ({ $theme }) => ({
   ...$theme.typography.font14,
   fontFamily: $theme.typography.primaryFontFamily,
@@ -70,17 +69,11 @@ const img = {
 
 
 
+// let blob= new Blob()
 
 function Uploader({ onChange, imageURL,required,multi }: any) {
-  // console.log("datarequired",required,imageURL)
 
-//   const imagesdata ={id:"",image}
-//   for(let i in imageURL){
-//     imagesdata["id"] = imageURL[i].id,
-//     imagesdata["preview"] = imageURL[i].imageUrl
-    
-//   }
-// console.log(imagesdata)
+
 
   const [files, setFiles] = useState(
     imageURL ? imageURL: []
@@ -108,8 +101,10 @@ function Uploader({ onChange, imageURL,required,multi }: any) {
   const thumbs = files.map(file => (
     
     <Thumb key={file.id}>
+        {console.log("uploaderImage",file.image)}
       <div style={thumbInner}>
-        <img src={file.image} style={img} alt={file.id} />
+      {/* {file instanceof File } */}
+        <img src={!(file instanceof File)?getURl(file.image):URL.createObjectURL(file)} style={img} alt={file.id} />
       </div>
     </Thumb>
   ));

@@ -422,7 +422,8 @@ export default function Products() {
                         brand={item.brand.name}
                         actual_size={item.actual_size}
                         nominal_size={item.nominal_size}
-                        image={data &&item.productImages.map(item=>{return item.image=getURl(item.image)})}
+                        // image={data &&item.productImages.map(item=>{return item.image=getURl(item.image)})}
+                        image={data &&item.productImages}
                         currency={CURRENCY}
                         price={parseFloat(parseFloat(item.price).toFixed(2))}
                         salePrice={parseFloat(parseFloat(item.selling_price).toFixed(2))}

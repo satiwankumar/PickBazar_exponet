@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import CKEditor from "react-ckeditor-component";
 import { useForm } from 'react-hook-form';
-import {getURl} from '../../utils'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import uuidv4 from 'uuid/v4';

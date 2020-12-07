@@ -1,7 +1,7 @@
 import React from 'react';
-import {getURl} from '../../utils'
+// import {getURl} from '../../utils'
 
-// import {getURl} from '../../utils.js'
+import {getURl} from '../../utils.js'
 import {
   ProductCardWrapper,
   ProductImageWrapper,
@@ -63,6 +63,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   
 //   }
 
+
+ 
+
   const openDrawer = React.useCallback(
     () =>
       dispatch({
@@ -76,7 +79,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
      
 //  let images=  { data && image.map(item=><Image url={item.image} className="product-image" />)}
 let getImage = (image)=>{
- return  Object.keys(image).length>0? image[0].image:""
+ return  Object.keys(image).length>0? getURl(image[0].image):""
    
 }
   return (

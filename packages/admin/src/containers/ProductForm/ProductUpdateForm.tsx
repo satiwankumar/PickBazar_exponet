@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import CKEditor from "react-ckeditor-component";
+import { getURl } from '../../utils';
+
 import '../../style.css'
 import { useForm } from 'react-hook-form';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -86,10 +88,14 @@ const AddProduct: React.FC<Props> = () => {
   const dispatch = useDrawerDispatch();
   const data = useDrawerState('data');
   console.log("Updatedata",data)
+  let unique=[]
+
+  // Object.keys(data).length>0? data.productsImages.forEach(element => console.log("Updatedata",element)):""
+
+  
   const closeDrawer = useCallback(() => dispatch({ type: 'CLOSE_DRAWER' }), [
     dispatch,
   ]);
-
 
 
   const { register, handleSubmit, setValue } = useForm({
@@ -98,8 +104,9 @@ const AddProduct: React.FC<Props> = () => {
   const {data:data1,refetch,error} = useQuery(GET_CATEGORIES,{
     variables: { filter_category_id: null, filter_by_name: null }
   })
-
-
+  // const imagesData = data.productImages.map(item=> item.image=getURl(item.image))
+  
+  
   const [productid,setProductId ] = useState(data && data.id)
   const [content,setContent] = useState({content:data&&data.description})
 
@@ -107,7 +114,10 @@ const AddProduct: React.FC<Props> = () => {
   const [brand, setBrands] = useState(data && data.brand);
   const [tag, setTag] = useState([data.categories[1]]);
   const [description, setDescription] = useState(data.description);
+  
   const [files, setFiles] = React.useState(data && data.productImages);
+
+
   const [newfiles, newFiles] = React.useState(data && data.productImages);
   
 
@@ -425,7 +435,7 @@ const afterPaste = (evt)=>{
   
     setTimeout(() => {
 
-      // window.location.reload()
+      window.location.reload()
 
     }, 2000);
     }catch (error) {
