@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/react-hooks';
 import { Col } from 'react-styled-flexboxgrid';
 import { openModal } from '@redq/reuse-modal';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import RadioCard from 'components/RadioCard/RadioCard';
 import { ProfileContext } from 'contexts/profile/profile.context';
 import { DELETE_ADDRESS } from 'graphql/mutation/address';

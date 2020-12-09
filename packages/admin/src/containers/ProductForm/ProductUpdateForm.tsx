@@ -118,9 +118,9 @@ const AddProduct: React.FC<Props> = () => {
   const [files, setFiles] = React.useState(data && data.productImages);
 
 
-  const [newfiles, newFiles] = React.useState(data && data.productImages);
+  const [newfiles, newFiles] = React.useState({});
   
-
+// console.log("newfiles",newfiles)
 
 
  let  productVariation = data && data.productVariations?data.productVariations:""
@@ -380,7 +380,7 @@ const afterPaste = (evt)=>{
 
   const onSubmit =async data => {
     try{
-    // console.log("DATA",data)
+    console.log("DATAaaaaaaaaaaaaaaaaaa",data)
 
     const result = await  updateProduct({
       variables:{

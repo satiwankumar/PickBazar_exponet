@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { getURl } from '../../utils';
+
 import dynamic from 'next/dynamic';
 import gql from 'graphql-tag';
 import { openModal, closeModal } from '@redq/reuse-modal';
@@ -40,7 +42,11 @@ const GET_PRODUCTS = gql`
    nominal_size
    name
    description
-   image
+   productImages{
+    id
+    product_id
+    image
+}
    categories{
        id
        name
@@ -159,15 +165,18 @@ export const Products: React.FC<ProductsProps> = ({
 }) => {
   const router = useRouter();
   const [loadingMore, toggleLoading] = useState(false);
- console.log(router.query.category)
+ console.log("dataproducts",router.query)
 
-
+console.log("typeinproducts",type)
   const { data, error, loading, fetchMore } = useQuery(GET_PRODUCTS, {
+
     variables: {
 
-      type: type,
+      // type: type,
       // text: '/product/category',
-      filter_category_id:router.query.category ?router.query.category:null ,filter_by_name:null
+      filter_category_id:router.query.category ?router.query.category:type ,
+      filter_by_name:router.query.text?router.query.text:null
+
       // category_id: Number(router.query.category ?router.query.category:1),
       // offset: 0,
       // limit: 5,
@@ -268,7 +277,14 @@ export const Products: React.FC<ProductsProps> = ({
 
   return (
     <>
+    {/* <div className="row">
+  <div className="col-6 col-md-4">.col-6 .col-md-4</div>
+  <div className="col-6 col-md-4">.col-6 .col-md-4</div>
+  <div className="col-6 col-md-4">.col-6 .col-md-4</div>
+</div> */}
       <ProductsRow>
+      
+
          {  
   
       Object.keys(data).length>0?(
@@ -287,7 +303,7 @@ export const Products: React.FC<ProductsProps> = ({
                 <ProductCard
                   title={element.name}
                   description={element.description}
-                  image={element.image}
+                  image={element.productImages}
                   brand={element.brand.name}
                   actual_size={element.actual_size}
                   nominal_size={element.nominal_size}

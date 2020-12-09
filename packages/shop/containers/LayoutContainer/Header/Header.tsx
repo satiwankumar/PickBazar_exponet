@@ -102,4 +102,5 @@ const Header: React.FC<Props> = ({ className }) => {
   );
 };
 
-export default withApollo(Header);
+export default Header
+;

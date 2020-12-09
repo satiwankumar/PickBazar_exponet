@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { LOGIN } from '../../graphql/mutation/Auth'
 import { useMutation } from '@apollo/react-hooks';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 import {
   LinkButton,
   Button,

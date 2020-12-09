@@ -335,7 +335,7 @@ const AddProduct: React.FC<Props> = props => {
                   },
                 }}
               >
-                <Uploader onChange={handleUploader} multi={true} required={true} />
+                <Uploader onChange={handleUploader} multi={true} required={false} />
 
               </DrawerBox>
             </Col>

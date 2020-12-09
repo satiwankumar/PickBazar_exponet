@@ -3,6 +3,8 @@ import { themeGet } from '@styled-system/theme-get';
 import Carousel from 'react-multi-carousel';
 import Image from 'components/Image/Image';
 import styled from 'styled-components';
+import {getURl} from '../../utils'
+
 
 const SingleItem = styled.li`
   border: 1px solid ${themeGet('colors.borderColor', '#f1f1f1')};
@@ -53,8 +55,9 @@ const CarouselWithCustomDots = ({
   ...rest
 }: any) => {
   const children = items.slice(0, 6).map((item: any, index: number) => (
+    console.log(item),
     <Image
-      url={item.url}
+      url={getURl(item.image)}
       key={index}
       alt={title}
       style={{
@@ -68,7 +71,7 @@ const CarouselWithCustomDots = ({
   ));
   const images = items.map((item: any, index: number) => (
     <Image
-      url={item.url}
+      url={getURl(item.image)}
       key={index}
       alt={title}
       style={{ width: '100%', height: '100%', position: 'relative' }}

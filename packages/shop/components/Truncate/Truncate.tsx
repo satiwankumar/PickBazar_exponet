@@ -1,3 +1,4 @@
+import { Description } from 'containers/ProductDetailsBook/ProductDetailsBook.style';
 import React, { useState } from 'react';
 
 type ReadMoreProps = {
@@ -16,10 +17,16 @@ const ReadMore = ({ children, more, less, character }) => {
 
   if (!children) return null;
 
+  function createMarkup(description) {
+    return {__html: description};
+  }
+  
+
+
   return (
     <>
       {(children && children.length < character) || expanded
-        ? children
+        ? <div dangerouslySetInnerHTML={createMarkup(children)}/>
         : children.substring(0, character)}
       {children && children.length > character && !expanded && (
         <>

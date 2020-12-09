@@ -48,7 +48,7 @@ const Banner: React.FC<BannerProps> = ({
         query: { ...urlState },
       },
       {
-        pathname: pathname === '/' ? `${pathname}grocery` : pathname,
+        pathname: pathname === '/' ? `${pathname}filters` : pathname,
         query: { ...urlState },
       },
       { shallow: true }

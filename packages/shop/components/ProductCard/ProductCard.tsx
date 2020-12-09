@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'components/Image/Image';
 import Button from '../Button/Button';
+import {getURl} from '../../utils'
 import { CartIcon } from '../AllSvgIcon';
 import {
   ProductCardWrapper,
@@ -35,6 +36,7 @@ type ProductCardProps = {
   value?: any;
   deviceType?: any;
 };
+// console.log("dataaaa",image)
 
 const ProductCard: React.FC<ProductCardProps> = ({
   title,
@@ -71,12 +73,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
     e.stopPropagation();
     removeItem(data);
   };
-
+  console.log("imageaaaaaaaaaaaaaaaaaaaa",image)
   return (
     <ProductCardWrapper onClick={onClick} className="product-card">
       <ProductImageWrapper>
         <Image
-          url={image}
+          url={Object.keys(image).length>0?getURl(image[0].image):image}
           className="product-image"
           style={{ position: 'relative' }}
           alt={name}

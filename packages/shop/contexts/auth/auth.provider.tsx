@@ -1,9 +1,16 @@
+import { useQuery } from '@apollo/react-hooks';
+import { GET_CATEGORIES } from 'graphql/query/category.query';
 import React, { useReducer } from 'react';
 import { AuthContext } from './auth.context';
 const isBrowser = typeof window !== 'undefined';
+
+
+
 const INITIAL_STATE = {
   isAuthenticated: isBrowser && !!localStorage.getItem('access_token'),
   currentForm: 'signIn',
+  categories: [],
+  settings: {}
 };
 
 function reducer(state: any, action: any) {
@@ -35,12 +42,23 @@ function reducer(state: any, action: any) {
         ...state,
         currentForm: 'forgotPass',
       };
+    case 'GLOBAL_DATA':
+    
+      //     console.log('filtered again again', data);
+          
+      console.log('filtered', state, action);
+      return {
+        ...state,
+        ...action
+      };
     default:
       return state;
   }
 }
 
-export const AuthProvider: React.FunctionComponent = ({ children }) => {
+const AuthProvider: React.FunctionComponent = ({ children }) => {
+
+
   const [authState, authDispatch] = useReducer(reducer, INITIAL_STATE);
   return (
     <AuthContext.Provider value={{ authState, authDispatch }}>
@@ -48,3 +66,6 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+
+export default AuthProvider;

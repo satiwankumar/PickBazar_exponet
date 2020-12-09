@@ -2,7 +2,7 @@ import React from 'react';
 import App from 'next/app';
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'theme';
-import { AuthProvider } from 'contexts/auth/auth.provider';
+import AuthProvider from 'contexts/auth/auth.provider';
 import { StickyProvider } from 'contexts/app/app.provider';
 import { SearchProvider } from 'contexts/search/search.provider';
 import { HeaderProvider } from 'contexts/header/header.provider';

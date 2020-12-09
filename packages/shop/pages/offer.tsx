@@ -64,13 +64,13 @@ const url="http://s3.amazonaws.com/redqteam.com/pickbazar/gift-card-1.png"
           </div>
         </MainContentArea>
 
-        <SiteFooter style={{ marginTop: 50 }}>
+        {/* <SiteFooter style={{ marginTop: 50 }}>
           <FormattedMessage
             id='siteFooter'
             defaultMessage='Pickbazar is a product of'
           />
           &nbsp; <a href='/'>Redq, Inc.</a>
-        </SiteFooter>
+        </SiteFooter> */}
       </OfferPageWrapper>
       <CartPopUp deviceType={deviceType} />
     </Modal>

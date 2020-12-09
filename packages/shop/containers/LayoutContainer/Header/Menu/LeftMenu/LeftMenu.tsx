@@ -106,7 +106,7 @@ const CategoryMenu = ({ onClick,data }) => {
           key={item.id}
           onClick={() => onClick(item)}
           className='menu-item'
-          href={`/${item.name.toLowerCase()}`}
+          href={`/${item.slug.toLowerCase()}`}
           label={item.name}
           icon={<Handbag />}
           iconClass='menu-item-icon'
@@ -131,13 +131,14 @@ export const LeftMenu: React.FC<Props> = ({ logo }) => {
     
   const categories = data && data.getCategory.filter(item => item.parent_id == null)
   const { pathname } = useRouter();
-  const initialMenu = data && data.getCategory.map((item) => item.name === pathname);
-  const [activeMenu, setActiveMenu] = React.useState(
-  data && categories[0]
-  );
- 
- 
 
+
+  const initialMenu = data && data.getCategory.map((item) => item.slug === pathname);
+  const [activeMenu, setActiveMenu] = React.useState(data&&data.getCategory[0]);
+ 
+ 
+  console.log("data",data)
+  console.log("dataactivemenu", data &&activeMenu)
   if (error) {
     
     toast.error(`🦄 SomeThing Went Wrong`, {
@@ -154,8 +155,7 @@ export const LeftMenu: React.FC<Props> = ({ logo }) => {
     
   }
 
-    console.log("data",data)
-    console.log("dataactivemenu", data &&activeMenu)
+
 // if(Object.keys(data).length>0){
 //   data.getCategory.map(item=>console.log(item.name))
 // }
@@ -178,7 +178,7 @@ export const LeftMenu: React.FC<Props> = ({ logo }) => {
                 <Icon>{activeMenu?.icon}</Icon>
                 <span>
                    <FormattedMessage
-                    id="filters"
+                    id={activeMenu?.name?activeMenu?.name:"filters"}
                     defaultMessage={data && activeMenu?.name}
                   /> 
                 </span>

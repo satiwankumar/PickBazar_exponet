@@ -53,7 +53,7 @@ const BannerHeading = styled('h1')`
   font-family: ${themeGet('fontFamily.1', 'sans-serif')};
   font-size: ${themeGet('fontSizes.6', '45')}px;
   font-weight: 700;
-  color: ${themeGet('colors.darkBold', '#0D1136')};
+  color: ${themeGet('colors.darkBold', '#005E7E')};
   margin-bottom: 15px;
   text-align: center;
 
@@ -71,8 +71,9 @@ const BannerHeading = styled('h1')`
 const BannerSubHeading = styled('span')`
   font-family: ${themeGet('fontFamily.0', 'sans-serif')};
   font-size: ${themeGet('fontSizes.3', '19')}px;
-  font-weight: 400;
-  color: ${themeGet('colors.darkRegular', '#77798C')};
+  font-weight: 700;
+  color: ${themeGet('colors.darkBold', '#005E7E')};
+
   margin-bottom: 60px;
   text-align: center;
 

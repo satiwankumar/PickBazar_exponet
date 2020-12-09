@@ -1,6 +1,7 @@
 import React from 'react';
 import Router from 'next/router';
 import { closeModal } from '@redq/reuse-modal';
+import Select from '../../components/Select/Select'
 import Button from 'components/Button/Button';
 import {
   QuickViewWrapper,
@@ -36,7 +37,7 @@ type QuickViewProps = {
   deviceType: any;
   onModalClose: any;
 };
-const images = [{"url":"http://dev74.onlinetestingserver.com/fleetcart_lighthouse/FleetCart/public/uploads/products/2020-11-26-21-35-29-Aprilaire45.jpg"}]
+
 const QuickView: React.FunctionComponent<QuickViewProps> = ({
   modalProps,
   deviceType,
@@ -48,6 +49,7 @@ const QuickView: React.FunctionComponent<QuickViewProps> = ({
     type,
     name,
     weight,
+    productImages,
     brand,
     nominal_size,
     actual_size,
@@ -69,10 +71,11 @@ const QuickView: React.FunctionComponent<QuickViewProps> = ({
     e.stopPropagation();
     removeItem(modalProps);
   };
-  function onCategoryClick(slug) {
+  console.log("modalPRops",modalProps)
+  function onCategoryClick() {
     Router.push({
-      pathname: `/${type}`,
-      query: { category: slug },
+      pathname: `/${modalProps.categories[0].name.toLowerCase()}`,
+      query: { category: modalProps.categories[1].id },
     }).then(() => window.scrollTo(0, 0));
     closeModal();
   }
@@ -86,7 +89,7 @@ const QuickView: React.FunctionComponent<QuickViewProps> = ({
         <ProductDetailsWrapper className='product-card' dir='ltr'>
           {!isRtl && (
             <ProductPreview>
-              <CarouselWithCustomDots items={images} deviceType={deviceType} />
+              <CarouselWithCustomDots items={productImages} deviceType={deviceType} />
               {!!discountInPercent && (
                 <>
                   <DiscountPercent>{discountInPercent}%</DiscountPercent>
@@ -120,9 +123,9 @@ const QuickView: React.FunctionComponent<QuickViewProps> = ({
 
               
               <ProductDescription>
-                <ReadMore character={600}>{description}</ReadMore>
+                <ReadMore character={10000000}>{description}</ReadMore>
               </ProductDescription>
-
+              {/* <Select   value={"satiwan"} />        */}
               <ProductCartWrapper>
                 <ProductCartBtn>
                   {!isInCart(id) ? (
@@ -152,8 +155,8 @@ const QuickView: React.FunctionComponent<QuickViewProps> = ({
                   {categories
                     ?
                         <MetaItem
-                          // onClick={() => onCategoryClick(categories[1].id)}
-                          // key={categories[1].id}
+                          onClick={() => onCategoryClick()}
+                          key={categories[1].id}
                         >
                           {categories[1].name}
                         </MetaItem>
@@ -166,7 +169,7 @@ const QuickView: React.FunctionComponent<QuickViewProps> = ({
 
           {isRtl && (
             <ProductPreview>
-              <CarouselWithCustomDots items={images} deviceType={deviceType} />
+              <CarouselWithCustomDots items={productImages} deviceType={deviceType} />
               {!!discountInPercent && (
                 <>
                   <DiscountPercent>{discountInPercent}%</DiscountPercent>

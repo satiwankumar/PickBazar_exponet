@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import {REGISTER} from '../../graphql/mutation/Auth'
 import {useMutation} from '@apollo/react-hooks'

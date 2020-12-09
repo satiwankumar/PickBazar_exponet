@@ -43,7 +43,7 @@ id
 price
 name
 qty
-image
+
     }
     }
 }

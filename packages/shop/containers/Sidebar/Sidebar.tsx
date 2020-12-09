@@ -42,12 +42,12 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
   deviceType: { mobile, tablet, desktop },
   type,
 }) => {
-  console.log("type")
+  console.log("type",type)
   const { state, dispatch } = useContext(SearchContext);
   const router = useRouter();
   const { pathname, query } = router;
   const { loading,error,data } = useQuery(GET_CATEGORIES, {
-    variables: { category_id:type?parseInt(type):null,filter_by_name: null  },
+    variables: { category_id:type?type:null,filter_by_name: null  },
   });
 console.log(error,loading,data)
 
@@ -56,7 +56,7 @@ console.log(error,loading,data)
   const { isRtl } = useLocale();
 
   const handleCategorySelection = (id: string) => {
-   alert(id)
+  //  alert(id)
     const updatedQuery = state.text
       ? { text: state.text, category: id }
       : { category: id };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Modal } from '@redq/reuse-modal';
 import { withApollo } from 'helper/apollo';
@@ -20,14 +20,33 @@ import {
 import OFFERS from 'data/offers';
 import BannerImg from 'image/grocery.png';
 import storeType from 'constants/storeType';
-
-const PAGE_TYPE = "1";
+import { AuthContext } from 'contexts/auth/auth.context';
+import { useQuery } from '@apollo/react-hooks';
+import { GET_CATEGORIES } from 'graphql/query/category.query';
 
 function HomePage({ deviceType }) {
+
+ 
+  //   const { data, error, refetch } =  useQuery(GET_CATEGORIES, {
+  //       variables : {category_id:null,filter_by_name: null}
+  //   })
+  // //   // console.log('filtered again again', data);
+  // const { authDispatch } = useContext<any>(AuthContext);
+    
+
+//  authDispatch({
+//         type: 'GLOBAL_DATA',
+//     });
+//   }
+
+
   const { query } = useRouter();
-  console.log("query",query)
   const targetRef = React.useRef(null);
   React.useEffect(() => {
+    
+
+  
+
     if ((query.text || query.category) && targetRef.current) {
       window.scrollTo({
         top: targetRef.current.offsetTop - 110,
@@ -36,14 +55,17 @@ function HomePage({ deviceType }) {
     }
   }, [query]);
 
+
+  const PAGE_TYPE = "1";
+
   return (
     <>
-      <SEO title='Grocery - PickBazar' description='Grocery Details' />
+      <SEO title='Filters - Exponent' description='Filters Details' />
       <Modal>
         <Banner
           intlTitleId='groceriesTitle'
           intlDescriptionId='groceriesSubTitle'
-          imageUrl={BannerImg}
+          imageUrl={"https://www.exponet.ca/images/background/intro.jpg"}
         />
 
         {deviceType.desktop ? (

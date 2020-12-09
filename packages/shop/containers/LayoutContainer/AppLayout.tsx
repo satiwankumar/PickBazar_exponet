@@ -51,13 +51,13 @@ console.log("pathnamelayout",pathname)
             } desktop`}
             pathname={pathname}
           />
-          <Header
+          {/* <Header
             className={`${isSticky && isHomePage ? 'sticky' : 'unSticky'} ${
               isHomePage ? 'home' : ''
             }`}
             token={token}
             pathname={pathname}
-          />
+          /> */}
         </Sticky>
       )}
       {children}

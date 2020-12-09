@@ -18,6 +18,16 @@ export const REGISTER = gql`
     status
   }
 }`
+
+// export const FORGOT = gql`  
+// mutation forgotPassword($input: ForgotPasswordInput!){
+// fogotPassword(input : $input ) {
+//   status
+//   message
+// }
+// `
+
+
 export const LOGOUT = gql`
 mutation logout{
     logout

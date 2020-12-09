@@ -5,7 +5,12 @@ import { ApolloProvider } from '@apollo/react-hooks';
 // import { InMemoryCache } from 'apollo-cache-inmemory';
 // import { HttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-unfetch';
-import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from 'apollo-boost';
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  HttpLink,
+} from 'apollo-boost';
 let apolloClient = null;
 
 /**
@@ -39,7 +44,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async ctx => {
+    WithApollo.getInitialProps = async (ctx) => {
       const { AppTree } = ctx;
 
       // Initialize ApolloClient, add it to the ctx object so
@@ -134,30 +139,29 @@ function createApolloClient(initialState = {}) {
   //   }),
   //   cache: new InMemoryCache().restore(initialState),
   // });
-  
-const httpLink = new HttpLink({ uri: process.env.API_URL });
 
-const authLink = new ApolloLink((operation, forward) => {
-  // Retrieve the authorization token from local storage.
-  const token = localStorage.getItem('access_token');
+  const httpLink = new HttpLink({ uri: process.env.API_URL });
 
-  // Use the setContext method to set the HTTP headers.
-  operation.setContext({
-    headers: {
-      authorization: token ? `Bearer ${token}` : ''
+  const authLink = new ApolloLink((operation, forward) => {
+    // Retrieve the authorization token from local storage.
+    let token = '';
+    if (typeof window !== 'undefined') {
+      token = localStorage.getItem('access_token');
     }
+
+    // Use the setContext method to set the HTTP headers.
+    operation.setContext({
+      headers: {
+        authorization: token ? `Bearer ${token}` : '',
+      },
+    });
+
+    // Call the next link in the middleware chain.
+    return forward(operation);
   });
 
-  // Call the next link in the middleware chain.
-  return forward(operation);
-});
-
-return   new ApolloClient({
-  link: authLink.concat(httpLink), // Chain it with the HttpLink
-  cache: new InMemoryCache()
-});
-
+  return new ApolloClient({
+    link: authLink.concat(httpLink), // Chain it with the HttpLink
+    cache: new InMemoryCache(),
+  });
 }
-
-
-
