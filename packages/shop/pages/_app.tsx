@@ -8,6 +8,7 @@ import { SearchProvider } from 'contexts/search/search.provider';
 import { HeaderProvider } from 'contexts/header/header.provider';
 import { LanguageProvider } from 'contexts/language/language.provider';
 
+import 'react-toastify/dist/ReactToastify.css';
 import AppLayout from 'containers/LayoutContainer/AppLayout';
 import { useDeviceType } from 'helper/useDeviceType';
 import { CartProvider } from 'contexts/cart/use-cart';
