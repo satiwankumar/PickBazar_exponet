@@ -43,7 +43,11 @@ id
 price
 name
 qty
-
+productImages{
+  id
+  product_id
+  image
+}
     }
     }
 }
@@ -80,6 +84,7 @@ const orderTableColumns = [
     width: 250,
     ellipsis: true,
     render: (text, record) => {
+    
       return (
         <ItemWrapper>
           <ImageWrapper>
