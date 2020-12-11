@@ -4,7 +4,7 @@ import { CounterBox, CounterButton, CounterValue } from './Counter.style';
 interface Props {
   onDecrement: (e: Event) => void;
   onIncrement: (e: Event) => void;
-  value: number;
+  value: any;
   variant?: string;
   className?: string;
 }

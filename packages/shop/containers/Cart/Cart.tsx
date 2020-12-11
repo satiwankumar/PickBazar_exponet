@@ -128,12 +128,12 @@ const Cart: React.FC<CartPropsType> = ({
       >
         <ItemWrapper className='items-wrapper'>
           {!!cartItemsCount ? (
-            items.map((item) => (
+            items.map((item,index) => (
               <CartItem
                 key={`cartItem-${item.id}`}
                 onIncrement={() => addItem(item)}
                 onDecrement={() => removeItem(item)}
-                onRemove={() => removeItemFromCart(item)}
+                onRemove={() => removeItemFromCart(index)}
                 data={item}
               />
             ))

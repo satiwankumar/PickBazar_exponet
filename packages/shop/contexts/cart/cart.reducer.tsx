@@ -13,15 +13,18 @@ export const cartItemsTotalPrice = (items, coupon = null) => {
 };
 // cartItems, cartItemToAdd
 const addItemToCart = (state, action) => {
-  const existingCartItemIndex = state.items.findIndex(
-    (item) => item.id === action.payload.id
-  );
+  // const existingCartItemIndex = state.items.findIndex(
+  //   (item) => item.id === action.payload.id
+  // );
 
-  if (existingCartItemIndex > -1) {
-    const newState = [...state.items];
-    newState[existingCartItemIndex].quantity += action.payload.quantity;
-    return newState;
-  }
+  // if (existingCartItemIndex > -1) {
+  //   const newState = [...state.items];
+  //   newState[existingCartItemIndex].quantity += action.payload.quantity;
+  //   return newState;
+  // }
+  console.log("items",state,action)
+
+
   return [...state.items, action.payload];
 };
 
@@ -40,7 +43,9 @@ const removeItemFromCart = (state, action) => {
 };
 
 const clearItemFromCart = (state, action) => {
-  return state.items.filter((item) => item.id !== action.payload.id);
+  console.log("state: ",action.payload);
+  return state.items.filter((item , index) => index !== action.payload);
+
 };
 
 export const reducer = (state, action) => {

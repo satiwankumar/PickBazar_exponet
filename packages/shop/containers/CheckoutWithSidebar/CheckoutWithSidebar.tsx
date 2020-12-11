@@ -256,7 +256,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                   defaultMessage='Delivery Address'
                 />
               </Heading>
-              <ButtonGroup>
+              {/* <ButtonGroup>
                 <RadioGroup
                   items={address}
                   component={(item: any) => (
@@ -296,7 +296,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                     />
                   }
                 />
-              </ButtonGroup>
+              </ButtonGroup> */}
             </InformationBox>
 
             {/* DeliverySchedule */}
@@ -308,7 +308,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                     defaultMessage='Select Your Delivery Schedule'
                   />
                 </Heading>
-                <RadioGroup
+                {/* <RadioGroup
                   items={schedules}
                   component={(item: any) => (
                     <RadioCard
@@ -327,7 +327,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                       }
                     />
                   )}
-                />
+                /> */}
               </DeliverySchedule>
             </InformationBox>
 

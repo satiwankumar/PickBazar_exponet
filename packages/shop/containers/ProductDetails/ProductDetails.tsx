@@ -1,5 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import Link from 'next/link';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Router from 'next/router';
 import Button from 'components/Button/Button';
 import {
@@ -31,6 +35,7 @@ import { FormattedMessage } from 'react-intl';
 import { useLocale } from 'contexts/language/language.provider';
 import { useCart } from 'contexts/cart/use-cart';
 import { Counter } from 'components/Counter/Counter';
+import { ItemBox } from 'containers/Cart/CartItem/CartItem.style';
 
 type ProductDetailsProps = {
   product: Product | any;
@@ -45,13 +50,16 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   product,
   deviceType,
 }) => {
+  const [vari, setVari] = useState('');
+  const [qty, setQty] = useState('');
+  console.log("productDetail0",product)
   const { isRtl } = useLocale();
   const { addItem, removeItem, isInCart, getItem, items } = useCart();
   const data = product;
 
   const handleAddClick = (e) => {
     e.stopPropagation();
-    addItem(data);
+    addItem(data,qty);
   };
 
   const handleRemoveClick = (e) => {
@@ -64,7 +72,30 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
       window.scrollTo(0, 0);
     }, 500);
   }, []);
-
+  const handleRadioChange = (e) => {
+    console.log("e.target.value: ",e.target.value);
+    // "foo3bar5".match(/\d+/)[0]
+    setVari(e.target.value);
+    let qtys = e.target.name.match(/\d+/)[0]
+    setQty(qtys);
+    // console.log("qtys: ",qtys);
+  }
+  const variation = () => {
+    // return "hello"
+    console.log("dfdsfsd", Object.keys(product.productVariations));
+    if (Object.keys(product.productVariations).length > 0) {
+      return product.productVariations.map((item) => {
+        
+        console.log("item: ",item);
+         return (
+          <RadioGroup aria-label="variation" value={vari} name="vari" onChange={handleRadioChange}>
+            <FormControlLabel value={item.variations && item.variations.id} name={item.variations && item.variations.variation_name} checked={item.variations && item.variations.id == vari ? true : false}  control={<Radio />} label={`${item.variations && item.variations.variation_name} of $${item.price}`} />
+            {/* <FormControlLabel value="worst" control={<Radio />} label="The worst." /> */}
+          </RadioGroup>
+        )}
+      )
+    }
+  }
   return (
     <>
       <ProductDetailsWrapper className='product-card' dir='ltr'>
@@ -87,7 +118,7 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
             </BackButton>
 
             <CarouselWithCustomDots
-              items={product.gallery}
+              items={product.productImages}
               deviceType={deviceType}
             />
           </ProductPreview>
@@ -95,7 +126,8 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
 
         <ProductInfo dir={isRtl ? 'rtl' : 'ltr'}>
           <ProductTitlePriceWrapper>
-            <ProductTitle>{product.title}</ProductTitle>
+            <ProductTitle>{product.name}</ProductTitle><br/>
+          
             <ProductPriceWrapper>
               {product.discountInPercent ? (
                 <SalePrice>
@@ -112,14 +144,17 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
               </ProductPrice>
             </ProductPriceWrapper>
           </ProductTitlePriceWrapper>
+          <ProductWeight>{`ActualSize : ${product.actual_size}`}</ProductWeight><br/>
+          <ProductWeight>{`NomialSize : ${product.nominal_size}`}</ProductWeight><br/>
+          {variation()}
 
-          <ProductWeight>{product.unit}</ProductWeight>
+          {/* <ProductWeight>{product.unit}</ProductWeight> */}
           <ProductDescription>
             <ReadMore character={600}>{product.description}</ReadMore>
           </ProductDescription>
 
           <ProductCartWrapper>
-            <ProductCartBtn>
+            {/* <ProductCartBtn>
               {!isInCart(data.id) ? (
                 <Button
                   title='Add to Cart'
@@ -132,34 +167,49 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
                 />
               ) : (
                 <Counter
-                  value={getItem(data.id).quantity}
+                  value={getItem(data.id).qty}
                   onDecrement={handleRemoveClick}
                   onIncrement={handleAddClick}
                 />
               )}
+            </ProductCartBtn> */}
+           
+           <ProductCartBtn>
+                <Button
+                  title='Add to Cart'
+                  intlButtonId='addToCartButton'
+                  iconPosition='left'
+                  size='small'
+                  className='cart-button'
+                  icon={<CartIcon />}
+                  onClick={handleAddClick}
+                />
+              
+            
             </ProductCartBtn>
           </ProductCartWrapper>
 
-          <ProductMeta>
+          {/* <ProductMeta>
             <MetaSingle>
               {product.categories
                 ? product.categories.map((item: any) => (
+                  console.log("item,item",ItemBox),
                     <Link
-                      href={`/${product.type.toLowerCase()}?category=${
-                        item.slug
+                      href={`/${item.name.toLowerCase()}?category=${
+                        item[1]
                       }`}
                       key={`link-${item.id}`}
                     >
                       {
                         <a>
-                          <MetaItem>{item.title}</MetaItem>
+                          <MetaItem>{item.name}</MetaItem>
                         </a>
                       }
                     </Link>
                   ))
                 : ''}
             </MetaSingle>
-          </ProductMeta>
+          </ProductMeta> */}
         </ProductInfo>
 
         {isRtl && (
@@ -196,7 +246,7 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
           />
         </h2>
         <Products
-          type={product.type.toLowerCase()}
+          type={product.categories[0].id}
           deviceType={deviceType}
           loadMore={false}
           fetchLimit={10}

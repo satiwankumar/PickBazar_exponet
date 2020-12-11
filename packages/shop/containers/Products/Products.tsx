@@ -47,6 +47,13 @@ const GET_PRODUCTS = gql`
     product_id
     image
 }
+productVariations{
+  price
+variations{
+  id
+  variation_name
+}
+}
    categories{
        id
        name
@@ -182,7 +189,7 @@ console.log("typeinproducts",type)
       // limit: 5,
     },
   });
-// console.log("data",data)
+console.log("updatedata",data)
 
 
   // Quick View Modal
@@ -307,6 +314,7 @@ console.log("typeinproducts",type)
                   brand={element.brand.name}
                   actual_size={element.actual_size}
                   nominal_size={element.nominal_size}
+                  variations={element && element.productVariations}
                   weight={element.unit}
                   currency={CURRENCY}
                   price={element.price}

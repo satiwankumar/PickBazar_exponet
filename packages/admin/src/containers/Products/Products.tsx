@@ -226,7 +226,7 @@ export default function Products() {
 
     variables: { filter_category_id: null, filter_by_name: null }
   });
-  // console.log("typeSelectOptions",data1)
+  console.log("productsdATA",data&& data.get)
 
   if (error) {
 
@@ -407,7 +407,9 @@ export default function Products() {
           <Row>
             {data ? (
               Object.keys(data.getproducts).length > 0 ? (
+              
                 data.getproducts.map((item: any, index: number) => (
+                  console.log("item",item),
                   <Col
                     md={4}
                     lg={3}
@@ -423,6 +425,7 @@ export default function Products() {
                         actual_size={item.actual_size}
                         nominal_size={item.nominal_size}
                         // image={data &&item.productImages.map(item=>{return item.image=getURl(item.image)})}
+                      
                         image={data &&item.productImages}
                         currency={CURRENCY}
                         price={parseFloat(parseFloat(item.price).toFixed(2))}

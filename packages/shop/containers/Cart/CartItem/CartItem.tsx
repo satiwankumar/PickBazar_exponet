@@ -12,6 +12,7 @@ import {
   Total,
   RemoveButton,
 } from './CartItem.style';
+import { getURl } from 'utils';
 
 interface Props {
   data: any;
@@ -26,18 +27,23 @@ export const CartItem: React.FC<Props> = ({
   onIncrement,
   onRemove,
 }) => {
-  const { title, image, price, salePrice, unit, quantity } = data;
-  const displayPrice = salePrice ? salePrice : price;
+  
+console.log(data)
+
+  const { title, productImages, price, salePrice, unit, quantity } = data;
+  let displayPrice = salePrice ? salePrice : price;
+   displayPrice = parseFloat(displayPrice).toFixed(2)
+
   const totalPrice = quantity * displayPrice;
   return (
     <ItemBox>
-      <Counter
+      {/* <Counter
         value={quantity}
         onDecrement={onDecrement}
         onIncrement={onIncrement}
         variant='lightVertical'
-      />
-      <Image src={image} />
+      /> */}
+      <Image src={getURl(productImages[0].image)} />
       <Information>
         <Name>{title}</Name>
         <Price>
@@ -45,12 +51,14 @@ export const CartItem: React.FC<Props> = ({
           {displayPrice}
         </Price>
         <Weight>
-          {quantity} X {unit}
+          {quantity} 
         </Weight>
       </Information>
       <Total>
         {CURRENCY}
-        {(quantity * displayPrice).toFixed(2)}
+        { displayPrice}
+
+        {/* {(quantity * displayPrice).toFixed(2)} */}
       </Total>
       <RemoveButton onClick={onRemove}>
         <CloseIcon />

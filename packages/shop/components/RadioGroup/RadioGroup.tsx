@@ -22,7 +22,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   return (
     <RadioGroupWrapper className={`radioGroup ${containerClassName}`.trim()}>
       {items.map(
-        (item: any, index: any) => component && component(item, index)
+        (item: any, index: any) => component && component(item[0], index)
       )}
 
       {secondaryComponent && secondaryComponent}

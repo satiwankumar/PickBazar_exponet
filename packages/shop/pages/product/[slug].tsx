@@ -37,26 +37,29 @@ const ProductPage: NextPage<Props> = ({ deviceType }) => {
 
   if (error) return <div>Error: {error.message}</div>;
 
-  let content;
-  switch (data.product.type) {
-    case 'BOOK': {
-      content = (
-        <ProductDetailsBook product={data.product} deviceType={deviceType} />
-      );
-      break;
-    }
-    default: {
-      content = (
-        <ProductDetails product={data.product} deviceType={deviceType} />
-      );
-    }
-  }
+  // let content;
+  // switch (data.product.type) {
+  //   case 'BOOK': {
+  //     content = (
+  //       <ProductDetailsBook product={data.product} deviceType={deviceType} />
+  //     );
+  //     break;
+  //   }
+  //   default: {
+  //     content = (
+  //       <ProductDetails product={data.product} deviceType={deviceType} />
+  //     );
+  //   }
+  // }
+  let content =  <ProductDetails product={data.getProductBySlug[0]} deviceType={deviceType} />
+     
+
 
   return (
     <>
       <SEO
-        title={`${data.product.title} - ExponetDetails`}
-        description={`${data.product.title} Details`}
+        title={`${data.getProductBySlug[0].name} - ExponetDetails`}
+        description={`${data.getProductBySlug[0].name} Details`}
       />
 
       <Modal>

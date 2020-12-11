@@ -135,7 +135,7 @@ const FixedCart: React.FC<CartPropsType> = ({
       >
         <ItemWrapper className='items-wrapper'>
           {!!cartItemsCount ? (
-            items.map((item) => (
+            items.map((item ) => (
               <TextCartItem
                 key={`cartItem-${item.id}`}
                 onIncrement={() => addItem(item)}

@@ -65,47 +65,85 @@ export const GET_PRODUCT = gql`
   }
 `;
 export const GET_PRODUCT_DETAILS = gql`
-  query getProduct($slug: String!) {
-    product(slug: $slug) {
-      id
-      slug
-      name
-      type
-      unit
-      price
-      salePrice
-      description
-      discountInPercent
-      gallery {
-        url
-      }
-      image
-      categories {
-        id
-        slug
-        title
-      }
-      author {
-        id
-        name
-        avatar
-        bio
-        socials {
-          id
-          media
-          profileLink
-        }
-      }
-      meta {
-        publisher
-        isbn
-        edition
-        languages
-        country
-        numberOfReader
-        numberOfPage
-        samplePDF
-      }
-    }
-  }
+query getProductBySlug($slug: String!){
+  getProductBySlug(slug: $slug){
+   id
+   brand{
+       name
+   }
+   slug
+   price
+   selling_price
+   unit
+   qty
+   actual_size
+   nominal_size
+   name
+   description
+   productImages{
+       id
+       product_id
+       image
+   }
+   productVariations{
+       price
+   variations{
+       id
+       variation_name
+   }
+   }
+   categories{
+       id
+       name
+   }
+  
+}
+}
+
+
+
+
 `;
+// query getProduct($slug: String!) {
+  //     product(slug: $slug) {
+  //       id
+  //       slug
+  //       name
+  //       type
+  //       unit
+  //       price
+  //       salePrice
+  //       description
+  //       discountInPercent
+  //       gallery {
+  //         url
+  //       }
+  //       image
+  //       categories {
+  //         id
+  //         slug
+  //         title
+  //       }
+  //       author {
+  //         id
+  //         name
+  //         avatar
+  //         bio
+  //         socials {
+  //           id
+  //           media
+  //           profileLink
+  //         }
+  //       }
+  //       meta {
+  //         publisher
+  //         isbn
+  //         edition
+  //         languages
+  //         country
+  //         numberOfReader
+  //         numberOfPage
+  //         samplePDF
+  //       }
+  //     }
+  //   }

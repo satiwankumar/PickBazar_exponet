@@ -20,7 +20,8 @@ type ProductCardProps = {
   currency: string;
   brand:string
   actual_size:string,
-  nominal_size:string
+  nominal_size:string,
+  variations:any,
   description: string;
   price: number;
   salePrice?: number;
@@ -47,6 +48,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   brand,
   actual_size,
   nominal_size,
+  variations,
   discountInPercent,
   cartProducts,
   addToCart,
@@ -95,6 +97,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <h3 className="product-title">{`${brand }   ${ title}`}</h3>
         <span className="product-weight">{`Actualsize : ${actual_size}`}</span><br></br>
         <span className="product-weight">{`Nomialsize:${nominal_size}`}</span>
+        {/* {Object.keys(variations).length>0?} */}
+
         <div className="product-meta">
           <div className="productPriceWrapper">
             {discountInPercent ? (
@@ -112,7 +116,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </span>
           </div>
 
-          {!isInCart(data.id) ? (
+          {/* {!isInCart(data.id) ? (
             <Button
               title="Cart"
               intlButtonId="addCartButton"
@@ -130,7 +134,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
               onDecrement={handleRemoveClick}
               onIncrement={handleAddClick}
             />
-          )}
+          )} */}
+         
+            {/* <Button
+              title="Cart"
+              intlButtonId="addCartButton"
+              iconPosition="left"
+              colors="primary"
+              size="small"
+              variant="outlined"
+              className="cart-button"
+              icon={<CartIcon />}
+              onClick={handleAddClick}
+            /> */}
+      
+          
         </div>
       </ProductInfo>
     </ProductCardWrapper>
