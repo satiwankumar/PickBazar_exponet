@@ -319,7 +319,7 @@ console.log("updatedata",data)
                   currency={CURRENCY}
                   price={element.price}
                   salePrice={element.selling_price}
-                  discountInPercent={10}
+                  // discountInPercent={10}
                   data={element}
                   deviceType={deviceType}
                   onClick={() =>
