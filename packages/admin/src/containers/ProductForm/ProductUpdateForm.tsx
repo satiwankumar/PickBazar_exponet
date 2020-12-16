@@ -104,11 +104,14 @@ const AddProduct: React.FC<Props> = () => {
   const {data:data1,refetch,error} = useQuery(GET_CATEGORIES,{
     variables: { filter_category_id: null, filter_by_name: null }
   })
+  console.log("dataaaaaaaaaaaaaaaaaaa",data1)
+
   // const imagesData = data.productImages.map(item=> item.image=getURl(item.image))
   
   
   const [productid,setProductId ] = useState(data && data.id)
   const [content,setContent] = useState({content:data&&data.description})
+  const [variation, setVariations] = useState( data && data.productVariations);
 
   const [type, setType] = useState([ data.categories[0] ]);
   const [brand, setBrands] = useState(data && data.brand);
@@ -123,15 +126,15 @@ const AddProduct: React.FC<Props> = () => {
 // console.log("newfiles",newfiles)
 
 
- let  productVariation = data && data.productVariations?data.productVariations:""
- let extractedVariations=data && data.productVariations?productVariation.map(item=>{return item.variations}):""
- let extractedPrices=data && data.productVariations?productVariation.map((item,index)=> {return  {newvalue : item.price}}):""
+//  let  productVariation = data && data.productVariations?data.productVariations:""
+//  let extractedVariations=data && data.productVariations?productVariation.map(item=>{return item.variations}):""
+//  let extractedPrices=data && data.productVariations?productVariation.map((item,index)=> {return  {newvalue : item.price}}):""
  const brandsOptions = data1 && data1.getBrand.map(item => { return item })
 
   // console.log("satibrands",brandsOptions)
 
-const [variation, setVariations] = useState({...extractedVariations})
-let [variation_price, setVariationsPrice] = useState({...extractedPrices});
+// const [variation, setVariations] = useState({...extractedVariations})
+// let [variation_price, setVariationsPrice] = useState({...extractedPrices});
 const [updateProduct] = useMutation(UPDATE_PRODUCT)
 const [deleteProduct] = useMutation(DELETE_PRODUCT)
 const handleDelete = async(id)=>{
@@ -193,27 +196,27 @@ closeDrawer();
 
  
 }
-const handleVariationChange = ({ value },_id) => {
+// const handleVariationChange = ({ value },_id) => {
 
-  setVariations({
-    ...variation,
-    [_id]:{
-      ...value[0]
-    }
+//   setVariations({
+//     ...variation,
+//     [_id]:{
+//       ...value[0]
+//     }
 
-  });
+//   });
 
-};
-const handlePriceChange = (e,_id) => {
-  // console.log("change", e.target.name, e.target.value)
-  let newvalue = e.target.value
-  setVariationsPrice({
-    ...variation_price,
-    [_id]:{
-      newvalue
-    }
-  })
-}
+// };
+// const handlePriceChange = (e,_id) => {
+//   // console.log("change", e.target.name, e.target.value)
+//   let newvalue = e.target.value
+//   setVariationsPrice({
+//     ...variation_price,
+//     [_id]:{
+//       newvalue
+//     }
+//   })
+// }
 const  onChange = (evt)=>{
   // console.log("onChange fired with event info: ", evt);
   var newContent = evt.editor.getData();
@@ -238,16 +241,21 @@ const afterPaste = (evt)=>{
     setBrands({name:e.target.value})
   };
 
+ 
+   
+  const AddVariation  = () =>{
+    setVariations((previous)=>[...previous,{variation_name:"",variation_price:"",variation_quantity:""}])
 
-  console.log("dataaaaid",productid)
+  }
+  // console.log("dataaaaid",productid)
   const categories = data1 && data1.getCategory.filter(item => item.parent_id == null)
   const Subcategories = []
  data1 && data1.getCategory.map( item => item.subcategories.map( item => Subcategories.push(item) ))
- const getSubCategory = (Subcategories)=>{
-  const sub = type.length>0?data && Subcategories.filter(item=>item.parent_id==type[0].id):""
-  console.log("dataaaaaa",sub)
-  return sub
-}
+//  const getSubCategory = (Subcategories)=>{
+//   const sub = type.length>0?data && Subcategories.filter(item=>item.parent_id==type[0].id):""
+//   console.log("dataaaaaa",sub)
+//   return sub
+// }
 
   React.useEffect(() => {
     register({ name: 'type' });
@@ -275,86 +283,61 @@ const afterPaste = (evt)=>{
     });
   };
 
-  const createdUI = ()=>{
-    return productVariation.map((item,i)=>
-  ( <>
-         <FormFields>
-
-<FormLabel>Variations</FormLabel>
-<Select
-
-  options={data1 && data1.getProductVariations}
-  labelKey="variation_name"
 
 
-  valueKey="id"
-  // placeholder="Variations"
-  value={variation?variation[i]:""}
-  searchable={false}
-  onChange={(e)=>handleVariationChange(e,i)}
-  overrides={{
-    Placeholder: {
-      style: ({ $theme }) => {
-        return {
-          ...$theme.typography.fontBold14,
-          color: $theme.colors.textNormal,
-        };
-      },
-    },
-    DropdownListItem: {
-      style: ({ $theme }) => {
-        return {
-          ...$theme.typography.fontBold14,
-          color: $theme.colors.textNormal,
-        };
-      },
-    },
-    OptionContent: {
-      style: ({ $theme, $selected }) => {
-        return {
-          ...$theme.typography.fontBold14,
-          color: $selected
-            ? $theme.colors.textDark
-            : $theme.colors.textNormal,
-        };
-      },
-    },
-    SingleValue: {
-      style: ({ $theme }) => {
-        return {
-          ...$theme.typography.fontBold14,
-          color: $theme.colors.textNormal,
-        };
-      },
-    },
-    Popover: {
-      props: {
-        overrides: {
-          Body: {
-            style: { zIndex: 5 },
-          },
-        },
-      },
-    },
-  }
 
-  }
+  const createdUI = () =>{
+    return variation.map((item,i)=>
+    ( <>
+     <Row>
+            <Col md={4}>
+            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+                      <input type="text" placeholder="variation" value={variation[i].variation_name}
+                    name="variation"
+                    onChange={((e)=>handleVariationChange(e,i))} className="form-control brand-flied"/>
+            </Col>
+            <Col md={4}>
+            <div className="mt-10"><FormLabel>Variation Price</FormLabel></div>
+                      <input type="number" step="any"
+                    min="0" placeholder="variation price"  value={variation[i].variation_price}
+                    onChange={((e)=>handleVariationChange(e,i))}
+                    name="variation_price" className="form-control brand-flied"/>
+            </Col>
+            <Col md={4}>
+            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+                      <input type="number" step="any"
+                    min="0" placeholder="variation quantity" value={variation[i].variation_quanity}
+                    onChange={((e)=>handleVariationChange(e,i))}
+                    name="variation_qty" className="form-control brand-flied"/>
+            </Col>
+            
+  </Row>
 
-/>
-</FormFields>
-
-<FormFields>
-<FormLabel>Enter Variation Price</FormLabel>
-
-
-<Input type="number" inputRef={register} name="variation_price" value={Object.keys(variation_price).length>0?variation_price[i].newvalue:""}  onChange={(e) => { handlePriceChange(e,i) }} step="any" min="0" required="true" />
-</FormFields> 
+    
+    
+    </>
   
-  </>
-
-  )
-      
     )
+        
+      )
+  } 
+
+  const handleVariationChange = (e,index)=>{
+      e.preventDefault()
+      let newArr = [...variation]; // copying the old datas array
+      console.log(newArr[index][e.target.name])
+      newArr[index] = {...newArr[index],[e.target.name]:e.target.value};
+
+      setVariations(newArr)
+    
+    
+        
+    
+        // [variation[index].[e.target.name]]:e.target.value[index]})
+    
+      
+      
+      console.log("e",e)
   }
 
 
@@ -370,12 +353,12 @@ const afterPaste = (evt)=>{
 
   let variationsData = []
   let variationPrice = []
-  for (const property in variation) {
-    variationsData.push(variation[property].id)
-  }
-  for (const property in variation_price) {
-    variationPrice.push(parseFloat(variation_price[property].newvalue))
-  }
+  // for (const property in variation) {
+  //   variationsData.push(variation[property].id)
+  // }
+  // for (const property in variation_price) {
+  //   variationPrice.push(parseFloat(variation_price[property].newvalue))
+  // }
   console.log("dataaaFiles",files)
 
   const onSubmit =async data => {
@@ -453,7 +436,7 @@ const afterPaste = (evt)=>{
     }
   };
 // console.log("sativariationsprice",variation_price)
-console.log("sati",variation_price)
+// console.log("sati",variation_price)
 
   return (
     <>
@@ -512,7 +495,6 @@ console.log("sati",variation_price)
                 <FormFields>
                   <FormLabel >Brand Name </FormLabel>
                   <input type="text" list="data" className="form-control brand-flied" value={brand.name}  onChange={(value)=>SelectChange(value)} />
-
                 <datalist id="data">
                 {data1 && brandsOptions.map((item, key) =>
                                 <option key={key} value={item.name} />
@@ -576,7 +558,11 @@ console.log("sati",variation_price)
 
                { createdUI()}
      
-
+               <Row>
+                <Col md={12}>
+             <Button type="button" title="add variation"  onClick={()=>AddVariation()} className="nm-bt">add</Button>
+            </Col>
+            </Row>
                 <FormFields>
                   <FormLabel>Product Quantity</FormLabel>
                   <Input type="number" inputRef={register} min="0" name="qty" />
@@ -644,7 +630,7 @@ console.log("sati",variation_price)
                 <FormFields>
                   <FormLabel>Categories</FormLabel>
                   <Select
-                    options={data1 && getSubCategory(Subcategories)}
+                    // options={data1 && getSubCategory(Subcategories)}
                     labelKey="name"
                     valueKey="id"
                     placeholder="Product Tag"

@@ -31,6 +31,10 @@ import {
 
 
 const GET_PRODUCTS = gql`
+
+ 
+
+
 query getCategory($filter_category_id:Int){
   getCategory(category_id:$filter_category_id,filter_by_name: null){
     id
@@ -56,6 +60,37 @@ query getCategory($filter_category_id:Int){
               id
               variation_name
           
+      },
+      getproducts(filter_category_id:null ,filter_by_name:null,brand_id:null){
+        id
+       brand{
+         name
+       },
+       slug
+        price
+        selling_price
+        unit
+        qty
+        actual_size,
+        nominal_size
+        name
+        description
+        productImages{
+         id
+         product_id
+         image
+         }
+        productVariations{
+                       price
+                   variations{
+                       id
+                       variation_name
+                   }}
+        categories{
+            id
+            name
+        }
+     
       }
   
 
@@ -63,8 +98,8 @@ query getCategory($filter_category_id:Int){
 
 
 const CREATE_PRODUCT = gql`
-  mutation createProduct($brand:String!,$name:String!,$file:[Upload],$price:Float!,$unit:String,$description:String!,$actual_size:String!,$nominal_size:String!,$variation:String,$variation_price:String, $selling_price:Float,$category_id:Int!,$qty:Int!,$sub_category_id:Int!) {  
-      createProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,nominal_size:$nominal_size,variation:$variation,variation_price:$variation_price,selling_price:$selling_price,qty:$qty,category_id:$category_id,sub_category_id:$sub_category_id)
+  mutation createProduct($brand:String!,$name:String!,$file:[Upload],$price:Float!,$unit:String,$description:String!,$actual_size:String!,$nominal_size:String!,$variation:String, $selling_price:Float,$category_id:Int!,$qty:Int!,$sub_category_id:Int!,$related_products:String) {  
+      createProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,nominal_size:$nominal_size,variation:$variation,selling_price:$selling_price,qty:$qty,category_id:$category_id,sub_category_id:$sub_category_id,related_products:$related_products)
          }`;
 
 type Props = any;
@@ -76,9 +111,11 @@ const AddProduct: React.FC<Props> = props => {
   ]);
   const { register, handleSubmit, setValue } = useForm();
   const [type, setType] = useState([]);
-  const [variation, setVariations] = useState({ });
-  let [variation_price, setVariationsPrice] = useState({});
+  const [variation, setVariations] = useState([{variation_name:"",variation_price :"",variation_quantity:""}]);
+  // let [variation_price, setVariationsPrice] = useState({});
   const [tag, setTag] = useState([]);
+  const [Related, setRelatedProducts] = useState([]);
+
   const [description, setDescription] = useState('');
   const [content,setContent] = useState({content:""})
   const [css] = useStyletron();
@@ -108,24 +145,32 @@ const AddProduct: React.FC<Props> = props => {
   const { data, refetch } = useQuery(GET_PRODUCTS, {
     variables: { filter_category_id: null, filter_by_name: null }
   })
-
-
+  console.log("dataaaa",data)
   const categories = data && data.getCategory.filter(item => item.parent_id == null)
   const brandsOptions = data && data.getBrand.map(item => { return item })
+  console.log("brandoptiopns",brandsOptions)
   const Subcategories = []
   data && data.getCategory.map(
     item => item.subcategories.map(
       item => Subcategories.push(item)
     ))
+const products = []
+data && data.getproducts.map(item=>products.push(item)) 
+   
+  const AddVariation  = () =>{
+    setVariations((previous)=>[...previous,{variation_name:"",variation_price:"",variation_quantity:""}])
 
-
-
+  }
   const handleMultiChange = ({ value }) => {
     setValue('categories', value);
     console.log(value)
     setTag(value);
   };
-
+  const handleMultiProductsChange = ({ value }) => {
+    setValue('categories', value);
+    console.log(value)
+    setRelatedProducts(value);
+  };
   const handleTypeChange = ({ value }) => {
     console.log("value", value)
     // setValue('type', value);
@@ -144,27 +189,27 @@ const AddProduct: React.FC<Props> = props => {
   }
 // getSubCategory(data && Subcategories)
 
-  const handleVariationChange = ({ value }, _id) => {
-    // console.log("variation", value)
-    setVariations({
-      ...variation,
-      [_id]: {
-        ...value[0]
-      }
+  // const handleVariationChange = ({ value }, _id) => {
+  //   // console.log("variation", value)
+  //   setVariations({
+  //     ...variation,
+  //     [_id]: {
+  //       ...value[0]
+  //     }
 
-    });
+  //   });
 
-  };
-  const handlePriceChange = (e, _id) => {
-    // console.log("change", e.target.name, e.target.value)
-    let newvalue = e.target.value
-    setVariationsPrice({
-      ...variation_price,
-      [_id]: {
-        newvalue
-      }
-    })
-  }
+  // };
+  // const handlePriceChange = (e, _id) => {
+  //   // console.log("change", e.target.name, e.target.value)
+  //   let newvalue = e.target.value
+  //   setVariationsPrice({
+  //     ...variation_price,
+  //     [_id]: {
+  //       newvalue
+  //     }
+  //   })
+  // }
 
   const SelectChange = (e) => {
     // console.log("value", e.target.value)
@@ -204,17 +249,21 @@ const AddProduct: React.FC<Props> = props => {
 
     let variationsData = []
     let variationPrice = []
-    for (const property in variation) {
-      variationsData.push(variation[property].id)
+    let relatedProducts = []
+    // for (const property in variation) {
+    //   variationsData.push(variation[property].id)
+    // }
+    // for (const property in variation_price) {
+    //   variationPrice.push(parseFloat(variation_price[property].newvalue))
+    // }
+    // console.log("filesssss", files)
+    // console.log("dataaa", variationPrice)
+    
+
+    for (const property in Related) {
+      relatedProducts.push(Related[property].id)
     }
-    for (const property in variation_price) {
-      variationPrice.push(parseFloat(variation_price[property].newvalue))
-    }
-    console.log("filesssss", files)
-    console.log("dataaa", variationPrice)
-
-
-
+    console.log("Related",relatedProducts)
 
     try {
       const result = await createProduct({
@@ -229,10 +278,11 @@ const AddProduct: React.FC<Props> = props => {
           unit: "",
           selling_price: data.salePrice ? data.salePrice : 0.0,
           qty: data.quantity,
-          variation: variationsData.length > 0 ? JSON.stringify(variationsData) : "",
-          variation_price: variationPrice.length > 0 ? JSON.stringify(variationPrice) : "",
+          variation: variation.length > 0 ? JSON.stringify(variation) : "",
+          // variation_price: variationPrice.length > 0 ? JSON.stringify(variationPrice) : "",
           category_id: type[0].id,
-          sub_category_id: tag[0].id
+          sub_category_id: tag[0].id,
+          related_products:relatedProducts.length > 0 ? JSON.stringify(relatedProducts) : ""
 
         }
       });
@@ -289,7 +339,61 @@ const AddProduct: React.FC<Props> = props => {
     }
   };
   
+  
 
+  const getvariation = () =>{
+    return variation.map((item,i)=>
+    ( <>
+     <Row>
+            <Col md={4}>
+            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+                      <input type="text" placeholder="variation" value={variation[i].variation_name}
+                    name="variation"
+                    onChange={((e)=>handleVariationChange(e,i))} className="form-control brand-flied"/>
+            </Col>
+            <Col md={4}>
+            <div className="mt-10"><FormLabel>Variation Price</FormLabel></div>
+                      <input type="number" step="any"
+                    min="0" placeholder="variation price"  value={variation[i].variation_price}
+                    onChange={((e)=>handleVariationChange(e,i))}
+                    name="variation_price" className="form-control brand-flied"/>
+            </Col>
+            <Col md={4}>
+            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+                      <input type="number" step="any"
+                    min="0" placeholder="variation quantity" value={variation[i].variation_quantity}
+                    onChange={((e)=>handleVariationChange(e,i))}
+                    name="variation_qty" className="form-control brand-flied"/>
+            </Col>
+            
+  </Row>
+
+    
+    
+    </>
+  
+    )
+        
+      )
+  } 
+
+  const handleVariationChange = (e,index)=>{
+      e.preventDefault()
+      let newArr = [...variation]; // copying the old datas array
+      console.log(newArr[index][e.target.name])
+      newArr[index] = {...newArr[index],[e.target.name]:e.target.value};
+
+      setVariations(newArr)
+    
+    
+        
+    
+        // [variation[index].[e.target.name]]:e.target.value[index]})
+    
+      
+      
+      console.log("e",e)
+  }
 
   console.log("after add", files)
   // console.log("after add", variation_price)
@@ -429,7 +533,34 @@ const AddProduct: React.FC<Props> = props => {
                     required="true"
                   />
                 </FormFields>
-                <FormFields>
+
+                {/* <Row>
+            <Col md={3}>
+            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+                      <input type="text" placeholder="re" className="form-control brand-flied"/>
+            </Col>
+            <Col md={3}>
+            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+                      <input type="text" placeholder="re" className="form-control brand-flied"/>
+            </Col>
+            <Col md={3}>
+            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+                      <input type="text" placeholder="re" className="form-control brand-flied"/>
+            </Col>
+             <Col md={3}>
+             <Button type="button" title="add variation" onClick={()=>AddVariation()} className="nm-bt">add</Button>
+            </Col>
+                    </Row> */}
+
+                {getvariation()}
+                <Row>
+                <Col md={12}>
+             <Button type="button" title="add variation"  onClick={()=>AddVariation()} className="nm-bt">add</Button>
+            </Col>
+            </Row>
+                {/* <Button type="button" title="add variation" onClick={()=>AddVariation()}>add</Button> */}
+
+                {/* <FormFields>
 
                   <FormLabel>Variations</FormLabel>
                   <Select
@@ -572,7 +703,7 @@ const AddProduct: React.FC<Props> = props => {
                     min="0" />
                 </FormFields>
 
-
+ */}
 
 
                 <FormFields>
@@ -676,6 +807,47 @@ const AddProduct: React.FC<Props> = props => {
                     value={tag}
                     required
                     onChange={handleMultiChange}
+                    overrides={{
+                      Placeholder: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      DropdownListItem: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      Popover: {
+                        props: {
+                          overrides: {
+                            Body: {
+                              style: { zIndex: 5 },
+                            },
+                          },
+                        },
+                      },
+                    }}
+                    multi
+                  />
+                </FormFields>
+
+                <FormFields>
+                  <FormLabel>Related Products</FormLabel>
+                  <Select
+                    options={data &&products}
+                    labelKey="name"
+                    valueKey="id"
+                    placeholder="Product Tag"
+                    value={Related}
+                    required
+                    onChange={handleMultiProductsChange}
                     overrides={{
                       Placeholder: {
                         style: ({ $theme }) => {

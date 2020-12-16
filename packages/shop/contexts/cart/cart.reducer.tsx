@@ -1,10 +1,17 @@
 export const cartItemsTotalPrice = (items, coupon = null) => {
+  console.log("items",items)
   let total = items.reduce((price, product) => {
     if (product.salePrice) {
-      return price + product.salePrice * product.quantity;
+      return price += product.salePrice ;
     }
-    return price + product.price * product.quantity;
+    return price += product.price ;
   }, 0);
+
+
+
+
+  console.log("items",total)
+
   const discount = coupon
     ? (total * Number(coupon.discountInPercent)) / 100
     : 0;
@@ -22,7 +29,7 @@ const addItemToCart = (state, action) => {
   //   newState[existingCartItemIndex].quantity += action.payload.quantity;
   //   return newState;
   // }
-  console.log("items",state,action)
+  console.log("itemssss",state,action)
 
 
   return [...state.items, action.payload];

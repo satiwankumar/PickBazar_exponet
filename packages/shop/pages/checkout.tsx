@@ -44,6 +44,23 @@ const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
     });
   }
 
+  const testing = () => {
+    <div id="one" style={{ margin: "50px", zIndex: 1 , padding: "500px" }} onClick={() => openModal({
+     show: true,
+     overlayClassName: 'quick-view-overlay',
+     closeOnClickOutside: true,
+     component: AuthenticationForm,
+     closeComponent: '',
+     config: {
+       enableResizing: false,
+       disableDragging: true,
+       className: 'quick-view-modal',
+       width: 458,
+       height: 'auto',
+     },
+   })}><h1 id="el1" >CLIck me</h1></div>
+ 
+ }
   const {
     authState: { isAuthenticated },
     authDispatch,
@@ -61,27 +78,10 @@ const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
   else {
     console.log("error called");
 
-
+testing()
 
   }
 
-  const testing = () => {
-     <div id="one" style={{ margin: "50px", zIndex: 1 , padding: "500px" }} onClick={() => openModal({
-      show: true,
-      overlayClassName: 'quick-view-overlay',
-      closeOnClickOutside: true,
-      component: AuthenticationForm,
-      closeComponent: '',
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: 'quick-view-modal',
-        width: 458,
-        height: 'auto',
-      },
-    })}><h1 id="el1" >CLIck me</h1></div>
-  
-  }
 
 
 

@@ -239,7 +239,7 @@ else{
                   },
                 }}
               >
-                <Uploader  onChange={handleUploader} required={true}/>
+                <Uploader  onChange={handleUploader} required={false}/>
               </DrawerBox>
             </Col>
           </Row>

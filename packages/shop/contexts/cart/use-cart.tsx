@@ -50,6 +50,7 @@ const useCartActions = (initialCart = INITIAL_STATE) => {
   };
   const getCartItemsPrice = () => cartItemsTotalPrice(state.items).toFixed(2);
   const getCartItemsTotalPrice = () =>
+  console.log("satiawan",state.items)
     cartItemsTotalPrice(state.items, state.coupon).toFixed(2);
 
   const getDiscount = () => {

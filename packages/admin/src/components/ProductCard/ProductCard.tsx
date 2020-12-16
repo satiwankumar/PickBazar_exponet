@@ -112,10 +112,10 @@ let getImage = (image)=>{
         <ProductWeight>{`Nominal: ${ nominal_size}`}</ProductWeight>
         <ProductMeta>
           <ProductPriceWrapper>
-            <ProductPrice>
+            {/* <ProductPrice>
               {currency}
               {salePrice && salePrice !== 0 ? salePrice: price}
-            </ProductPrice>
+            </ProductPrice> */}
 
             {discountInPercent && discountInPercent !== 0 ? (
               <DiscountedPrice>

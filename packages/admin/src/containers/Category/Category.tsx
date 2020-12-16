@@ -58,6 +58,7 @@ import {
   WomenDress,
   Minus,
   Trash,
+  PencilIcon,
 } from '../../components/AllSvgIcon';
 import NoResult from '../../components/NoResult/NoResult';
 import { setTimeout } from 'timers';
@@ -448,7 +449,7 @@ button.cat-del-btn .ae.fa {
 
 
             <TableWrapper>
-              <StyledTable $gridTemplateColumns='minmax(70px, 70px) minmax(70px, 70px) minmax(70px, 70px) minmax(150px, auto) minmax(150px, auto) auto'>
+              <StyledTable $gridTemplateColumns='minmax(70px, 70px) minmax(70px, 70px) minmax(70px, 70px) minmax(150px, auto) minmax(150px, auto)  minmax(150px, 70px)  auto'>
                 <StyledHeadCell>
                 <Checkbox
                     type='checkbox'
@@ -470,6 +471,8 @@ button.cat-del-btn .ae.fa {
                 <StyledHeadCell>Name</StyledHeadCell>
                 <StyledHeadCell>Slug</StyledHeadCell>
                 <StyledHeadCell>Type</StyledHeadCell>
+                <StyledHeadCell>Action</StyledHeadCell>
+
 
                 {data ? (
                   Object.keys(data.getCategory).length > 0 ? (
@@ -504,6 +507,8 @@ button.cat-del-btn .ae.fa {
                           <StyledCell>{subItem.name}</StyledCell>
                           <StyledCell>{subItem.slug}</StyledCell>
                           <StyledCell>{subItem.parent_id}</StyledCell>
+                          <StyledCell><Button startEnhancer={() => <PencilIcon/>} className="edit-btn">Edit</Button></StyledCell>
+
                         </React.Fragment>
                         )),
                       

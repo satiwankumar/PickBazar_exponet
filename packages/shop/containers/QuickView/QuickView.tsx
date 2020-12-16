@@ -75,10 +75,11 @@ const QuickView: React.FunctionComponent<QuickViewProps> = ({
   const { isRtl } = useLocale();
   const [vari, setVari] = useState('');
   const [qty, setQty] = useState('');
+  const [variPrices, setvariPrices] = useState('');
   
   const handleAddClick = (e: any) => {
     e.stopPropagation();
-    addItem(modalProps,qty);
+    addItem(modalProps,qty,price);
   };
 
   const handleRemoveClick = (e: any) => {
@@ -93,10 +94,17 @@ const QuickView: React.FunctionComponent<QuickViewProps> = ({
     }).then(() => window.scrollTo(0, 0));
     closeModal();
   }
+   const getvariationBid=()=>{
+
+   }  
+ 
   const handleRadioChange = (e) => {
-    console.log("e.target.value: ",e.target.value);
-    // "foo3bar5".match(/\d+/)[0]
-    setVari(e.target.value);
+    console.log("e.target.value:",e.target.value);
+    let selectedVariation =  e.target.value
+   for(const i of selectedVariation){
+    console.log("e.target.value:",i);
+   }
+    setVari(selectedVariation.id);
     let qtys = e.target.name.match(/\d+/)[0]
     setQty(qtys);
     // console.log("qtys: ",qtys);
@@ -111,7 +119,7 @@ const QuickView: React.FunctionComponent<QuickViewProps> = ({
         console.log("item: ",item);
          return (
           <RadioGroup aria-label="variation" value={vari} name="vari" onChange={handleRadioChange}>
-            <FormControlLabel value={item.variations && item.variations.id} name={item.variations && item.variations.variation_name} checked={item.variations && item.variations.id == vari ? true : false}  control={<Radio />} label={`${item.variations && item.variations.variation_name} of $${item.price}`} />
+            <FormControlLabel value={item.variations && item.variations.id} name={item.variations && item.variations.variation_name} checked={item.variations && item.variations.id == vari ? true : false}  control={<Radio />} label={`${item.variations && item.variations.variation_name} For $${item.price}`} />
             {/* <FormControlLabel value="worst" control={<Radio />} label="The worst." /> */}
           </RadioGroup>
         )}

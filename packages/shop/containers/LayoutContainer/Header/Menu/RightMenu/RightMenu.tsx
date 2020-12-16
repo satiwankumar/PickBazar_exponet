@@ -41,6 +41,7 @@ export const RightMenu: React.FC<Props> = ({
 
       {!isAuthenticated ? (
         <Button
+         className="joinButton"
           onClick={onJoin}
           size="small"
           title="Join"

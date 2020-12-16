@@ -3,7 +3,9 @@ import { useDropzone } from 'react-dropzone';
 import { styled } from 'baseui';
 import {getURl} from '../../utils.js'
 
-import { UploadIcon } from '../AllSvgIcon';
+import { Trash,Time, UploadIcon } from '../AllSvgIcon';
+import Button from '../../components/Button/Button';
+
 const Text = styled('span', ({ $theme }) => ({
   ...$theme.typography.font14,
   fontFamily: $theme.typography.primaryFontFamily,
@@ -57,6 +59,8 @@ const thumbInner = {
   display: 'flex',
   minWidth: '100%',
   // overflow: 'hidden',
+  borderRadius:"25px",
+  Padding:"2px solid red"
 };
 
 const img = {
@@ -64,6 +68,10 @@ const img = {
   width: '100%',
   height: '100%',
 };
+
+const x = {
+  "position":"relative","background":"white","color":"black","height":"10px"
+}
 
 
 
@@ -73,12 +81,15 @@ const img = {
 
 function Uploader({ onChange, imageURL,required,multi }: any) {
 
-
-
+ 
   const [files, setFiles] = useState(
     imageURL ? imageURL: []
   );
 
+  const  removePic = (id)=>{
+   let newfiles =  files.filter(item=>item.id!==id)
+    setFiles(newfiles)
+  }
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -102,9 +113,12 @@ function Uploader({ onChange, imageURL,required,multi }: any) {
     
     <Thumb key={file.id}>
         {console.log("uploaderImage",file.image)}
-      <div style={thumbInner}>
+      <div style={thumbInner} id="container" className="img-div">
+
       {/* {file instanceof File } */}
-        <img src={!(file instanceof File)?getURl(file.image):URL.createObjectURL(file)} style={img} alt={file.id} />
+        <img src={!(file instanceof File)?getURl(file.image):URL.createObjectURL(file)} style={img}  alt={file.id} />
+        <Button type="button" onClick={()=>removePic(file.id)} startEnhancer={() => <Time />}  className="del-pic">
+        </Button>
       </div>
     </Thumb>
   ));

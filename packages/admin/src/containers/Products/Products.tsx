@@ -75,8 +75,8 @@ export const LoaderItem = styled('div', () => ({
 }));
 
 const GET_PRODUCTS = gql`
-query getproducts($filter_category_id:Int,$filter_by_name: String){
-  getproducts(filter_category_id:$filter_category_id ,filter_by_name:$filter_by_name){
+query getproducts($filter_category_id:Int,$filter_by_name: String,){
+  getproducts(filter_category_id:$filter_category_id ,filter_by_name:$filter_by_name,brand_id:null){
    id
   brand{
     name
@@ -95,12 +95,15 @@ query getproducts($filter_category_id:Int,$filter_by_name: String){
     product_id
     image
     }
-   productVariations{
-                  price
-              variations{
-                  id
-                  variation_name
-              }}
+    productVariations{
+
+      variations{
+          id
+          variation_name
+          variation_quantity
+         variation_price
+      }
+      }
    categories{
        id
        name

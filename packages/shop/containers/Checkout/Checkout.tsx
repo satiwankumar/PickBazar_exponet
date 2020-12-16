@@ -13,7 +13,6 @@ import { DELETE_CARD } from 'graphql/mutation/card';
 import { DELETE_CONTACT } from 'graphql/mutation/contact';
 import { openModal } from '@redq/reuse-modal';
 import { useMutation } from '@apollo/react-hooks';
-import { AuthContext } from 'contexts/auth/auth.context';
 
 import CheckoutWrapper, {
   CheckoutContainer,
