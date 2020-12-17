@@ -13,6 +13,10 @@ import { DELETE_CARD } from 'graphql/mutation/card';
 import { DELETE_CONTACT } from 'graphql/mutation/contact';
 import { openModal } from '@redq/reuse-modal';
 import { useMutation } from '@apollo/react-hooks';
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('pk_test_HAorAMBpZdnSy3XeSoEc7EHZ00GmySthxL');
 
 import CheckoutWrapper, {
   CheckoutContainer,
@@ -388,6 +392,8 @@ const Checkout: React.FC<MyFormProps> = ({ token, deviceType }) => {
                 );
               }}
             />
+            <h1>Here Stripe will come</h1>
+
           </PaymentOption>
           {/* CheckoutSubmit */}
           <CheckoutSubmit>

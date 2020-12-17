@@ -18,6 +18,10 @@ const CheckoutWrapper = styled.div`
   }
 `;
 
+export const stripeDiv = styled.div`
+  padding: 10px;
+`;
+
 export const CheckoutContainer = styled.div`
   width: 100%;
   display: flex;

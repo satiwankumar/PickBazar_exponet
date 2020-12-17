@@ -49,6 +49,7 @@ import CheckoutWrapper, {
   Bold,
   Small,
   NoProductMsg,
+  stripeDiv
 } from './CheckoutWithSidebar.style';
 
 import { Plus } from 'components/AllSvgIcon';
@@ -61,6 +62,11 @@ import { useCart } from 'contexts/cart/use-cart';
 import {CHECK_OUT} from 'graphql/mutation/checkout'
 import { APPLY_COUPON } from 'graphql/mutation/coupon';
 import { useLocale } from 'contexts/language/language.provider';
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe('pk_test_HAorAMBpZdnSy3XeSoEc7EHZ00GmySthxL');
 
 // The type of props Checkout Form receives
 interface MyFormProps {
@@ -413,6 +419,11 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                   );
                 }}
               />
+              <div style={{ padding: 10 }} className="stripeDiv">
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm />
+                </Elements>              
+              </div>
 
               {/* Coupon start */}
               {coupon ? (
@@ -497,8 +508,8 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                 />
               </CheckoutSubmit>
             </InformationBox>
-          </CheckoutInformation>
 
+          </CheckoutInformation>
           <CartWrapper>
             <Sticky enabled={true} top={totalHeight} innerZ={999}>
               <OrderInfo>
@@ -608,3 +619,41 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
 };
 
 export default CheckoutWithSidebar;
+
+
+
+
+
+const CheckoutForm = () => {
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const handleSubmit = async (event) => {
+    // Block native form submission.
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      // Stripe.js has not loaded yet. Make sure to disable
+      // form submission until Stripe.js has loaded.
+      return;
+    }
+
+    // Get a reference to a mounted CardElement. Elements knows how
+    // to find your CardElement because there can only ever be one of
+    // each type of element.
+    const cardElement = elements.getElement(CardElement);
+
+
+    stripe.createToken(cardElement).then((payload) => console.log("Token", payload.token.id));
+
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <CardElement />
+      <button  type="submit" disabled={!stripe}>
+        Pay
+      </button>
+    </form>
+  );
+};
