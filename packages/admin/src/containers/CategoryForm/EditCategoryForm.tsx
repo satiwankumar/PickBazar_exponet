@@ -65,7 +65,7 @@ query getCategoryWithoutFilter{
 }`
 const Edit_CATEGORY = gql`
 
-  mutation editCategory($parent_id: Int,$name:String!,$slug:String,$file: Upload,$category_id:Int) {
+  mutation editCategory($parent_id: Int,$name:String!,$slug:String,$file: Upload!,$category_id:Int) {
     editCategory(parent_id: $parent_id,name:$name,slug:$slug,file:$file,category_id:$category_id)
   }
 `;
@@ -86,10 +86,14 @@ const AddCategory: React.FC<Props> = props => {
   const closeDrawer = useCallback(() => dispatch({ type: 'CLOSE_DRAWER' }), [
     dispatch,
   ]);
+
+
   const { register, handleSubmit, setValue } = useForm();
-  const [category, setCategory] = useState([]);
+  
+  
   const [formdata, setFormData] = useState(Categoryitem);
   console.log("formdata",formdata)
+
   // const [slug, setSlug] = useState('');
   // const [file, setFile] = useState('');
   
@@ -105,6 +109,11 @@ const AddCategory: React.FC<Props> = props => {
 
 
   const categories= data && data.getCategoryWithoutFilter.filter(item=> item.parent_id==null)
+  const valueData =data && categories.filter(item=> item.id===formdata.parent_id)
+console.log("valueData",valueData)
+  const [Parentcategory, setCategory] = useState(data&& valueData);
+
+
   // console.log("category ",typeof(categories),categories)
   const Subcategories = data && data.getCategoryWithoutFilter.map(item=>item.subcategories.map(
         item=> {return item}
@@ -139,10 +148,10 @@ try{
  const resulting = await editCategory({
       variables: { 
         category_id:formdata.id,
-        parent_id:parent?parent[0].id:null,
+        parent_id:Parentcategory.length>0?Parentcategory[0].id:null,
         name:formdata.name,
         slug:formdata.slug,
-        file:formdata.image
+        file:image
 
       },
     }); 
@@ -152,7 +161,7 @@ try{
        
    
               
-      toast.success(`🦄  ${resulting.data.createCategory} `, {
+      toast.success(`🦄  ${resulting.data.editCategory} `, {
                   position: "top-right",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -210,6 +219,10 @@ else{
   const handleUploader = files => {
     setValue('image', files[0]);
   };
+  const handleChangeInput = (e)=>{
+      setFormData({...formdata,[e.target.name]:e.target.value})
+      console.log(formdata)
+  }
 
   return (
     <>
@@ -274,6 +287,7 @@ else{
                     inputRef={register({ required: true, maxLength: 20 })}
                     name="name"
                     value={formdata.name}
+                    onChange={(e)=>handleChangeInput(e)}
                     
                   />
                 </FormFields>
@@ -284,6 +298,8 @@ else{
                     inputRef={register({ required: true, maxLength: 20 })}
                     name="slug"
                     value={formdata.slug}
+                    onChange={(e)=>handleChangeInput(e)}
+
                   />
                 </FormFields>
                 <ToastContainer autoClose={2000} />
@@ -294,7 +310,7 @@ else{
                     options={categories}
                     labelKey="name"
                     valueKey="id"
-                    value={formdata.parent_id}
+                    value={valueData}
                     placeholder="Ex: Choose parent category"
                     // value={category}
                     searchable={false}

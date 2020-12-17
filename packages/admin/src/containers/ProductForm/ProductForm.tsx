@@ -169,8 +169,8 @@ data && data.getproducts.map(item=>products.push(item))
     setTag(value);
   };
   const handleMultiProductsChange = ({ value }) => {
-    setValue('categories', value);
-    console.log(value)
+    // setValue('categories', value);
+    // console.log(value)
     setRelatedProducts(value);
   };
   const handleTypeChange = ({ value }) => {
@@ -265,7 +265,7 @@ data && data.getproducts.map(item=>products.push(item))
     for (const property in Related) {
       relatedProducts.push(Related[property].id)
     }
-    console.log("Related",relatedProducts)
+    console.log("Related",variation)
 
     try {
       const result = await createProduct({

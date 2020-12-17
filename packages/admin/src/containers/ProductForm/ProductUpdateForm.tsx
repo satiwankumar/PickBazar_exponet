@@ -57,15 +57,48 @@ query getCategory($filter_category_id:Int){
               variation_name
           
       }
-    
+    ,
+    getproducts(filter_category_id:null ,filter_by_name:null,brand_id:null){
+      id
+     brand{
+       name
+     },
+     slug
+      price
+      selling_price
+      unit
+      qty
+      actual_size,
+      nominal_size
+      name
+      description
+      productImages{
+       id
+       product_id
+       image
+       }
+       productVariations{
+        variations{
+            id
+            variation_name
+            variation_quantity
+     variation_price
+        }
+      }
+      categories{
+          id
+          name
+      }
+   
+    }
 
 
 }`
 
 const UPDATE_PRODUCT = gql`
 # 
-  mutation updateProduct($brand:String!,$name:String!,$file:[Upload],$price:Float!,$unit:String,$description:String!,$actual_size:String!,$variation:String,$nominal_size:String!,$selling_price:Float!,$category_id:Int!,$qty:Int!,$product_id:Int!) {  
-    updateProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,variation:$variation,nominal_size:$nominal_size,selling_price:$selling_price,qty:$qty,category_id:$category_id,product_id:$product_id)
+  mutation updateProduct($brand:String!,$name:String!,$file:[Upload],$price:Float!,$unit:String,$description:String!,$actual_size:String!,$variation:String,$nominal_size:String!,$selling_price:Float!,$category_id:Int!,$sub_category_id:Int!,$qty:Int!,$product_id:Int!,$related_products:String!) {  
+    updateProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,variation:$variation,nominal_size:$nominal_size,selling_price:$selling_price,qty:$qty,category_id:$category_id,sub_category_id:$sub_category_id,product_id:$product_id,related_products:$related_products)
  
     
       }`;
@@ -89,7 +122,7 @@ const AddProduct: React.FC<Props> = () => {
   const data = useDrawerState('data');
   console.log("Updatedata",data)
   let unique=[]
-
+console.log("updatedata",data)
   // Object.keys(data).length>0? data.productsImages.forEach(element => console.log("Updatedata",element)):""
 
   
@@ -104,6 +137,10 @@ const AddProduct: React.FC<Props> = () => {
   const {data:data1,refetch,error} = useQuery(GET_CATEGORIES,{
     variables: { filter_category_id: null, filter_by_name: null }
   })
+
+  const products = []
+data1 && data1.getproducts.map(item=>products.push(item)) 
+   
   // console.log("dataaaaaaaaaaaaaaaaaaa",data1)
 
   // const imagesData = data.productImages.map(item=> item.image=getURl(item.image))
@@ -115,11 +152,11 @@ const AddProduct: React.FC<Props> = () => {
 const filterVariation =[]
 data.productVariations.map(item=>
   {filterVariation.push(item.variations)})
-console.log("filterVariation",filterVariation)
+// console.log("filterVariation",filterVariation,'   strinignf ',JSON.stringify(filterVariation))
 
 
   const [variation, setVariations] = useState( data && filterVariation);
-  console.log("dataaaaaaaaaaaaaaaaaaa",variation)
+  // console.log("dataaaaaaaaaaaaaaaaaaa",variation)
 
   const [type, setType] = useState([ data.categories[0] ]);
   const [brand, setBrands] = useState(data && data.brand);
@@ -127,7 +164,7 @@ console.log("filterVariation",filterVariation)
   const [description, setDescription] = useState(data.description);
   
   const [files, setFiles] = React.useState(data && data.productImages);
-
+  const [Related, setRelatedProducts] = useState(data && data.relatedProducts);
 
   const [newfiles, newFiles] = React.useState({});
   
@@ -147,6 +184,7 @@ const [updateProduct] = useMutation(UPDATE_PRODUCT)
 const [deleteProduct] = useMutation(DELETE_PRODUCT)
 const handleDelete = async(id)=>{
   // console.log("handleDelete ",id)
+  console.log("relatedproducts",Related)
 
 try {
   
@@ -249,7 +287,10 @@ const afterPaste = (evt)=>{
     setBrands({name:e.target.value})
   };
 
- 
+  const handleMultiProductsChange = ({ value }) => {
+  
+    setRelatedProducts(value);
+  };
    
   const AddVariation  = () =>{
     let newArr = [...variation, {variation_name:"",variation_price:"",variation_quantity:""} ]; // copying the old datas array
@@ -370,19 +411,32 @@ const afterPaste = (evt)=>{
   };
 
 
-  let variationsData = []
-  let variationPrice = []
+  // let variationsData = []
+  // let variationPrice = []
+  
+ 
   // for (const property in variation) {
-  //   variationsData.push(variation[property].id)
+  
+  //   variationsData.push(variation[property])
+  // }
+  // for (const [key, value] of variationsData) {
+  //   console.log("dataaaFilesVaruatiopnsdf",key, value);
   // }
   // for (const property in variation_price) {
   //   variationPrice.push(parseFloat(variation_price[property].newvalue))
   // }
   console.log("dataaaFiles",files)
+const relatedProducts = []
+  for (const property in Related) {
+    relatedProducts.push(Related[property].id)
+  }
+
+  
+  // console.log("Related",relatedProducts)
+  console.log("updateddAta",variation)
 
   const onSubmit =async data => {
     try{
-    console.log("DATAaaaaaaaaaaaaaaaaaa",variation)
 
     const result = await  updateProduct({
       variables:{
@@ -400,7 +454,8 @@ const afterPaste = (evt)=>{
         variation: variation.length > 0 ? JSON.stringify(variation) : "",
         category_id: type[0].id,
         sub_category_id: tag[0].id,
-        product_id:productid
+        product_id:productid,
+        related_products:relatedProducts.length > 0 ? JSON.stringify(relatedProducts) : ""
       }
     })
     if (result) {
@@ -654,6 +709,46 @@ const afterPaste = (evt)=>{
                     placeholder="Product Tag"
                     value={tag}
                     onChange={handleMultiChange}
+                    overrides={{
+                      Placeholder: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      DropdownListItem: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      Popover: {
+                        props: {
+                          overrides: {
+                            Body: {
+                              style: { zIndex: 5 },
+                            },
+                          },
+                        },
+                      },
+                    }}
+                    multi
+                  />
+                </FormFields>
+                <FormFields>
+                  <FormLabel>Related Products</FormLabel>
+                  <Select
+                    options={data &&products}
+                    labelKey="name"
+                    valueKey="id"
+                    placeholder="Related Products"
+                    value={Related}
+                    required
+                    onChange={handleMultiProductsChange}
                     overrides={{
                       Placeholder: {
                         style: ({ $theme }) => {

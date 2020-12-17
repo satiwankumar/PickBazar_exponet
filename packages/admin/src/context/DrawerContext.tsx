@@ -4,6 +4,7 @@ const initialState = {
   isOpen: false,
   drawerComponent: null,
   data: null,
+  category:null
 };
 type State = typeof initialState;
 type Action = any;

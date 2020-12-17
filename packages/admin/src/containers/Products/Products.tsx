@@ -108,6 +108,39 @@ query getproducts($filter_category_id:Int,$filter_by_name: String,){
        id
        name
    }
+   relatedProducts{
+    id
+ brand{
+     name
+ }
+ slug
+ price
+ selling_price
+ unit
+ qty
+ actual_size
+ nominal_size
+ name
+ description
+ productImages{
+     id
+     product_id
+     image
+ }
+ productVariations{
+
+ variations{
+     id
+     variation_name
+     variation_quantity
+    variation_price
+ }
+ }
+ categories{
+     id
+     name
+ }
+ }
 
   },  
  
