@@ -28,7 +28,7 @@ const NoResultFound: React.FC<NoResultFoundProps> = ({ id }) => {
       <h3>
         <FormattedMessage
           id='noResultFound'
-          defaultMessage='Sorry, No result found :('
+          defaultMessage='Sorry, No Product found :('
         />
       </h3>
 

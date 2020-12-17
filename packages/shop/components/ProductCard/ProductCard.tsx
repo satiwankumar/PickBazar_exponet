@@ -75,7 +75,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     e.stopPropagation();
     removeItem(data);
   };
-  console.log("imageaaaaaaaaaaaaaaaaaaaa",image)
+  // console.log("imageaaaaaaaaaaaaaaaaaaaa",image)
   return (
     <ProductCardWrapper onClick={onClick} className="product-card">
       <ProductImageWrapper>
@@ -83,7 +83,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           url={Object.keys(image).length>0?getURl(image[0].image):image}
           className="product-image"
           style={{ position: 'relative' }}
-          alt={name}
+          alt="noimage"
         />
         {discountInPercent ? (
           <>
@@ -110,10 +110,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
               ''
             )}
 
-            <span className="product-price">
+          {/* {  <span className="product-price">
               {currency}
               {salePrice ? salePrice : price}
-            </span>
+            </span>} */}
           </div>
 
           {/* {!isInCart(data.id) ? (

@@ -6,9 +6,12 @@ import Sticky from 'react-stickynode';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Popover from 'components/Popover/Popover';
 import { ArrowDropDown, CategoryIcon } from 'components/AllSvgIcon';
+import Select from 'components/Select/Select/Select';
+
 import { SearchContext } from 'contexts/search/search.context';
 import { useLocale } from 'contexts/language/language.provider';
 import { useStickyState } from 'contexts/app/app.provider';
+
 import {
   SidebarMobileLoader,
   SidebarLoader,
@@ -39,6 +42,7 @@ type SidebarCategoryProps = {
 };
 
 const SidebarCategory: React.FC<SidebarCategoryProps> = ({
+
   deviceType: { mobile, tablet, desktop },
   type,
 }) => {
@@ -50,6 +54,7 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
     variables: { category_id:type?type:null,filter_by_name: null  },
   });
 console.log(error,loading,data)
+const [brands, setBrands] = React.useState([]);
 
   const selectedQueries = query.category;
 
@@ -65,7 +70,17 @@ console.log(error,loading,data)
       query: updatedQuery,
     });
   };
-
+  const handleBrandSelection = (id: string,name:string) => {
+    //  alert(id)
+      const updatedQuery = state.text
+        ? { text: state.text, category: id ,brand:name}
+        : { category: id };
+      router.push({
+        pathname: pathname,
+        query: updatedQuery,
+      });
+    };
+  
 
 
 
@@ -75,8 +90,13 @@ console.log(error,loading,data)
     item => item.subcategories.map(
       item => Subcategories.push(item)
     ))
-
-
+    const brandsOptions = data && data.getBrand.map(item => { return item })
+    const SelectChange = (e) => {
+      // console.log("value", e.target.value)
+      // setValue('type', value);
+      setBrands(e.target.value)
+  
+    };
 
   const isSidebarSticky = useStickyState('isSidebarSticky');
 
@@ -89,8 +109,22 @@ console.log(error,loading,data)
   }
 
   return (
+
+   
+    
+
+
     <CategoryWrapper>
+         <label >Brand </label><br/>
+                  <input type="text" list="data" className="form-control brand-flied"   onChange={(value) => SelectChange(value)} />
+
+                  <datalist id="data">
+                    {data && brandsOptions.map((item, key) =>
+                      <option key={key} value={item.name} />
+                    )}
+                  </datalist>
       <PopoverWrapper className={`${mobile || tablet ? 'mobileView' : ''}`}>
+        
         <Popover
           handler={
             <PopoverHandler>
@@ -106,13 +140,13 @@ console.log(error,loading,data)
           className="category-popover"
           content={
             <>
-              {type === 'medicine' && (
+              {/* {type === 'medicine' && (
                 <Link href={REQUEST_MEDICINE_PAGE}>
                   <RequestMedicine>
                     <FormattedMessage id="reqMedicine" />
                   </RequestMedicine>
                 </Link>
-              )}
+              )} */}
               <TreeMenu
                 data={data && data.getCategory}
                 onClick={handleCategorySelection}
@@ -128,13 +162,13 @@ console.log(error,loading,data)
         style={{ paddingTop: type === 'medicine' ? 0 : 45 }}
       >
         <Sticky enabled={isSidebarSticky} top={type === 'medicine' ? 89 : 110}>
-          {type === 'medicine' && (
+          {/* {type === 'medicine' && (
             <Link href={REQUEST_MEDICINE_PAGE}>
               <RequestMedicine>
                 <FormattedMessage id="reqMedicine" />
               </RequestMedicine>
             </Link>
-          )}
+          )} */}
 
           <Scrollbars
             universal

@@ -31,4 +31,8 @@ query getCategory($category_id:Int,$filter_by_name: String){
         site_description
         image
 }
+
+getBrand(filter_text: null){
+  name
+},
 }`;

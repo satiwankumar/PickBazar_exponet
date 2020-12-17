@@ -56,7 +56,7 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   const { isRtl } = useLocale();
   const { addItem, removeItem, isInCart, getItem, items } = useCart();
   const data = product;
-
+console.log("dataaaaaaaaaaaaaaaaaaaaaaaaa",data)
   const handleAddClick = (e) => {
     e.stopPropagation();
     addItem(data,qty);
@@ -76,20 +76,20 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
     console.log("e.target.value: ",e.target.value);
     // "foo3bar5".match(/\d+/)[0]
     setVari(e.target.value);
-    let qtys = e.target.name.match(/\d+/)[0]
-    setQty(qtys);
+    // let qtys = e.target.name.match(/\d+/)[0]
+    // setQty(qtys);
     // console.log("qtys: ",qtys);
   }
   const variation = () => {
     // return "hello"
-    console.log("dfdsfsd", Object.keys(product.productVariations));
+    console.log("dfdsfsd", product.productVariations);
     if (Object.keys(product.productVariations).length > 0) {
       return product.productVariations.map((item) => {
         
-        console.log("item: ",item);
+        console.log("item: ",item.variations.id);
          return (
           <RadioGroup aria-label="variation" value={vari} name="vari" onChange={handleRadioChange}>
-            <FormControlLabel value={item.variations && item.variations.id} name={item.variations && item.variations.variation_name} checked={item.variations && item.variations.id == vari ? true : false}  control={<Radio />} label={`${item.variations && item.variations.variation_name} of $${item.price}`} />
+            <FormControlLabel value={item.variations && item.variations} name={item && item.variations.variation_name} checked={item && item.id == vari ? true : false}  control={<Radio />} label={`${item && item.variations.variation_name} ${item && item.variations.variation_quantity} of $${item.variations.variation_price}`} />
             {/* <FormControlLabel value="worst" control={<Radio />} label="The worst." /> */}
           </RadioGroup>
         )}
@@ -147,7 +147,19 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
           <ProductWeight>{`ActualSize : ${product.actual_size}`}</ProductWeight><br/>
           <ProductWeight>{`NomialSize : ${product.nominal_size}`}</ProductWeight><br/>
           {variation()}
-
+          <ProductCartBtn>
+                <Button
+                  title='Add to Cart'
+                  intlButtonId='addToCartButton'
+                  iconPosition='left'
+                  size='small'
+                  className='cart-button'
+                  icon={<CartIcon />}
+                  onClick={handleAddClick}
+                />
+              
+            
+            </ProductCartBtn>
           {/* <ProductWeight>{product.unit}</ProductWeight> */}
           <ProductDescription>
             <ReadMore character={600}>{product.description}</ReadMore>
@@ -174,19 +186,7 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
               )}
             </ProductCartBtn> */}
            
-           <ProductCartBtn>
-                <Button
-                  title='Add to Cart'
-                  intlButtonId='addToCartButton'
-                  iconPosition='left'
-                  size='small'
-                  className='cart-button'
-                  icon={<CartIcon />}
-                  onClick={handleAddClick}
-                />
-              
-            
-            </ProductCartBtn>
+         
           </ProductCartWrapper>
 
           {/* <ProductMeta>

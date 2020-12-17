@@ -65,7 +65,7 @@ query getCategoryWithoutFilter{
 }`
 const Edit_CATEGORY = gql`
 
-  mutation editCategory($parent_id: Int,$name:String!,$slug:String,$file: Upload!,$category_id:Int) {
+  mutation editCategory($parent_id: Int,$name:String!,$slug:String,$file: Upload,$category_id:Int) {
     editCategory(parent_id: $parent_id,name:$name,slug:$slug,file:$file,category_id:$category_id)
   }
 `;
@@ -172,7 +172,11 @@ try{
 
 
 })
-window.location.reload()
+
+setTimeout(() => {
+  window.location.reload()
+    
+  }, 3000);
     
 
 } 
@@ -213,7 +217,7 @@ else{
  
   };
   const handleChange = ({ value }) => {
-    setValue('parent', value);
+    // setValue('parent', value);
     setCategory(value);
   };
   const handleUploader = files => {
@@ -298,6 +302,7 @@ else{
                     inputRef={register({ required: true, maxLength: 20 })}
                     name="slug"
                     value={formdata.slug}
+                    disabled={true}
                     onChange={(e)=>handleChangeInput(e)}
 
                   />
@@ -310,7 +315,7 @@ else{
                     options={categories}
                     labelKey="name"
                     valueKey="id"
-                    value={valueData}
+                    value={Parentcategory}
                     placeholder="Ex: Choose parent category"
                     // value={category}
                     searchable={false}

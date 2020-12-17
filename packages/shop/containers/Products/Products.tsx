@@ -28,41 +28,75 @@ const QuickView = dynamic(() => import('../QuickView/QuickView'));
 const GET_PRODUCTS = gql`
 
  query getproducts($filter_category_id:Int,$filter_by_name: String){
-  getproducts(filter_category_id:$filter_category_id ,filter_by_name:$filter_by_name){
-   id
-  brand{
-    name
-  },
-  slug
-   price
-   selling_price
-   unit
-   qty
-   actual_size,
-   nominal_size
-   name
-   description
-   productImages{
+  getproducts(filter_category_id:$filter_category_id ,filter_by_name:$filter_by_name,brand_id:null){
     id
-    product_id
-    image
-}
-productVariations{
+   brand{
+     name
+   },
+   slug
+    price
+    selling_price
+    unit
+    qty
+    actual_size,
+    nominal_size
+    name
+    description
+    productImages{
+     id
+     product_id
+     image
+     }
+     productVariations{
+ 
+       variations{
+           id
+           variation_name
+           variation_quantity
+          variation_price
+       }
+       }
+    categories{
+        id
+        name
+    }
+    relatedProducts{
+     id
+  brand{
+      name
+  }
+  slug
   price
-variations{
-  id
-  variation_name
-}
-}
-   categories{
-       id
-       name
+  selling_price
+  unit
+  qty
+  actual_size
+  nominal_size
+  name
+  description
+  productImages{
+      id
+      product_id
+      image
+  }
+  productVariations{
+ 
+  variations{
+      id
+      variation_name
+      variation_quantity
+     variation_price
+  }
+  }
+  categories{
+      id
+      name
+  }
+  }
+ 
    }
-
-  }
-  }
   
-
+  }
 
 #  getProductByCategory( input : {category_id: $category_id }){
 #         products{
@@ -183,6 +217,7 @@ console.log("typeinproducts",type)
       // text: '/product/category',
       filter_category_id:router.query.category ?router.query.category:type ,
       filter_by_name:router.query.text?router.query.text:null
+      
 
       // category_id: Number(router.query.category ?router.query.category:1),
       // offset: 0,
@@ -204,32 +239,38 @@ console.log("updatedata",data)
     deviceType: any,
     onModalClose: any
   ) => {
+
     if (router.pathname === '/product/[slug]') {
       const as = `/product/${modalProps.id}`;
       router.push(router.pathname, as);
       return;
     }
-    openModal({
-      show: true,
-      overlayClassName: 'quick-view-overlay',
-      closeOnClickOutside: false,
-      component: QuickView,
-      componentProps: { modalProps, deviceType, onModalClose },
-      closeComponent: 'div',
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: 'quick-view-modal',
-        width: 900,
-        y: 30,
-        height: 'auto',
-        transition: {
-          mass: 1,
-          tension: 0,
-          friction: 0,
-        },
-      },
-    });
+    // if (router.pathname === '/product/[slug]') {
+    //   const as = `/product/${modalProps.id}`;
+    //   router.push(router.pathname, as);
+    //   return;
+    // }
+    // openModal({
+    //   show: true,
+    //   overlayClassName: 'quick-view-overlay',
+    //   closeOnClickOutside: false,
+    //   component: QuickView,
+    //   componentProps: { modalProps, deviceType, onModalClose },
+    //   closeComponent: 'div',
+    //   config: {
+    //     enableResizing: false,
+    //     disableDragging: true,
+    //     className: 'quick-view-modal',
+    //     width: 900,
+    //     y: 30,
+    //     height: 'auto',
+    //     transition: {
+    //       mass: 1,
+    //       tension: 0,
+    //       friction: 0,
+    //     },
+    //   },
+    // });
     const href = router.asPath;
     const as = `/product/${modalProps.slug}`;
     router.push(href, as, { shallow: true });
@@ -294,7 +335,7 @@ console.log("updatedata",data)
 
          {  
   
-      Object.keys(data).length>0?(
+      Object.keys(data.getproducts).length>0?(
                data.getproducts.map((element,index) => (
 
         

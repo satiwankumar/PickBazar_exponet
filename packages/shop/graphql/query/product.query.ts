@@ -67,40 +67,73 @@ export const GET_PRODUCT = gql`
 export const GET_PRODUCT_DETAILS = gql`
 query getProductBySlug($slug: String!){
   getProductBySlug(slug: $slug){
-   id
-   brand{
+      id
+     brand{
        name
-   }
-   slug
-   price
-   selling_price
-   unit
-   qty
-   actual_size
-   nominal_size
-   name
-   description
-   productImages{
+     },
+     slug
+      price
+      selling_price
+      unit
+      qty
+      actual_size,
+      nominal_size
+      name
+      description
+      productImages{
        id
        product_id
        image
-   }
-   productVariations{
-       price
-   variations{
+       }
+       productVariations{
+   
+         variations{
+             id
+             variation_name
+             variation_quantity
+            variation_price
+         }
+         }
+      categories{
+          id
+          name
+      }
+      relatedProducts{
        id
-       variation_name
-   }
-   }
-   categories{
-       id
-       name
-   }
-  
+    brand{
+        name
+    }
+    slug
+    price
+    selling_price
+    unit
+    qty
+    actual_size
+    nominal_size
+    name
+    description
+    productImages{
+        id
+        product_id
+        image
+    }
+    productVariations{
+   
+    variations{
+        id
+        variation_name
+        variation_quantity
+       variation_price
+    }
+    }
+    categories{
+        id
+        name
+    }
+    }
+   
+  }    
 }
-}
-
-
 
 
 `;
