@@ -80,12 +80,14 @@ query getCategory($filter_category_id:Int){
          product_id
          image
          }
-        productVariations{
-                       price
-                   variations{
-                       id
-                       variation_name
-                   }}
+         productVariations{
+          variations{
+              id
+              variation_name
+              variation_quantity
+       variation_price
+          }
+        }
         categories{
             id
             name
@@ -348,7 +350,7 @@ data && data.getproducts.map(item=>products.push(item))
             <Col md={4}>
             <div className="mt-10"><FormLabel>Variation</FormLabel></div>
                       <input type="text" placeholder="variation" value={variation[i].variation_name}
-                    name="variation"
+                    name="variation_name"
                     onChange={((e)=>handleVariationChange(e,i))} className="form-control brand-flied"/>
             </Col>
             <Col md={4}>
@@ -363,7 +365,7 @@ data && data.getproducts.map(item=>products.push(item))
                       <input type="number" step="any"
                     min="0" placeholder="variation quantity" value={variation[i].variation_quantity}
                     onChange={((e)=>handleVariationChange(e,i))}
-                    name="variation_qty" className="form-control brand-flied"/>
+                    name="variation_quantity" className="form-control brand-flied"/>
             </Col>
             
   </Row>

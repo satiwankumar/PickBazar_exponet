@@ -64,8 +64,8 @@ query getCategory($filter_category_id:Int){
 
 const UPDATE_PRODUCT = gql`
 # 
-  mutation updateProduct($brand:String!,$name:String!,$file:[Upload],$price:Float!,$unit:String,$description:String!,$actual_size:String!,$variation:String,$variation_price:String,$nominal_size:String!,$selling_price:Float!,$category_id:Int!,$qty:Int!,$product_id:Int!) {  
-    updateProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,variation:$variation,variation_price:$variation_price,nominal_size:$nominal_size,selling_price:$selling_price,qty:$qty,category_id:$category_id,product_id:$product_id)
+  mutation updateProduct($brand:String!,$name:String!,$file:[Upload],$price:Float!,$unit:String,$description:String!,$actual_size:String!,$variation:String,$nominal_size:String!,$selling_price:Float!,$category_id:Int!,$qty:Int!,$product_id:Int!) {  
+    updateProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,variation:$variation,nominal_size:$nominal_size,selling_price:$selling_price,qty:$qty,category_id:$category_id,product_id:$product_id)
  
     
       }`;
@@ -104,14 +104,22 @@ const AddProduct: React.FC<Props> = () => {
   const {data:data1,refetch,error} = useQuery(GET_CATEGORIES,{
     variables: { filter_category_id: null, filter_by_name: null }
   })
-  console.log("dataaaaaaaaaaaaaaaaaaa",data1)
+  // console.log("dataaaaaaaaaaaaaaaaaaa",data1)
 
   // const imagesData = data.productImages.map(item=> item.image=getURl(item.image))
   
   
   const [productid,setProductId ] = useState(data && data.id)
   const [content,setContent] = useState({content:data&&data.description})
-  const [variation, setVariations] = useState( data && data.productVariations);
+
+const filterVariation =[]
+data.productVariations.map(item=>
+  {filterVariation.push(item.variations)})
+console.log("filterVariation",filterVariation)
+
+
+  const [variation, setVariations] = useState( data && filterVariation);
+  console.log("dataaaaaaaaaaaaaaaaaaa",variation)
 
   const [type, setType] = useState([ data.categories[0] ]);
   const [brand, setBrands] = useState(data && data.brand);
@@ -244,7 +252,10 @@ const afterPaste = (evt)=>{
  
    
   const AddVariation  = () =>{
-    setVariations((previous)=>[...previous,{variation_name:"",variation_price:"",variation_quantity:""}])
+    let newArr = [...variation, {variation_name:"",variation_price:"",variation_quantity:""} ]; // copying the old datas array
+    
+    console.log("newArr",newArr)
+    setVariations(newArr)
 
   }
   // console.log("dataaaaid",productid)
@@ -292,8 +303,8 @@ const afterPaste = (evt)=>{
      <Row>
             <Col md={4}>
             <div className="mt-10"><FormLabel>Variation</FormLabel></div>
-                      <input type="text" placeholder="variation" value={variation[i].variation_name}
-                    name="variation"
+                      <input type="text" placeholder="variation name" value={variation[i].variation_name}
+                    name="variation_name"
                     onChange={((e)=>handleVariationChange(e,i))} className="form-control brand-flied"/>
             </Col>
             <Col md={4}>
@@ -306,9 +317,9 @@ const afterPaste = (evt)=>{
             <Col md={4}>
             <div className="mt-10"><FormLabel>Variation</FormLabel></div>
                       <input type="number" step="any"
-                    min="0" placeholder="variation quantity" value={variation[i].variation_quanity}
+                    min="0" placeholder="variation quantity" value={variation[i].variation_quantity}
                     onChange={((e)=>handleVariationChange(e,i))}
-                    name="variation_qty" className="form-control brand-flied"/>
+                    name="variation_quantity" className="form-control brand-flied"/>
             </Col>
             
   </Row>
@@ -323,14 +334,22 @@ const afterPaste = (evt)=>{
   } 
 
   const handleVariationChange = (e,index)=>{
+    console.log("e.target.value",e.target.value)
+    console.log("e.target.name",e.target.name)
+    
       e.preventDefault()
       let newArr = [...variation]; // copying the old datas array
-      console.log(newArr[index][e.target.name])
-      newArr[index] = {...newArr[index],[e.target.name]:e.target.value};
+      console.log("newArray",newArr)
+      // console.log("newArray",newArr[index][e.target.name])
+      // console.log("newArrays",)
+      let object = newArr[index];
+      object[e.target.name] = e.target.value;
+      console.log('newaray',newArr[index],e.target.name)
+      newArr[index] = object;
+
+    
 
       setVariations(newArr)
-    
-    
         
     
         // [variation[index].[e.target.name]]:e.target.value[index]})
@@ -363,7 +382,7 @@ const afterPaste = (evt)=>{
 
   const onSubmit =async data => {
     try{
-    console.log("DATAaaaaaaaaaaaaaaaaaa",data)
+    console.log("DATAaaaaaaaaaaaaaaaaaa",variation)
 
     const result = await  updateProduct({
       variables:{
@@ -378,8 +397,7 @@ const afterPaste = (evt)=>{
         unit: "",
         selling_price: data.selling_price,
         qty: data.qty,
-        variation: variationsData.length > 0 ? JSON.stringify(variationsData) : "",
-        variation_price: variationPrice.length > 0 ? JSON.stringify(variationPrice) : "",
+        variation: variation.length > 0 ? JSON.stringify(variation) : "",
         category_id: type[0].id,
         sub_category_id: tag[0].id,
         product_id:productid

@@ -182,6 +182,22 @@ export default function Category() {
     () => dispatch({ type: 'OPEN_DRAWER', drawerComponent: 'CATEGORY_FORM' }),
     [dispatch]
   );
+  // const openCategoryEditDrawer = useCallback(
+  //   (subitem) => dispatch({ type: 'OPEN_DRAWER', drawerComponent: 'Edit_CATEGORY_FORM',data: subitem}),
+  //   [dispatch]
+  // );
+  
+  const openCategoryEditDrawer = React.useCallback(
+    (subItem) =>
+      dispatch({
+        type: 'OPEN_DRAWER',
+        drawerComponent: 'EDIT_CATEGORY_FORM',
+        data: subItem,
+      }),
+    [dispatch]
+  );
+
+  
   const [deleteCategory]  = useMutation(Delete_Category)
 
   const { data, error, refetch } = useQuery(GET_CATEGORIES,{
@@ -507,7 +523,8 @@ button.cat-del-btn .ae.fa {
                           <StyledCell>{subItem.name}</StyledCell>
                           <StyledCell>{subItem.slug}</StyledCell>
                           <StyledCell>{subItem.parent_id}</StyledCell>
-                          <StyledCell><Button startEnhancer={() => <PencilIcon/>} className="edit-btn">Edit</Button></StyledCell>
+                          
+                          <StyledCell><Button startEnhancer={() => <PencilIcon/>}  onClick={()=>openCategoryEditDrawer(subItem)} className="edit-btn">Edit</Button></StyledCell>
 
                         </React.Fragment>
                         )),
