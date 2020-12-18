@@ -18,6 +18,9 @@ import { openModal } from '@redq/reuse-modal';
 import { Product } from 'interfaces';
 import { useMutation } from '@apollo/react-hooks';
 import { Scrollbars } from 'react-custom-scrollbars';
+
+
+
 import CheckoutWrapper, {
   CheckoutContainer,
   CheckoutInformation,
@@ -63,12 +66,10 @@ import { useCart } from 'contexts/cart/use-cart';
 import {CHECK_OUT} from 'graphql/mutation/checkout'
 import { APPLY_COUPON } from 'graphql/mutation/coupon';
 import { useLocale } from 'contexts/language/language.provider';
-import {Elements} from '@stripe/react-stripe-js';
-import {loadStripe} from '@stripe/stripe-js';
-import {CardElement, useStripe, useElements, StripeProvider} from '@stripe/react-stripe-js';
+import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import { order } from 'styled-system';
+import TextField from 'components/TextField/TextField';
 
-const stripePromise = loadStripe('pk_test_HAorAMBpZdnSy3XeSoEc7EHZ00GmySthxL');
 
 // The type of props Checkout Form receives
 interface MyFormProps {
@@ -81,10 +82,11 @@ type CartItemProps = {
 };
 
 const OrderItem: React.FC<CartItemProps> = ({ product }) => {
-  console.log("dataaaaa",product)
+  
 
   const { id, quantity, title, name, unit, price, salePrice } = product;
   const displayPrice = salePrice ? salePrice : price;
+  
   return (
     <Items key={id}>
       <Quantity>{quantity}</Quantity>
@@ -94,13 +96,15 @@ const OrderItem: React.FC<CartItemProps> = ({ product }) => {
       </ItemInfo>
       <Price>
         {CURRENCY}
-        {(displayPrice * quantity).toFixed(2)}
+        {displayPrice}
       </Price>
     </Items>
   );
 };
 
 const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
+  const stripe = useStripe();
+  const elements = useElements();
   const [hasCoupon, setHasCoupon] = useState(false);
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setError] = useState('');
@@ -121,11 +125,6 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
     toggleRestaurant,
   } = useCart();
 
-
-  const stripe = useStripe();
-  const elements = useElements();
-
-  
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const { address, contact, card, schedules } = state;
@@ -136,10 +135,8 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
   const [checkout] = useMutation(CHECK_OUT);
   const [appliedCoupon] = useMutation(APPLY_COUPON);
 
-let orderItems  = []
-
-
-items.forEach(item=> {
+  let orderItems  = []
+  items.forEach(item=> {
   let variation = item.productVariations.find((variation)=>variation.variations.id == item.variationId);
   // console.log('items reducer',variation);
   if(variation){
@@ -156,7 +153,8 @@ items.forEach(item=> {
 }
 
 );
-console.log("orderItems",orderItems)
+  
+  console.log("orderItems",orderItems)
 
   const [shipping,setShipping] = useState({
     first_name:"",
@@ -185,74 +183,7 @@ console.log("orderItems",orderItems)
 
   });
   const { headerState } = useContext<any>(HeaderContext);
-  const totalHeight =
-    headerState?.desktopHeight > 0 ? headerState.desktopHeight + 30 : 76 + 30;
-
-  const handleSubmit = async (e) => {
-
-    handleStripeSubmit(e);
-
-    return 
-
-
-    setLoading(true);
-    if (isValid) {
-      const result =  await checkout({
-        variables:{
-          input:{
-            _token: Token?Token:"",
-            customer_email: "noreplydummy@gmail.com",
-            customer_phone: "+1 (772) 895-7472",
-            is_billing: "false",
-            is_shipping: "false",
-            sub_total: 200,
-            shipping_cost: 0,
-            coupon_id: couponCode,
-            discount: 0,
-            total: 200,
-            currency: "$",
-            currency_rate: "27.5",
-            billing:{
-              first_name: Billing.first_name,
-              last_name: Billing.last_name,
-              address_1: Billing.address1,
-              address_2: Billing.address2,
-              city: Billing.city,
-              zip: Billing.zip,
-              country: Billing.country,
-              state: Billing.state
-            },
-            ship_to_a_different_address: "0",
-            shipping:{
-              first_name: shipping.first_name,
-              last_name: shipping.last_name,
-              address_1: shipping.address1,
-              address_2: shipping.address2,
-              city: shipping.city,
-              zip: shipping.zip,
-              country: shipping.country,
-              state: shipping.state
-            },
-            delivery_time:{
-              date: null,
-              min_time: null,
-              max_time: null,
-          },
-          locale: "en",
-          payment_method: "stripe",
-          shipping_method: "free_shipping",
-          terms_and_conditions: "on",
-          service_charge: 0,
-          tax: 0,
-          items:orderItems.length>0?orderItems:""
-          }
-        }
-      })
-      clearCart();
-      Router.push('/order-received');
-    }
-    setLoading(false);
-  };
+  const totalHeight = headerState?.desktopHeight > 0 ? headerState.desktopHeight + 30 : 76 + 30;
 
   useEffect(() => {
     if (
@@ -336,392 +267,391 @@ console.log("orderItems",orderItems)
       setError('Invalid Coupon');
     }
   };
+
   const handleOnUpdate = (couponCode: any) => {
     setCouponCode(couponCode);
   };
-const handleBilling = (e)=>{
-    setBilling({...Billing,[e.target.name]:e.target.value  })
-}
-const handleShipping = (e)=>{
-  setShipping({...shipping,[e.target.name]:e.target.value  })
-}
 
-
-
-const handleStripeSubmit = async (event) => {
-
-  // Block native form submission.
-  event.preventDefault();
-
-  if (!stripe || !elements) {
-    // Stripe.js has not loaded yet. Make sure to disable
-    // form submission until Stripe.js has loaded.
-    return;
+  const handleBilling = (e)=>{
+      setBilling({...Billing,[e.target.name]:e.target.value  })
   }
 
-  // Get a reference to a mounted CardElement. Elements knows how
-  // to find your CardElement because there can only ever be one of
-  // each type of element.
-  const cardElement = elements.getElement(CardElement);
+  const handleShipping = (e)=>{
+    setShipping({...shipping,[e.target.name]:e.target.value  })
+  }
+
+  console.log("orderItems",orderItems)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!stripe || !elements) {
+      return;
+    }
+    const cardElement = elements.getElement(CardElement);
+    const result = await stripe.createToken(cardElement);
+    console.log("result",result)
+    let stripeToken = result.token.id;
+    setToken(stripeToken)
+    // console.log(result.token.id);
+    // console.log(stripeToken);
+   ;
+
+console.log("billing",Billing)
+console.log("shipping",shipping)
+    setLoading(true);
+    if (isValid) {
+      const result =  await checkout({
+        variables:{
+          input:{
+            token: stripeToken?stripeToken:"",
+            customer_email: "test@gmail.com",
+            customer_phone: "+1 (772) 895-7472",
+            is_billing: "false",
+            is_shipping: "false",
+            sub_total: 200,
+            shipping_cost: 0,
+            coupon_id: couponCode,
+            discount: 0,
+            total: 200,
+            currency: "$",
+            currency_rate: "27.5",
+            billing:{
+              first_name: Billing.first_name,
+              last_name: Billing.last_name,
+              address_1: Billing.address1,
+              address_2: Billing.address2,
+              city: Billing.city,
+              zip: Billing.zip,
+              country: Billing.country,
+              state: Billing.state
+            },
+            ship_to_a_different_address: "0",
+            shipping:{
+              first_name: shipping.first_name,
+              last_name: shipping.last_name,
+              address_1: shipping.address1,
+              address_2: shipping.address2,
+              city: shipping.city,
+              zip: shipping.zip,
+              country: shipping.country,
+              state: shipping.state
+            },
+            delivery_time:{
+              date: null,
+              min_time: null,
+              max_time: null,
+          },
+          locale: "en",
+          payment_method: "stripe",
+          shipping_method: "free_shipping",
+          terms_and_conditions: "on",
+          service_charge: 0,
+          tax: 0,
+          items:[
+            {
+              product_id: 58,
+              unit_price: 8,
+              qty: 2,
+              variation_id:2
+            }
+          ]
+          }
+        }
+      })
+      clearCart();
+      console.log("result",result)
+      Router.push('/order-received');
+    }
+    setLoading(false);
+  };
 
 
-  stripe.createToken(cardElement).then((payload) => console.log("Token", payload.token.id));
+  const handleStripeSubmit = async (event) => {
+    event.preventDefault();
+    if (!stripe || !elements) {
+      return;
+    }
+    const cardElement = elements.getElement(CardElement);
+    const result = await stripe.createToken(cardElement);
+    
+    console.log(result.token.id);
+    return result.token.id
+  };
 
-};
+  const CheckoutForm = () => {
+    const stripe = useStripe();
+    return (
+        <CardElement />
+    );
+  };
 
 
-const CheckoutForm = () => {
-  const stripe = useStripe();
 
   return (
-    <form onSubmit={handleStripeSubmit}>
-      <CardElement />
-      <button  type="submit" disabled={!stripe}>
-        Pay
-      </button>
-    </form>
-  );
-};
+      <form onSubmit={(e)=>handleSubmit(e)} >
+        <CheckoutWrapper>
+          <CheckoutContainer>
+            <CheckoutInformation>
+              {/* DeliveryAddress */}
+              <InformationBox>
+                <Heading>
+                  <h1>Billing Details</h1>
+                </Heading>
 
+                <h4>FirstName</h4>
+                <TextField placeholder="Please enter First Name" type="text" name="first_name" onChange={(e)=>handleBilling(e)}  /><br/>
+                <h4>LastName</h4>
+                <TextField placeholder="Please enter Last Name" type="text" name="last_name"onChange={(e)=>handleBilling(e)}/><br/>
+                <h4>Address1</h4>
+                <TextField placeholder="Please enter Address1" type="text" name="address1"   onChange={(e)=>handleBilling(e)} />   <br/>
+                <h4>Address2</h4>
+                <TextField placeholder="Please enter Address2" type="text" name="address2"   onChange={(e)=>handleBilling(e)} />   <br/>
+                <h4>Phone</h4>
+                <TextField placeholder="Please enter Phone" type="number" name="Phone"   onChange={(e)=>handleBilling(e)} />   <br/>
+                <h4>City</h4>
+                <TextField placeholder="Please enter City" type="test" name="city"    onChange={(e)=>handleBilling(e)}/>   <br/>
+                <h4>Zip</h4>
+                <TextField placeholder="Please enter Zip" type="test" name="zip"  onChange={(e)=>handleBilling(e)}  />   <br/>
+                <h4>Country</h4>
+                <TextField placeholder="Please enter Country" type="text" name="country"  onChange={(e)=>handleBilling(e)}  />   <br/>
+                <h4>State</h4>
+                <TextField placeholder="Please enter State" type="text" name="state"   onChange={(e)=>handleBilling(e)} />   <br/>
 
-
-  return (
-<StripeProvider apiKey="pk_test_HAorAMBpZdnSy3XeSoEc7EHZ00GmySthxL">
-  <Elements stripe={stripePromise}>
-    <form onSubmit={(e)=>handleSubmit(e)} >
-      <CheckoutWrapper>
-        <CheckoutContainer>
-          <CheckoutInformation>
-            {/* DeliveryAddress */}
-            <InformationBox>
-              <Heading>
-                <h1>Billing Details</h1>
-                {/* <FormattedMessage
-                  id='checkoutDeliveryAddress'
-                  defaultMessage='Delivery Address'
-                /> */}
-              </Heading>
-              <label>FirstName</label>
-              <input type="text" name="first_name" onChange={(e)=>handleBilling(e)}  /><br/>
-              <label>LastName</label>
-              <input type="text" name="last_name"onChange={(e)=>handleBilling(e)}/><br/>
-              <label>Address1</label>
-              <input type="text" name="address1"   onChange={(e)=>handleBilling(e)} />   <br/>
-              <label>Address2</label>
-              <input type="text" name="address2"   onChange={(e)=>handleBilling(e)} />   <br/>
-              <label>Phone</label>
-              <input type="number" name="Phone"   onChange={(e)=>handleBilling(e)} />   <br/>
-                <label>City</label>
-              <input type="Email" name="Phone"    onChange={(e)=>handleBilling(e)}/>   <br/>
-              <label>Zip</label>
-              <input type="Email" name="Phone"  onChange={(e)=>handleBilling(e)}  />   <br/>
-              <label>Country</label>
-              <input type="Email" name="Phone"  onChange={(e)=>handleBilling(e)}  />   <br/>
-              <label>State</label>
-              <input type="Email" name="Phone"   onChange={(e)=>handleBilling(e)} />   <br/>
-
-           
-              {/* <ButtonGroup>
-                <RadioGroup
-                  items={address}
-                  component={(item: any) => (
-                    <RadioCard
-                      id={item.id}
-                      key={item.id}
-                      title={item.name}
-                      content={item.info}
-                      name='address'
-                      checked={item.type === 'primary'}
-                      onChange={() =>
-                        dispatch({
-                          type: 'SET_PRIMARY_ADDRESS',
-                          payload: item.id.toString(),
-                        })
-                      }
-                      onEdit={() => handleEditDelete(item, 'edit', 'address')}
-                      onDelete={() =>
-                        handleEditDelete(item, 'delete', 'address')
-                      }
-                    />
-                  )}
-                  secondaryComponent={
-                    <Button
-                      className='addButton'
-                      title='Add New'
-                      icon={<Plus width='10px' />}
-                      iconPosition='left'
-                      colors='primary'
-                      size='small'
-                      variant='textButton'
-                      type='button'
-                      intlButtonId='addNew'
-                      onClick={() =>
-                        handleModal(UpdateAddress, 'add-address-modal')
-                      }
-                    />
-                  }
-                />
-              </ButtonGroup> */}
-            </InformationBox>
-            <InformationBox>
-              <Heading>
-                <h1>Shipping Details</h1>
-              </Heading>
-              <label>FirstName</label>
-              <input type="text" name="first_name" onChange={(e)=>handleShipping(e)}  /><br/>
-              <label>LastName</label>
-              <input type="text" name="last_name"onChange={(e)=>handleShipping(e)}/><br/>
-              <label>Address1</label>
-              <input type="text" name="address1"   onChange={(e)=>handleShipping(e)} />   <br/>
-              <label>Address2</label>
-              <input type="text" name="address2"   onChange={(e)=>handleShipping(e)} />   <br/>
-              <label>Phone</label>
-              <input type="number" name="Phone"   onChange={(e)=>handleShipping(e)} />   <br/>
-                <label>City</label>
-              <input type="Email" name="Phone"    onChange={(e)=>handleShipping(e)}/>   <br/>
-              <label>Zip</label>
-              <input type="Email" name="Phone"  onChange={(e)=>handleShipping(e)}  />   <br/>
-              <label>Country</label>
-              <input type="Email" name="Phone"  onChange={(e)=>handleShipping(e)}  />   <br/>
-              <label>State</label>
-              <input type="Email" name="Phone"   onChange={(e)=>handleShipping(e)} />   <br/>
-            </InformationBox>
-            {/* DeliverySchedule */}
-            <InformationBox
-              className='paymentBox'
-              style={{ paddingBottom: 30 }}
-            >
-              <Heading>
-                <FormattedMessage
-                  id='selectPaymentText'
-                  defaultMessage='Select Payment Option'
-                />
-              </Heading>
-              <PaymentGroup
-                name='payment'
-                deviceType={deviceType}
-                items={card}
-                onEditDeleteField={(item: any, type: string) =>
-                  handleEditDelete(item, type, 'payment')
-                }
-                onChange={(item: any) =>
-                  dispatch({
-                    type: 'SET_PRIMARY_CARD',
-                    payload: item.id.toString(),
-                  })
-                }
-                handleAddNewCard={() => {
-                  handleModal(
-                    StripePaymentForm,
-                    { totalPrice: calculatePrice() },
-                    'add-address-modal stripe-modal'
-                  );
-                }}
-              />
-              <div style={{ padding: 10 }} className="stripeDiv">
-                  <CardElement />
-
-                  {/* <CheckoutForm /> */}
+            
                 
-              </div>
-
-              {/* Coupon start */}
-              {coupon ? (
-                <CouponBoxWrapper>
-                  <CouponCode>
-                    <FormattedMessage id='couponApplied' />
-                    <span>{coupon.code}</span>
-
-                    <RemoveCoupon
-                      onClick={(e) => {
-                        e.preventDefault();
-                        removeCoupon();
-                        setHasCoupon(false);
-                      }}
-                    >
-                      <FormattedMessage id='removeCoupon' />
-                    </RemoveCoupon>
-                  </CouponCode>
-                </CouponBoxWrapper>
-              ) : (
-                <CouponBoxWrapper>
-                  {!hasCoupon ? (
-                    <HaveCoupon onClick={() => setHasCoupon((prev) => !prev)}>
-                      <FormattedMessage
-                        id='specialCode'
-                        defaultMessage='Have a special code?'
-                      />
-                    </HaveCoupon>
-                  ) : (
-                    <>
-                      <CouponInputBox>
-                        <Input
-                          onUpdate={handleOnUpdate}
-                          value={couponCode}
-                          intlPlaceholderId='couponPlaceholder'
-                        />
-                        <Button
-                          onClick={handleApplyCoupon}
-                          title='Apply'
-                          intlButtonId='voucherApply'
-                        />
-                      </CouponInputBox>
-
-                      {couponError && (
-                        <ErrorMsg>
-                          <FormattedMessage
-                            id='couponError'
-                            defaultMessage={couponError}
-                          />
-                        </ErrorMsg>
-                      )}
-                    </>
-                  )}
-                </CouponBoxWrapper>
-              )}
-
-              <TermConditionText>
-                <FormattedMessage
-                  id='termAndConditionHelper'
-                  defaultMessage='By making this purchase you agree to our'
-                />
-                <Link href='#'>
-                  <TermConditionLink>
-                    <FormattedMessage
-                      id='termAndCondition'
-                      defaultMessage='terms and conditions.'
-                    />
-                  </TermConditionLink>
-                </Link>
-              </TermConditionText>
-
-              {/* CheckoutSubmit */}
-              <CheckoutSubmit>
-                <Button
-                  onClick={handleSubmit}
-                  type='button'
-                  disabled={!isValid}
-                  title='Proceed to Checkout'
-                  intlButtonId='proceesCheckout'
-                  loader={<Loader />}
-                  isLoading={loading}
-                />
-              </CheckoutSubmit>
-            </InformationBox>
-
-          </CheckoutInformation>
-          <CartWrapper>
-            <Sticky enabled={true} top={totalHeight} innerZ={999}>
-              <OrderInfo>
-                <Title>
+              </InformationBox>
+              <InformationBox>
+                <Heading>
+                  <h1>Shipping Details</h1>
+                </Heading>
+                <h4>FirstName</h4>
+                <TextField placeholder="Please enter First Name" type="text" name="first_name" onChange={(e)=>handleShipping(e)}  /><br/>
+                <h4>LastName</h4>
+                <TextField placeholder="Please enter Last Name" type="text" name="last_name"onChange={(e)=>handleShipping(e)}/><br/>
+                <h4>Address1</h4>
+                <TextField placeholder="Please enter Address1" type="text" name="address1"   onChange={(e)=>handleShipping(e)} />   <br/>
+                <h4>Address2</h4>
+                <TextField placeholder="Please enter Address2" type="text" name="address2"   onChange={(e)=>handleShipping(e)} />   <br/>
+                <h4>Phone</h4>
+                <TextField placeholder="Please enter Phone" type="number" name="Phone"   onChange={(e)=>handleShipping(e)} />   <br/>
+                <h4>City</h4>
+                <TextField placeholder="Please enter City" type="text" name="city"    onChange={(e)=>handleShipping(e)}/>   <br/>
+                <h4>Zip</h4>
+                <TextField placeholder="Please enter Zip" type="text" name="zip"  onChange={(e)=>handleShipping(e)}  />   <br/>
+                <h4>Country</h4>
+                <TextField placeholder="Please enter Country" type="text" name="country"  onChange={(e)=>handleShipping(e)}  />   <br/>
+                <h4>State</h4>
+                <TextField placeholder="Please enter State" type="text" name="state"   onChange={(e)=>handleShipping(e)} />   <br/>
+              </InformationBox>
+              {/* DeliverySchedule */}
+              <InformationBox
+                className='paymentBox'
+                style={{ paddingBottom: 30 }}
+              >
+                <Heading>
                   <FormattedMessage
-                    id='cartTitle'
-                    defaultMessage='Your Order'
+                    id='selectPaymentText'
+                    defaultMessage='Select Payment Option'
                   />
-                </Title>
+                </Heading>
 
-                <Scrollbars
-                  universal
-                  autoHide
-                  autoHeight
-                  autoHeightMax='390px'
-                  renderView={(props) => (
-                    <div
-                      {...props}
-                      style={{
-                        ...props.style,
-                        marginLeft: isRtl ? props.style.marginRight : 0,
-                        marginRight: isRtl ? 0 : props.style.marginRight,
-                        paddingLeft: isRtl ? 15 : 0,
-                        paddingRight: isRtl ? 0 : 15,
-                      }}
-                    />
+                <div style={{ padding: 10 }} className="stripeDiv">
+                    <CheckoutForm />                  
+
+                </div>
+
+                  {/* Coupon start */}
+                  {coupon ? (
+                    <CouponBoxWrapper>
+                      <CouponCode>
+                        <FormattedMessage id='couponApplied' />
+                        <span>{coupon.code}</span>
+
+                        <RemoveCoupon
+                          onClick={(e) => {
+                            e.preventDefault();
+                            removeCoupon();
+                            setHasCoupon(false);
+                          }}
+                        >
+                          <FormattedMessage id='removeCoupon' />
+                        </RemoveCoupon>
+                      </CouponCode>
+                    </CouponBoxWrapper>
+                  ) : (
+                    <CouponBoxWrapper>
+                      {!hasCoupon ? (
+                        <HaveCoupon onClick={() => setHasCoupon((prev) => !prev)}>
+                          <FormattedMessage
+                            id='specialCode'
+                            defaultMessage='Have a special code?'
+                          />
+                        </HaveCoupon>
+                      ) : (
+                        <>
+                          <CouponInputBox>
+                            <Input
+                              onUpdate={handleOnUpdate}
+                              value={couponCode}
+                              intlPlaceholderId='couponPlaceholder'
+                            />
+                            <Button
+                              onClick={handleApplyCoupon}
+                              title='Apply'
+                              intlButtonId='voucherApply'
+                            />
+                          </CouponInputBox>
+
+                          {couponError && (
+                            <ErrorMsg>
+                              <FormattedMessage
+                                id='couponError'
+                                defaultMessage={couponError}
+                              />
+                            </ErrorMsg>
+                          )}
+                        </>
+                      )}
+                    </CouponBoxWrapper>
                   )}
-                >
-                  <ItemsWrapper>
-                    {cartItemsCount > 0 ? (
-                      items.map((item) => (
-                        <OrderItem key={`cartItem-${item.id}`} product={item} />
-                      ))
-                    ) : (
-                      <NoProductMsg>
-                        <FormattedMessage
-                          id='noProductFound'
-                          defaultMessage='No products found'
-                        />
-                      </NoProductMsg>
+
+                <TermConditionText>
+                  <FormattedMessage
+                    id='termAndConditionHelper'
+                    defaultMessage='By making this purchase you agree to our'
+                  />
+                  <Link href='#'>
+                    <TermConditionLink>
+                      <FormattedMessage
+                        id='termAndCondition'
+                        defaultMessage='terms and conditions.'
+                      />
+                    </TermConditionLink>
+                  </Link>
+                </TermConditionText>
+
+                {/* CheckoutSubmit */}
+                <CheckoutSubmit>
+                  <Button
+                    onClick={handleSubmit}
+                    type='button'
+                    disabled={!isValid}
+                    title='Proceed to Checkout'
+                    intlButtonId='proceesCheckout'
+                    loader={<Loader />}
+                    isLoading={loading}
+                  />
+                </CheckoutSubmit>
+              </InformationBox>
+            </CheckoutInformation>
+            <CartWrapper>
+              <Sticky enabled={true} top={totalHeight} innerZ={999}>
+                <OrderInfo>
+                  <Title>
+                    <FormattedMessage
+                      id='cartTitle'
+                      defaultMessage='Your Order'
+                    />
+                  </Title>
+
+                  <Scrollbars
+                    universal
+                    autoHide
+                    autoHeight
+                    autoHeightMax='390px'
+                    renderView={(props) => (
+                      <div
+                        {...props}
+                        style={{
+                          ...props.style,
+                          marginLeft: isRtl ? props.style.marginRight : 0,
+                          marginRight: isRtl ? 0 : props.style.marginRight,
+                          paddingLeft: isRtl ? 15 : 0,
+                          paddingRight: isRtl ? 0 : 15,
+                        }}
+                      />
                     )}
-                  </ItemsWrapper>
-                </Scrollbars>
+                  >
+                    <ItemsWrapper>
+                      {cartItemsCount > 0 ? (
+                        items.map((item) => (
+                          <OrderItem key={`cartItem-${item.id}`} product={item} />
+                        ))
+                      ) : (
+                        <NoProductMsg>
+                          <FormattedMessage
+                            id='noProductFound'
+                            defaultMessage='No products found'
+                          />
+                        </NoProductMsg>
+                      )}
+                    </ItemsWrapper>
+                  </Scrollbars>
 
-                <CalculationWrapper>
-                  <TextWrapper>
-                    <Text>
-                      <FormattedMessage
-                        id='subTotal'
-                        defaultMessage='Subtotal'
-                      />
-                    </Text>
-                    <Text>
-                      {CURRENCY}
-                      {calculateSubTotalPrice()}
-                    </Text>
-                  </TextWrapper>
-
-                  <TextWrapper>
-                    <Text>
-                      <FormattedMessage
-                        id='intlOrderDetailsDelivery'
-                        defaultMessage='Delivery Fee'
-                      />
-                    </Text>
-                    <Text>{CURRENCY}0.00</Text>
-                  </TextWrapper>
-
-                  <TextWrapper>
-                    <Text>
-                      <FormattedMessage
-                        id='discountText'
-                        defaultMessage='Discount'
-                      />
-                    </Text>
-                    <Text>
-                      {CURRENCY}
-                      {calculateDiscount()}
-                    </Text>
-                  </TextWrapper>
-
-                  <TextWrapper style={{ marginTop: 20 }}>
-                    <Bold>
-                      <FormattedMessage id='totalText' defaultMessage='Total' />{' '}
-                      <Small>
-                        (
+                  <CalculationWrapper>
+                    <TextWrapper>
+                      <Text>
                         <FormattedMessage
-                          id='vatText'
-                          defaultMessage='Incl. VAT'
+                          id='subTotal'
+                          defaultMessage='Subtotal'
                         />
-                        )
-                      </Small>
-                    </Bold>
-                    <Bold>
-                      {CURRENCY}
-                      {calculatePrice()}
-                    </Bold>
-                  </TextWrapper>
-                </CalculationWrapper>
-              </OrderInfo>
-            </Sticky>
-          </CartWrapper>
-        </CheckoutContainer>
-      </CheckoutWrapper>
-    </form>
-    </Elements>              
-    </StripeProvider>
+                      </Text>
+                      <Text>
+                        {CURRENCY}
+                        {calculateSubTotalPrice()}
+                      </Text>
+                    </TextWrapper>
 
+                    <TextWrapper>
+                      <Text>
+                        <FormattedMessage
+                          id='intlOrderDetailsDelivery'
+                          defaultMessage='Delivery Fee'
+                        />
+                      </Text>
+                      <Text>{CURRENCY}0.00</Text>
+                    </TextWrapper>
+
+                    <TextWrapper>
+                      <Text>
+                        <FormattedMessage
+                          id='discountText'
+                          defaultMessage='Discount'
+                        />
+                      </Text>
+                      <Text>
+                        {CURRENCY}
+                        {calculateDiscount()}
+                      </Text>
+                    </TextWrapper>
+
+                    <TextWrapper style={{ marginTop: 20 }}>
+                      <Bold>
+                        <FormattedMessage id='totalText' defaultMessage='Total' />{' '}
+                        <Small>
+                          (
+                          <FormattedMessage
+                            id='vatText'
+                            defaultMessage='Incl. VAT'
+                          />
+                          )
+                        </Small>
+                      </Bold>
+                      <Bold>
+                        {CURRENCY}
+                        {calculatePrice()}
+                      </Bold>
+                    </TextWrapper>
+                  </CalculationWrapper>
+                </OrderInfo>
+              </Sticky>
+            </CartWrapper>
+          </CheckoutContainer>
+        </CheckoutWrapper>
+      </form>
   );
 };
 
 export default CheckoutWithSidebar;
-
 
 

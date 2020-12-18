@@ -51,13 +51,14 @@ const ProductPage: NextPage<Props> = ({ deviceType }) => {
   //     );
   //   }
   // }
+  data.getProductBySlug[0].productVariations.unshift({variations:{id:"0",variation_name:"Select Variation" ,variation_quantity:"",variation_price:""}})
+  
   let content =  <ProductDetails product={data.getProductBySlug[0]} deviceType={deviceType} />
      
 
 
   return (
     <>
-    <Breadcrumbs/>
       <SEO
         title={`${data.getProductBySlug[0].name} - ExponetDetails`}
         description={`${data.getProductBySlug[0].name} Details`}

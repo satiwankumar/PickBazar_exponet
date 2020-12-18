@@ -84,6 +84,8 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   product,
   deviceType,
 }) => {
+
+
   const router = useRouter();
   const handleQuickViewModal = (
     modalProps: any,
@@ -172,12 +174,13 @@ const getVariation = (id)=>{
     // console.log("qty",selected.variations.variation_quantity)
     setQty(selected.variations.variation_quantity);
   }
+
   const variation = () => {
     // return "hello"
     console.log("dfdsfsd", product.productVariations);
+   
     if (Object.keys(product.productVariations).length > 0) {
-
-     return( <>
+       return( <>
     
     <h1 style={{ "margin": "5px 0px 2.5px 5px" }} >Variations </h1> 
       
@@ -189,8 +192,11 @@ const getVariation = (id)=>{
            "border":"1px solid #ccc"
           }}>
           {data && product.productVariations.map((item, key) =>
+          key!==0?
             <option key={item.variations.id} value={item.variations.id} >{`${item.variations.variation_name} of ${item.variations.variation_quantity} for ${item.variations.variation_price}`}</option>
-          )}
+          : <option key={item.variations.id} value={item.variations.id} >{`${item.variations.variation_name} `}</option>
+            )}
+
         </select>
       </>
      )
@@ -261,7 +267,7 @@ const getVariation = (id)=>{
                   size='small'
                   className='cart-button'
                   icon={<CartIcon />}
-                  disabled={vari!==""?false:true}
+                  disabled={vari==="0"||vari===""?true:false}
                   onClick={handleAddClick}
                 />
               

@@ -13,6 +13,9 @@ import { AuthContext } from 'contexts/auth/auth.context';
 import AuthenticationForm from '../containers/SignInOutForm/Form';
 
 import { ProfileProvider } from 'contexts/profile/profile.provider';
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+const stripePromise = loadStripe('pk_test_HAorAMBpZdnSy3XeSoEc7EHZ00GmySthxL');
 
 type Props = {
   deviceType: {
@@ -83,10 +86,6 @@ testing()
   }
 
 
-
-
-
-
   const token = 'true';
   return (
     <>
@@ -95,7 +94,9 @@ testing()
           <SEO title='Checkout - Exponet' description='Checkout Details' />
           <ProfileProvider initData={data}>
             <Modal>
+              <Elements stripe={stripePromise}>
               <Checkout token={token} deviceType={deviceType} />
+              </Elements>
               {testing()}
             </Modal>
           </ProfileProvider> </> :

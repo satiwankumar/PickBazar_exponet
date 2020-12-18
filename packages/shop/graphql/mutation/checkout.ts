@@ -2,7 +2,12 @@ import gql from 'graphql-tag';
 
 export const CHECK_OUT = gql`
   mutation($input: CheckoutInput) {
-    checkout(input: $input) 
+    checkout(input: $input){ 
+    order_id
+    message
+    status
+
+    }
      
   }
 `;
