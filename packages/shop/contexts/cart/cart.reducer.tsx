@@ -1,25 +1,33 @@
 export const cartItemsTotalPrice = (items, coupon = null) => {
-  console.log("items",items)
+  // console.log("items",items)
+  // let filterVariation =  items.productVariations.filter(item=>item.variations.id == items.variationId)
+  //   // newState.productVariations= filterVariation;
   let total = items.reduce((price, product) => {
-    if (product.salePrice) {
-      return price += product.salePrice ;
+    let variation = product.productVariations.find((variation)=>variation.variations.id == product.variationId);
+    // console.log('items reducer',variation);
+    if(variation){
+      // console.log('items reducer',variation.);
+      return price = parseFloat(price) + parseFloat(variation.variations.variation_price);
+      // console.log('items reducer',variation);
+    }else if (product.salePrice) {
+      return price = parseFloat(price) + parseFloat(product.salePrice) ;
     }
-    return price += product.price ;
+    return price = parseFloat(price) + parseFloat(product.price);
   }, 0);
 
 
 
 
-  console.log("items",total)
-
+  console.log("items total",total)
+  // return ;
   const discount = coupon
     ? (total * Number(coupon.discountInPercent)) / 100
     : 0;
-
   return total - discount;
 };
 // cartItems, cartItemToAdd
 const addItemToCart = (state, action) => {
+  // console.log("action.payload",action.payload)
   // const existingCartItemIndex = state.items.findIndex(
   //   (item) => item.id === action.payload.id
   // );
@@ -29,8 +37,11 @@ const addItemToCart = (state, action) => {
   //   newState[existingCartItemIndex].quantity += action.payload.quantity;
   //   return newState;
   // }
-  console.log("itemssss",state,action)
-
+  // const newState = state.items[0];
+  
+  // let filterVariation =  newState.productVariations.filter(item=>item.variations.id == newState.variationId)
+  //   // newState.productVariations= filterVariation;
+  // state.items[0].productVariations = filterVariation
 
   return [...state.items, action.payload];
 };

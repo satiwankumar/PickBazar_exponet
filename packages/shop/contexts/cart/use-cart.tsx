@@ -12,8 +12,8 @@ const INITIAL_STATE = {
 const useCartActions = (initialCart = INITIAL_STATE) => {
   const [state, dispatch] = useReducer(reducer, initialCart);
 
-  const addItemHandler = (item, quantity) => {
-    dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity } });
+  const addItemHandler = (item, quantity = 2,variationid) => {
+    dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity,"variationId":variationid } });
   };
 
   const removeItemHandler = (item, quantity = 1) => {
@@ -50,8 +50,7 @@ const useCartActions = (initialCart = INITIAL_STATE) => {
   };
   const getCartItemsPrice = () => cartItemsTotalPrice(state.items).toFixed(2);
   const getCartItemsTotalPrice = () =>
-  console.log("satiawan",state.items)
-    cartItemsTotalPrice(state.items, state.coupon).toFixed(2);
+    {return cartItemsTotalPrice(state.items, state.coupon).toFixed(2)};
 
   const getDiscount = () => {
     const total = cartItemsTotalPrice(state.items);

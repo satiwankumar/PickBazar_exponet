@@ -4,7 +4,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import NoResultFound from 'components/NoResult/NoResult';
-
+import Breadcrumbs  from './BreadCumbs'
+import Select from 'react-select';
 import FormControl from '@material-ui/core/FormControl';
 import Router from 'next/router';
 import Fade from 'react-reveal/Fade';
@@ -64,19 +65,20 @@ type ProductDetailsProps = {
     desktop: boolean;
   };
 };
-const BreadCrumbs: React.FunctionComponent = () => {
-  return (
-    <div className="breadcrumb">
-        <ul className="list-inline">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Parent Category</a></li>
-            <li><a href="#">Child Category</a></li>
-            <li><a href="#">More Category if any</a></li>
-            <li className="active">Product Name</li>
-        </ul>
-    </div>
-  )  
-}
+// const BreadCrumbs: React.FunctionComponent = () => {
+//   return (
+    
+//     // <div className="breadcrumb">
+//     //     <ul className="list-inline">
+//     //         <li><a href="#">Home</a></li>
+//     //         <li><a href="#">Parent Category</a></li>
+//     //         <li><a href="#">Child Category</a></li>
+//     //         <li><a href="#">More Category if any</a></li>
+//     //         <li className="active">Product Name</li>
+//     //     </ul>
+//     // </div>
+//   )  
+// }
 
 const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   product,
@@ -136,10 +138,15 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   const { isRtl } = useLocale();
   const { addItem, removeItem, isInCart, getItem, items } = useCart();
   const data = product;
-console.log("dataaaaaaaaaaaaaaaaaaaaaaaaa",data)
+  // ata && product.productVariations.filter((item, key) =>{return item.variations.id==id})
   const handleAddClick = (e) => {
     e.stopPropagation();
-    addItem(data,qty);
+
+    let newdata = product
+    // console.log("newdata",newdata)
+    // newdata.productVariations =  product.productVariations.filter((item, key) =>{return item.variations.id==vari})
+    // console.log("newdata",newdata)
+    addItem(data,qty,vari);
   };
 
   const handleRemoveClick = (e) => {
@@ -152,35 +159,50 @@ console.log("dataaaaaaaaaaaaaaaaaaaaaaaaa",data)
       window.scrollTo(0, 0);
     }, 500);
   }, []);
+const getVariation = (id)=>{
+  let variationOptions = data && product.productVariations.filter((item, key) =>{return item.variations.id==id})
+    return variationOptions[0]
+}
+  
   const handleRadioChange = (e) => {
     // "foo3bar5".match(/\d+/)[0]
-    let selected = e.target.value
-    console.log("e.target.value: ",selected);
-
-    setVari(selected.id);
-    // let qtys = e.target.name.match(/\d+/)[0]
-    setQty(selected.variation_quantity);
-    // console.log("qtys: ",qtys);
+    let selected = getVariation(e.target.value)
+    setVari(selected.variations.id);
+  //  console.log("selected",selected.variations.id)
+    // console.log("qty",selected.variations.variation_quantity)
+    setQty(selected.variations.variation_quantity);
   }
   const variation = () => {
     // return "hello"
     console.log("dfdsfsd", product.productVariations);
     if (Object.keys(product.productVariations).length > 0) {
-      return product.productVariations.map((item) => {
-        
-        console.log("item: ",item.variations.id);
-         return (
-          <RadioGroup aria-label="variation" value={vari} name="vari" onChange={handleRadioChange}>
-            <FormControlLabel value={item.variations.id} name={item && item.variations.variation_name} checked={item && item.variations.id == vari ? true : false}  control={<Radio />} label={`${item && item.variations.variation_name} ${item && item.variations.variation_quantity} of $${item.variations.variation_price}`} />
-            {/* <FormControlLabel value="worst" control={<Radio />} label="The worst." /> */}
-          </RadioGroup>
-        )}
-      )
+
+     return( <>
+    
+    <h1 style={{ "margin": "5px 0px 2.5px 5px" }} >Variations </h1> 
+      
+        <select id="data" onChange={(value)=>handleRadioChange(value)} contentEditable="true" style={{
+           "borderRadius":"4px",
+           "padding":"10px",
+           "margin":"10px 0px 0px 20px",
+           "width":"87%",
+           "border":"1px solid #ccc"
+          }}>
+          {data && product.productVariations.map((item, key) =>
+            <option key={item.variations.id} value={item.variations.id} >{`${item.variations.variation_name} of ${item.variations.variation_quantity} for ${item.variations.variation_price}`}</option>
+          )}
+        </select>
+      </>
+     )
+    
     }
   }
+  console.log("qtys: ",qty);
+
   return (
     <>
-       <BreadCrumbs />
+         <Breadcrumbs/>
+
 
       <ProductDetailsWrapper className='product-card' dir='ltr'>
         {!isRtl && (
@@ -239,7 +261,7 @@ console.log("dataaaaaaaaaaaaaaaaaaaaaaaaa",data)
                   size='small'
                   className='cart-button'
                   icon={<CartIcon />}
-                  disabled={vari?true:false}
+                  disabled={vari!==""?false:true}
                   onClick={handleAddClick}
                 />
               

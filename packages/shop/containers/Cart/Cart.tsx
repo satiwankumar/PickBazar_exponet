@@ -67,7 +67,7 @@ const Cart: React.FC<CartPropsType> = ({
   const [error, setError] = useState('');
   const [appliedCoupon] = useMutation(APPLY_COUPON);
   const { isRtl } = useLocale();
-
+  // console.log('calculatePrice',calculatePrice())
   const handleApplyCoupon = async () => {
     const { data }: any = await appliedCoupon({
       variables: { code: couponText },
@@ -88,7 +88,6 @@ const Cart: React.FC<CartPropsType> = ({
   const toggleCoupon = () => {
     showCoupon(true);
   };
-
   return (
     <CartPopupBody className={className} style={style}>
       <PopupHeader>

@@ -13,7 +13,7 @@ import { useLocale } from 'contexts/language/language.provider';
 import { useStickyState } from 'contexts/app/app.provider';
 import { FormFields, FormLabel } from '../../components/FormFields/FormFields';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab'
+// import Autocomplete from '@material-ui/lab'
 import {
   SidebarMobileLoader,
   SidebarLoader,
@@ -72,12 +72,12 @@ const [brands, setBrands] = React.useState([]);
       query: updatedQuery,
     });
   };
-  const handleBrandSelection = (value: any) => {
+  const handleBrandSelection = (e: any) => {
     // alert(value)
-     console.log("id",value)
+     console.log("brandSelection",e.target.value)
       const updatedQuery = state.text
-        ? { text: state.text, brand: value.key}
-        : { brand: value.key };
+        ? { text: state.text, brand: e.target.value}
+        : { brand: e.target.value };
       router.push({
         pathname: pathname,
         query: updatedQuery,
@@ -119,68 +119,9 @@ const [brands, setBrands] = React.useState([]);
 
 
     <CategoryWrapper>
-    
-    <FormFields>
-                  <FormLabel>Type</FormLabel>
-                  <Select
+  
 
-                    options={data && data.brandOptions}
-                    labelKey="name"
-                    valueKey="id"
-                    required
-                    placeholder="Product Type"
-                    value={type}
-                    searchable={false}
-                    onChange={handleBrandSelection}
-                    overrides={{
-                      Placeholder: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      DropdownListItem: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      OptionContent: {
-                        style: ({ $theme, $selected }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $selected
-                              ? $theme.colors.textDark
-                              : $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      SingleValue: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      Popover: {
-                        props: {
-                          overrides: {
-                            Body: {
-                              style: { zIndex: 5 },
-                            },
-                          },
-                        },
-                      },
-                    }}
-                  />
-                </FormFields>
-
-        <h1 style={{ "margin": "19px 0px 10px 20px" }} >Brand </h1>
+        <h1 style={{ "margin": "19px 0px 10px 20px" }} >Brand </h1> 
          {/* <input type="text" list="data" 
           style={{
            "borderRadius":"4px",
@@ -189,9 +130,9 @@ const [brands, setBrands] = React.useState([]);
            "width":"87%",
            "border":"1px solid #ccc"
           }}
-         className="form-control brand-flied"  onChange={(value) => handleBrandSelection(value)} /> */}
+         className="form-control brand-flied"  onChange={(value) => handleBrandSelection(value)} />  */}
 
-        <select id="data"  style={{
+        <select id="data" onChange={(value)=>handleBrandSelection(value)} contentEditable="true" style={{
            "borderRadius":"4px",
            "padding":"10px",
            "margin":"0px 0px 0px 20px",
@@ -199,7 +140,7 @@ const [brands, setBrands] = React.useState([]);
            "border":"1px solid #ccc"
           }}>
           {data && brandsOptions.map((item, key) =>
-            <option key={item.id} value={item} >{item.name}</option>
+            <option key={item.id} value={item.id} >{item.name}</option>
           )}
         </select>
       <PopoverWrapper className={`${mobile || tablet ? 'mobileView' : ''}`}>

@@ -12,7 +12,7 @@ import ProductSingleWrapper, {
 import CartPopUp from 'containers/Cart/CartPopUp';
 import { withApollo } from 'helper/apollo';
 import { GET_PRODUCT_DETAILS } from 'graphql/query/product.query';
-
+import { Breadcrumbs } from 'nextjs-breadcrumbs'
 type Props = {
   deviceType?: {
     mobile: boolean;
@@ -57,6 +57,7 @@ const ProductPage: NextPage<Props> = ({ deviceType }) => {
 
   return (
     <>
+    <Breadcrumbs/>
       <SEO
         title={`${data.getProductBySlug[0].name} - ExponetDetails`}
         description={`${data.getProductBySlug[0].name} Details`}

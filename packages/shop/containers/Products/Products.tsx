@@ -27,8 +27,8 @@ const QuickView = dynamic(() => import('../QuickView/QuickView'));
 
 const GET_PRODUCTS = gql`
 
- query getproducts($filter_category_id:Int,$filter_by_name: String){
-  getproducts(filter_category_id:$filter_category_id ,filter_by_name:$filter_by_name,brand_id:null){
+ query getproducts($filter_category_id:Int,$filter_by_name: String,$brand_id:Int){
+  getproducts(filter_category_id:$filter_category_id ,filter_by_name:$filter_by_name,brand_id:$brand_id){
     id
    brand{
      name
@@ -216,8 +216,8 @@ console.log("typeinproducts",type)
       // type: type,
       // text: '/product/category',
       filter_category_id:router.query.category ?router.query.category:type ,
-      filter_by_name:router.query.text?router.query.text:null
-      
+      filter_by_name:router.query.text?router.query.text:null,
+      brand_id:router.query.brand?router.query.brand:null
 
       // category_id: Number(router.query.category ?router.query.category:1),
       // offset: 0,
