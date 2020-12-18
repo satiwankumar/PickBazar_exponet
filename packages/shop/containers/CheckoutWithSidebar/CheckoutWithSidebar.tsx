@@ -140,11 +140,13 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
   let variation = item.productVariations.find((variation)=>variation.variations.id == item.variationId);
   // console.log('items reducer',variation);
   if(variation){
-    // console.log('items reducer',variation.);
-    let data  =  { "id":"" ,"unit_price":"","quantity":""}
-  data.id  = item.id
+    // console.log('items reducer',variation.);product_id: 58,
+              
+    let data  =  { "product_id":"" ,"unit_price":"","qty":"","variation_id":""}
+  data.product_id  = item.id
   data.unit_price = variation.variations.variation_price
-  data.quantity  = variation.variations.variation_quantity
+  data.qty  = variation.variations.variation_quantity
+  data.variation_id  = variation.variations.id
   orderItems.push(data)
 
 }
@@ -347,14 +349,7 @@ console.log("shipping",shipping)
           terms_and_conditions: "on",
           service_charge: 0,
           tax: 0,
-          items:[
-            {
-              product_id: 58,
-              unit_price: 8,
-              qty: 2,
-              variation_id:2
-            }
-          ]
+          items:orderItems
           }
         }
       })
