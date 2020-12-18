@@ -33,6 +33,7 @@ query getCategory($category_id:Int,$filter_by_name: String){
 }
 
 getBrand(filter_text: null){
+  id
   name
 },
 }`;

@@ -11,7 +11,9 @@ import Select from 'components/Select/Select/Select';
 import { SearchContext } from 'contexts/search/search.context';
 import { useLocale } from 'contexts/language/language.provider';
 import { useStickyState } from 'contexts/app/app.provider';
-
+import { FormFields, FormLabel } from '../../components/FormFields/FormFields';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab'
 import {
   SidebarMobileLoader,
   SidebarLoader,
@@ -70,11 +72,12 @@ const [brands, setBrands] = React.useState([]);
       query: updatedQuery,
     });
   };
-  const handleBrandSelection = (id: string,name:string) => {
-    //  alert(id)
+  const handleBrandSelection = (value: any) => {
+    // alert(value)
+     console.log("id",value)
       const updatedQuery = state.text
-        ? { text: state.text, category: id ,brand:name}
-        : { category: id };
+        ? { text: state.text, brand: value.key}
+        : { brand: value.key };
       router.push({
         pathname: pathname,
         query: updatedQuery,
@@ -91,6 +94,7 @@ const [brands, setBrands] = React.useState([]);
       item => Subcategories.push(item)
     ))
     const brandsOptions = data && data.getBrand.map(item => { return item })
+    console.log("brandOptions",brandsOptions)
     const SelectChange = (e) => {
       // console.log("value", e.target.value)
       // setValue('type', value);
@@ -115,14 +119,89 @@ const [brands, setBrands] = React.useState([]);
 
 
     <CategoryWrapper>
-         <label >Brand </label><br/>
-                  <input type="text" list="data" className="form-control brand-flied"   onChange={(value) => SelectChange(value)} />
+    
+    <FormFields>
+                  <FormLabel>Type</FormLabel>
+                  <Select
 
-                  <datalist id="data">
-                    {data && brandsOptions.map((item, key) =>
-                      <option key={key} value={item.name} />
-                    )}
-                  </datalist>
+                    options={data && data.brandOptions}
+                    labelKey="name"
+                    valueKey="id"
+                    required
+                    placeholder="Product Type"
+                    value={type}
+                    searchable={false}
+                    onChange={handleBrandSelection}
+                    overrides={{
+                      Placeholder: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      DropdownListItem: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      OptionContent: {
+                        style: ({ $theme, $selected }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $selected
+                              ? $theme.colors.textDark
+                              : $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      SingleValue: {
+                        style: ({ $theme }) => {
+                          return {
+                            ...$theme.typography.fontBold14,
+                            color: $theme.colors.textNormal,
+                          };
+                        },
+                      },
+                      Popover: {
+                        props: {
+                          overrides: {
+                            Body: {
+                              style: { zIndex: 5 },
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
+                </FormFields>
+
+        <h1 style={{ "margin": "19px 0px 10px 20px" }} >Brand </h1>
+         {/* <input type="text" list="data" 
+          style={{
+           "borderRadius":"4px",
+           "padding":"10px",
+           "margin":"0px 0px 0px 20px",
+           "width":"87%",
+           "border":"1px solid #ccc"
+          }}
+         className="form-control brand-flied"  onChange={(value) => handleBrandSelection(value)} /> */}
+
+        <select id="data"  style={{
+           "borderRadius":"4px",
+           "padding":"10px",
+           "margin":"0px 0px 0px 20px",
+           "width":"87%",
+           "border":"1px solid #ccc"
+          }}>
+          {data && brandsOptions.map((item, key) =>
+            <option key={item.id} value={item} >{item.name}</option>
+          )}
+        </select>
       <PopoverWrapper className={`${mobile || tablet ? 'mobileView' : ''}`}>
         
         <Popover

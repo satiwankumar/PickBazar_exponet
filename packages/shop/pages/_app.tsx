@@ -29,6 +29,8 @@ import 'components/MultiCarousel/MultiCarousel.style.css';
 import '@redq/reuse-modal/lib/index.css';
 import { GlobalStyle } from 'styled/global.style';
 import { parseCookies } from 'helper/parse-cookies';
+import './style.css'
+
 
 // Language translation Config
 const messages = {

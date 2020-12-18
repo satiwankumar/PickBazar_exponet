@@ -1,0 +1,45 @@
+.breadcrumb {
+  margin: 23px 0 10px 20px;
+  padding: 0;
+  background: #fff;
+}
+
+.breadcrumb ul {
+  margin-left: -11px;
+}
+
+.breadcrumb ul > li {
+  font-size: 15px;
+  line-height: 26px;
+  position: relative;
+  display: inline-block;
+  padding: 0 10px;
+}
+
+.breadcrumb ul > li:after {
+  position: absolute;
+  content: '|';
+  font-family: Line Awesome Free;
+  font-weight: 900;
+  font-size: 12px;
+  top: 1px;
+  color: #191919;
+}
+
+.breadcrumb ul > li:last-child:after {
+  content: '';
+}
+
+.breadcrumb ul > li.active,
+.breadcrumb ul > li.active:after {
+  color: #a6a6a6;
+}
+
+.breadcrumb ul > li > a {
+  color: #191919;
+}
+
+.breadcrumb ul > li > a:hover {
+  color: #0068e1;
+  color: var(--color-primary);
+}
