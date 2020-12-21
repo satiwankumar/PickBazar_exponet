@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Router from 'next/router';
+import Router,{useRouter} from 'next/router';
+
 import Link from 'next/link';
 import InputButton from 'components/Input/Input'
 import Button from 'components/Button/Button';
@@ -83,6 +84,7 @@ type CartItemProps = {
 
 const OrderItem: React.FC<CartItemProps> = ({ product }) => {
   
+  const { pathname, query } = useRouter();
 
   const { id, quantity, title, name, unit, price, salePrice } = product;
   const displayPrice = salePrice ? salePrice : price;
@@ -355,7 +357,15 @@ console.log("shipping",shipping)
       })
       clearCart();
       console.log("result",result)
-      Router.push('/order-received');
+      
+      const updatedQuery =result.data.checkout?
+      { order_id :parseInt(result.data.checkout.order_id) }
+      : {order_id:null};
+      Router.push({
+        pathname:'/order-received' ,
+        query: updatedQuery,
+      });
+   
     }
     setLoading(false);
   };

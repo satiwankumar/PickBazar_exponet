@@ -52,7 +52,7 @@ export const RightMenu: React.FC<Props> = ({
         <Popover
           direction="right"
           className="user-pages-dropdown"
-          handler={<img src={avatar} alt="user" />}
+          handler={<img src={`https://ui-avatars.com/api/?name=Test Test&rounded=2`} alt="user" />}
           content={<AuthorizedMenu onLogout={onLogout} />}
         />
       )}

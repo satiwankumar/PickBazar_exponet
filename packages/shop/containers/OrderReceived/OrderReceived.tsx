@@ -1,5 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
+import gql from 'graphql-tag';
+
+import Router,{useRouter} from 'next/router'
 import OrderRecivedWrapper, {
   OrderRecivedContainer,
   OrderInfo,
@@ -14,10 +17,59 @@ import OrderRecivedWrapper, {
   ListDes,
 } from './OrderReceived.style';
 import { FormattedMessage } from 'react-intl';
+import { useQuery } from '@apollo/react-hooks';
+// import {GET_ORDER_DETAIL} from 'graphql/query/order.query'
+
+
+const GET_ORDER_DETAIL = gql`
+query getOrderById($order_id:Int) {
+    getOrderById(order_id:$order_id){
+        id
+        customer_id
+        shipping_address_1
+        total
+        created_at
+        payment_method
+        customer_phone
+        status
+        products{
+            id
+             slug
+   price
+   selling_price
+   unit
+   qty
+   actual_size
+   nominal_size
+   name
+   description
+   productVariations{
+   variations{
+       id
+       variation_name
+       variation_quantity
+variation_price
+   }
+   }
+  
+        }
+         
+    
+}
+}`
 
 type OrderRecivedProps = {};
 
 const OrderRecived: React.FunctionComponent<OrderRecivedProps> = props => {
+const{query} = useRouter()
+console.log("Checkoutdata",query)
+const { data, error, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {
+
+  variables: { order_id:query.order_id?query.order_id:null}
+
+});
+
+console.log("Checkoutdata",data,error)
   return (
     <OrderRecivedWrapper>
       <OrderRecivedContainer>
@@ -50,21 +102,21 @@ const OrderRecived: React.FunctionComponent<OrderRecivedProps> = props => {
                   defaultMessage="Order Number"
                 />
               </Text>
-              <Text>1444</Text>
+              <Text>{data&&data.getOrderById[0].id}</Text>
             </InfoBlock>
 
             <InfoBlock>
               <Text bold className="title">
                 <FormattedMessage id="orderDateText" defaultMessage="Date" />
               </Text>
-              <Text>March 14, 2019</Text>
+              <Text>{data&&data.getOrderById[0].created_at}</Text>
             </InfoBlock>
 
             <InfoBlock>
               <Text bold className="title">
                 <FormattedMessage id="totalText" defaultMessage="Total" />
               </Text>
-              <Text>$10,944.00</Text>
+              <Text>{data&&data.getOrderById[0].total}</Text>
             </InfoBlock>
 
             <InfoBlock>
@@ -116,21 +168,22 @@ const OrderRecived: React.FunctionComponent<OrderRecivedProps> = props => {
               </Text>
             </ListTitle>
             <ListDes>
-              <Text>1.00pm 10/12/19</Text>
+              <Text> {data&&data.getOrderById[0].created_at}</Text>
             </ListDes>
           </ListItem>
 
           <ListItem>
             <ListTitle>
               <Text bold>
-                <FormattedMessage
+                {/* <FormattedMessage
                   id="deliveryTimeText"
                   defaultMessage="Delivery Time"
-                />
+                /> */}
+                Customer ID
               </Text>
             </ListTitle>
             <ListDes>
-              <Text>90 Minute Express Delivery</Text>
+              <Text>  {data&&data.getOrderById[0].customer_id}</Text>
             </ListDes>
           </ListItem>
 
@@ -145,7 +198,7 @@ const OrderRecived: React.FunctionComponent<OrderRecivedProps> = props => {
             </ListTitle>
             <ListDes>
               <Text>
-                1st Floor, House 149, Road-22, Mohakhali DOHS, Dhaka - North
+              {data&&data.getOrderById[0].shipping_address_1}
               </Text>
             </ListDes>
           </ListItem>
@@ -180,7 +233,7 @@ const OrderRecived: React.FunctionComponent<OrderRecivedProps> = props => {
               </Text>
             </ListTitle>
             <ListDes>
-              <Text>Cash On Delivery</Text>
+              <Text>{data&&data.getOrderById[0].payment_method}</Text>
             </ListDes>
           </ListItem>
 
@@ -205,7 +258,7 @@ const OrderRecived: React.FunctionComponent<OrderRecivedProps> = props => {
               </Text>
             </ListTitle>
             <ListDes>
-              <Text>$10,874.00</Text>
+              <Text>{data&&data.getOrderById[0].total}</Text>
             </ListDes>
           </ListItem>
         </TotalAmount>
