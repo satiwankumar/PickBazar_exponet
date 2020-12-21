@@ -68,9 +68,13 @@ const { data, error, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {
   variables: { order_id:query.order_id?query.order_id:null}
 
 });
+  if(error){
+    return <div>Error! {error.message}</div>;
+  }
 
-console.log("Checkoutdata",data,error)
   return (
+    
+    
     <OrderRecivedWrapper>
       <OrderRecivedContainer>
         <Link href="/">
@@ -127,10 +131,7 @@ console.log("Checkoutdata",data,error)
                 />
               </Text>
               <Text>
-                <FormattedMessage
-                  id="paymentMethodName"
-                  defaultMessage="Cash on delivery"
-                />
+              {data&&data.getOrderById[0].payment_method}
               </Text>
             </InfoBlock>
           </InfoBlockWrapper>
@@ -219,7 +220,7 @@ console.log("Checkoutdata",data,error)
               </Text>
             </ListTitle>
             <ListDes>
-              <Text>$10,864.00</Text>
+              <Text>{data&&data.getOrderById[0].total}</Text>
             </ListDes>
           </ListItem>
 
