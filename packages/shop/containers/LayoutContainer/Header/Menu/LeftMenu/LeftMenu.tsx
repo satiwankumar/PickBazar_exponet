@@ -160,11 +160,11 @@ export const LeftMenu: React.FC<Props> = ({ logo }) => {
 
   return (
     <LeftMenuBox>
-      <Logo
+     {data && data.getSiteSetting? (<Logo
         imageUrl={data&&data.getSiteSetting.image}
-        alt={'exponent'}
+        alt={data&&data.getSiteSetting.image}
         onClick={() => setActiveMenu(data &&data.getCategory[0])}
-      />
+      />):""}
 
       <MainMenu>
         <Popover

@@ -240,11 +240,7 @@ console.log("updatedata",data)
     onModalClose: any
   ) => {
 
-    if (router.pathname === '/product/[slug]') {
-      const as = `/product/${modalProps.id}`;
-      router.push(router.pathname, as);
-      return;
-    }
+  
     // if (router.pathname === '/product/[slug]') {
     //   const as = `/product/${modalProps.id}`;
     //   router.push(router.pathname, as);
@@ -271,9 +267,9 @@ console.log("updatedata",data)
     //     },
     //   },
     // });
-    const href = router.asPath;
+    // const href = router.asPath;
     const as = `/product/${modalProps.slug}`;
-    router.push(href, as, { shallow: true });
+    router.push(as);
   };
 
 
