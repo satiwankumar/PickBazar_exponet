@@ -52,6 +52,8 @@ console.log("pathnamelayout",pathname)
             pathname={pathname}
           />
           <Header
+          apolloClient={''}
+          apolloState={''}
             className={`${isSticky && isHomePage ? 'sticky' : 'unSticky'} ${
               isHomePage ? 'home' : ''
             }`}

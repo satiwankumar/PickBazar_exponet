@@ -157,11 +157,7 @@ export const LeftMenu: React.FC<Props> = ({ logo }) => {
   }
 
 
-// if(Object.keys(data).length>0){
-//   data.getCategory.map(item=>console.log(item.name))
-// }
 
-// data.getCategory.map((item,index)=>{item[index]})
   return (
     <LeftMenuBox>
       <Logo

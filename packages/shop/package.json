@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "next build && next export",
+    "build": "next build",
+    "serve": "http-serve",
+    
     "start": "next start",
     "shop-dev": "next"
   },
