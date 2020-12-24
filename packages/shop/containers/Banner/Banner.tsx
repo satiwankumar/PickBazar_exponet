@@ -101,7 +101,7 @@ const Banner: React.FC<BannerProps> = ({
           value={state.text || ''}
           onClick={handleClickSearchButton}
           className="banner-search"
-          pathname={pathname}
+          pathname="Humidifier Pads"
         />
         <Waypoint
           onEnter={removeSticky}

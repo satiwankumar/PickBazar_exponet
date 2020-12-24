@@ -95,6 +95,7 @@ const [brands, setBrands] = React.useState([]);
     ))
     const brandsOptions = data && data.getBrand.map(item => { return item })
     console.log("brandOptions",brandsOptions)
+   data&& brandsOptions.unshift({id:"",name:"Select Brand"})
     const SelectChange = (e) => {
       // console.log("value", e.target.value)
       // setValue('type', value);
@@ -121,7 +122,10 @@ const [brands, setBrands] = React.useState([]);
     <CategoryWrapper>
   
 
-        <h1 style={{ "margin": "19px 0px 10px 20px" }} >Brand </h1> 
+        <h1 style={{
+           "margin": "19px 0px 10px 20px",
+           "fontSize": "24px"
+          }} >Filter By Brand </h1> 
          {/* <input type="text" list="data" 
           style={{
            "borderRadius":"4px",

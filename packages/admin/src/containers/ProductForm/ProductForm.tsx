@@ -16,7 +16,7 @@ import Input from '../../components/Input/Input';
 import { Textarea } from '../../components/Textarea/Textarea';
 import Select from '../../components/Select/Select';
 import { FormFields, FormLabel } from '../../components/FormFields/FormFields';
-
+import {Trash, Plus} from '../../components/AllSvgIcon'
 import { useStyletron } from 'baseui';
 import { Combobox, SIZE } from 'baseui/combobox';
 import { FormControl } from 'baseui/form-control';
@@ -100,7 +100,7 @@ query getCategory($filter_category_id:Int){
 
 
 const CREATE_PRODUCT = gql`
-  mutation createProduct($brand:String!,$name:String!,$file:[Upload],$price:Float!,$unit:String,$description:String!,$actual_size:String!,$nominal_size:String!,$variation:String, $selling_price:Float,$category_id:Int!,$qty:Int!,$sub_category_id:Int!,$related_products:String) {  
+  mutation createProduct($brand:String!,$name:String!,$file:[Upload],$price:Float,$unit:String,$description:String,$actual_size:String!,$nominal_size:String!,$variation:String, $selling_price:Float,$category_id:Int!,$qty:Int!,$sub_category_id:Int!,$related_products:String) {  
       createProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,nominal_size:$nominal_size,variation:$variation,selling_price:$selling_price,qty:$qty,category_id:$category_id,sub_category_id:$sub_category_id,related_products:$related_products)
          }`;
 
@@ -157,10 +157,21 @@ const AddProduct: React.FC<Props> = props => {
       item => Subcategories.push(item)
     ))
 const products = []
-data && data.getproducts.map(item=>products.push(item)) 
-   
+data && data.getproducts.map(item=>
+    {
+      let branditems = {...item,"brandWithName":`${item.brand.name} ${item.name} `}
+
+  products.push(branditems)}) 
+   console.log("productssssssssssssssssssssssss",products)
   const AddVariation  = () =>{
     setVariations((previous)=>[...previous,{variation_name:"",variation_price:"",variation_quantity:""}])
+
+  }
+  const removeVariation  = (i) =>{
+
+   let variaton =[...variation]
+   variaton.splice(i,1)
+   setVariations(variaton)
 
   }
   const handleMultiChange = ({ value }) => {
@@ -272,11 +283,11 @@ data && data.getproducts.map(item=>products.push(item))
         variables: {
           brand: brands,
           name: data.name,
-          description: description,
+          description: description?description:null,
           actual_size: data.actual_size,
           nominal_size: data.nominal_size,
           file: files?files:null,
-          price: data.price,
+          price: data.price?data.price:0.0,
           unit: "",
           selling_price: data.salePrice ? data.salePrice : 0.0,
           qty: data.quantity,
@@ -347,20 +358,20 @@ data && data.getproducts.map(item=>products.push(item))
     return variation.map((item,i)=>
     ( <>
      <Row>
-            <Col md={4}>
+            <Col xl={3} lg={6} md={6}>
             <div className="mt-10"><FormLabel>Variation</FormLabel></div>
                       <input type="text" placeholder="variation" value={variation[i].variation_name}
                     name="variation_name"
                     onChange={((e)=>handleVariationChange(e,i))} className="form-control brand-flied"/>
             </Col>
-            <Col md={4}>
+            <Col  xl={3} lg={6} md={6}>
             <div className="mt-10"><FormLabel>Variation Price</FormLabel></div>
                       <input type="number" step="any"
                     min="0" placeholder="variation price"  value={variation[i].variation_price}
                     onChange={((e)=>handleVariationChange(e,i))}
                     name="variation_price" className="form-control brand-flied"/>
             </Col>
-            <Col md={4}>
+            <Col xl={3} lg={6} md={6}>
             <div className="mt-10"><FormLabel>Variation</FormLabel></div>
                       <input type="number" step="any"
                     min="0" placeholder="variation quantity" value={variation[i].variation_quantity}
@@ -368,6 +379,16 @@ data && data.getproducts.map(item=>products.push(item))
                     name="variation_quantity" className="form-control brand-flied"/>
             </Col>
             
+                <Col xl={3} lg={6} md={6}>
+                {
+   i == (variation.length - 1)?  (<Button type="button"   startEnhancer={() => <Plus />} title="add variation"  onClick={()=>AddVariation()} className="nm-bt mt-40">add</Button>)
+   :(<Button type="button" title="add variation"  startEnhancer={() => <Trash />} onClick={()=>removeVariation(i)} className="nm-bt mt-40 red-bg">Remove</Button>)
+
+                }
+     
+
+            </Col>
+           
   </Row>
 
     
@@ -524,7 +545,7 @@ data && data.getproducts.map(item=>products.push(item))
                   <Input type="text" inputRef={register} name="unit" required="true" />
                 </FormFields> */}
 
-                <FormFields>
+                {/* <FormFields>
                   <FormLabel>Price</FormLabel>
                   <Input
                     type="number"
@@ -534,200 +555,22 @@ data && data.getproducts.map(item=>products.push(item))
                     name="price"
                     required="true"
                   />
-                </FormFields>
+                </FormFields> */}
 
-                {/* <Row>
-            <Col md={3}>
-            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
-                      <input type="text" placeholder="re" className="form-control brand-flied"/>
-            </Col>
-            <Col md={3}>
-            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
-                      <input type="text" placeholder="re" className="form-control brand-flied"/>
-            </Col>
-            <Col md={3}>
-            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
-                      <input type="text" placeholder="re" className="form-control brand-flied"/>
-            </Col>
-             <Col md={3}>
-             <Button type="button" title="add variation" onClick={()=>AddVariation()} className="nm-bt">add</Button>
-            </Col>
-                    </Row> */}
+                    
 
                 {getvariation()}
-                <Row>
-                <Col md={12}>
-             <Button type="button" title="add variation"  onClick={()=>AddVariation()} className="nm-bt">add</Button>
-            </Col>
-            </Row>
-                {/* <Button type="button" title="add variation" onClick={()=>AddVariation()}>add</Button> */}
+             
+                
+
 
                 {/* <FormFields>
-
-                  <FormLabel>Variations</FormLabel>
-                  <Select
-
-                    options={data && data.getProductVariations}
-                    labelKey="variation_name"
-                    valueKey="id"
-                    // placeholder="Variations"
-                    value={variation["1"]}
-                    searchable={false}
-                    onChange={(e) => handleVariationChange(e, "1")}
-                    overrides={{
-                      Placeholder: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      DropdownListItem: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      OptionContent: {
-                        style: ({ $theme, $selected }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $selected
-                              ? $theme.colors.textDark
-                              : $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      SingleValue: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      Popover: {
-                        props: {
-                          overrides: {
-                            Body: {
-                              style: { zIndex: 5 },
-                            },
-                          },
-                        },
-                      },
-                    }
-
-                    }
-
-                  />
-                </FormFields>
-
-                <FormFields>
-                  <FormLabel>Enter Variation Price</FormLabel>
-
-
-                  <Input type="number" inputRef={register} name="variation_price" disabled={Object.keys(variation).length > 0 ? "" : "disabled"} onChange={(e) => { handlePriceChange(e, "1") }} step="any"
-                    min="0" />
-                </FormFields>
-
-                <FormFields>
-
-                  <FormLabel>Variations</FormLabel>
-                  <Select
-
-                    options={data && data.getProductVariations}
-                    labelKey="variation_name"
-
-                    valueKey="id"
-                    // placeholder="Variations"
-                    value={variation["2"]}
-                    searchable={false}
-                    onChange={(e) => handleVariationChange(e, "2")}
-                    overrides={{
-                      Placeholder: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      DropdownListItem: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      OptionContent: {
-                        style: ({ $theme, $selected }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $selected
-                              ? $theme.colors.textDark
-                              : $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      SingleValue: {
-                        style: ({ $theme }) => {
-                          return {
-                            ...$theme.typography.fontBold14,
-                            color: $theme.colors.textNormal,
-                          };
-                        },
-                      },
-                      Popover: {
-                        props: {
-                          overrides: {
-                            Body: {
-                              style: { zIndex: 5 },
-                            },
-                          },
-                        },
-                      },
-                    }
-
-                    }
-
-                  />
-                </FormFields>
-
-                <FormFields>
-                  <FormLabel>Enter Variation Price</FormLabel>
-
-
-                  <Input type="number" inputRef={register} name="variation_price" disabled={Object.keys(variation).length > 0 ? "" : "disabled"} onChange={(e) => { handlePriceChange(e, "2") }} step="any"
-                    min="0" />
-                </FormFields>
-
- */}
-
-
-                <FormFields>
                   <FormLabel>Sale Price</FormLabel>
                   <Input type="number" inputRef={register} name="salePrice" step="any"
                     min="0" />
-                </FormFields>
-
-                {/* <FormFields>
-                  <FormLabel>Discount In Percent</FormLabel>
-                  <Input
-                    type="number"
-                    inputRef={register}
-                    name="discountInPercent"
-                  />
                 </FormFields> */}
-                {/* 
-                    { CreatUI()}
-                    { CreatUI()}
-                    { CreatUI()} */}
 
-                {/* <input type='button' value='add more' onClick={()=>setCount()}/> */}
+                
                 <FormFields>
                   <FormLabel>Product Quantity</FormLabel>
                   <Input
@@ -844,11 +687,10 @@ data && data.getproducts.map(item=>products.push(item))
                   <FormLabel>Related Products</FormLabel>
                   <Select
                     options={data &&products}
-                    labelKey="name"
+                    labelKey="brandWithName"
                     valueKey="id"
                     placeholder="Product Tag"
                     value={Related}
-                    required
                     onChange={handleMultiProductsChange}
                     overrides={{
                       Placeholder: {

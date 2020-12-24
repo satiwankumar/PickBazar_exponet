@@ -58,6 +58,7 @@ import {
   WomenDress,
   Minus,
   Trash,
+  TrashNew,
   PencilIcon,
 } from '../../components/AllSvgIcon';
 import NoResult from '../../components/NoResult/NoResult';
@@ -246,6 +247,7 @@ export default function Category() {
     // console.log("id",id)
 if(checkedId.length>0){
   const value = JSON.stringify(checkedId)
+  console.log("vale",value)
     const result = await deleteCategory({variables:{category_id:value}})
     if(result){
       if (result.data.deleteCategory.status ==200) {
@@ -297,6 +299,53 @@ if(checkedId.length>0){
     progress: undefined,
     })
 }
+
+
+
+  }
+  const handleSingleDelete =async (id)=>{
+    // console.log("id",id)
+    const value = JSON.stringify([id])
+    const result = await deleteCategory({variables:{category_id:value}})
+    if(result){
+      if (result.data.deleteCategory.status ==200) {
+        // console.log(result)
+
+              
+                    toast.success(`🦄  ${result.data.deleteCategory.message} `, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+  
+            
+          })
+
+          } 
+        
+        else{
+                          toast.error(`🦄 SomeThing Went Wrong`, {
+                            position: "top-right",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            })
+    
+  
+    }
+  }
+  
+  setTimeout(() => {
+  window.location.reload()
+    
+  }, 3000);
+
 
 
 
@@ -458,14 +507,14 @@ button.cat-del-btn .ae.fa {
                     }}
                   >
                     
-                Delete
+               Multiple Delete
               </Button>                
               </div>
           </div>          
 
 
             <TableWrapper>
-              <StyledTable $gridTemplateColumns='minmax(70px, 70px) minmax(70px, 70px) minmax(70px, 70px) minmax(150px, auto) minmax(150px, auto)  minmax(150px, 70px)  auto'>
+              <StyledTable $gridTemplateColumns='minmax(70px, 70px) minmax(70px, 70px) minmax(70px, 70px) minmax(150px, auto) minmax(150px, auto)  minmax(150px, 70px)   auto'>
                 <StyledHeadCell>
                 <Checkbox
                     type='checkbox'
@@ -524,8 +573,25 @@ button.cat-del-btn .ae.fa {
                           <StyledCell>{subItem.slug}</StyledCell>
                           <StyledCell>{subItem.parent_id}</StyledCell>
                           
-                          <StyledCell><Button startEnhancer={() => <PencilIcon/>}  onClick={()=>openCategoryEditDrawer(subItem)} className="edit-btn">Edit</Button></StyledCell>
-
+                          <StyledCell><Button startEnhancer={() => <PencilIcon/>}  onClick={()=>openCategoryEditDrawer(subItem)} className="edit-btn">Edit</Button>
+                        
+                  <Button
+                    onClick={()=>handleSingleDelete(subItem.id)}
+                    startEnhancer={() => <TrashNew />}
+                    className="cat-del-btn new-del-btn"
+                    overrides={{
+                      BaseButton: {
+                        style: () => ({
+                          marginBottom: '10px',
+                           
+                        }),
+                      },
+                    }}
+                  >
+                    
+                Delete
+              </Button>   </StyledCell>              
+             
                         </React.Fragment>
                         )),
                       

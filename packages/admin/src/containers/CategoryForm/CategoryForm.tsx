@@ -62,7 +62,7 @@ query getCategoryWithoutFilter{
     }
 }`
 const CREATE_CATEGORY = gql`
-  mutation createCategory($parent_id: Int,$name:String!,$slug:String,$file: Upload!) {
+  mutation createCategory($parent_id: Int,$name:String!,$slug:String,$file: Upload) {
     createCategory(parent_id: $parent_id,name:$name,slug:$slug,file:$file)
   }
 `;
@@ -138,7 +138,7 @@ try{
        
    
               
-      toast.success(`🦄  ${resulting.data.createCategory} `, {
+      toast.success(`🦄  Category Created Successfully `, {
                   position: "top-right",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -149,9 +149,11 @@ try{
 
 
 })
-window.location.reload()
-    
+setTimeout(() => {
 
+  window.location.reload()
+
+}, 3000);
 } 
 
 else{

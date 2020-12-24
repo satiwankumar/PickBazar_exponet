@@ -1496,6 +1496,11 @@ export const Trash = ({ color = 'currentColor', width = 12, height = 1.5 }) => {
     <span className="fa fa-trash-alt"></span>
   );
 };
+export const TrashNew = ({ color = 'currentColor', width = 12, height = 1.5 }) => {
+  return (
+    <span className="fa fa-trash-alt mar-5"></span>
+  );
+};
 export const Time = ({ color = 'currentColor', width = 12, height = 1.5 }) => {
   return (
     <span className="fa fa-times-circle"></span>

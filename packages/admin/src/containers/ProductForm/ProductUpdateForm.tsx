@@ -97,7 +97,7 @@ query getCategory($filter_category_id:Int){
 
 const UPDATE_PRODUCT = gql`
 # 
-  mutation updateProduct($brand:String!,$name:String!,$file:[Upload],$price:Float!,$unit:String,$description:String!,$actual_size:String!,$variation:String,$nominal_size:String!,$selling_price:Float!,$category_id:Int!,$sub_category_id:Int!,$qty:Int!,$product_id:Int!,$related_products:String!) {  
+  mutation updateProduct($brand:String!,$name:String!,$file:[Upload],$price:Float!,$unit:String,$description:String,$actual_size:String!,$variation:String,$nominal_size:String!,$selling_price:Float!,$category_id:Int!,$sub_category_id:Int!,$qty:Int!,$product_id:Int!,$related_products:String!) {  
     updateProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,variation:$variation,nominal_size:$nominal_size,selling_price:$selling_price,qty:$qty,category_id:$category_id,sub_category_id:$sub_category_id,product_id:$product_id,related_products:$related_products)
  
     
@@ -303,11 +303,11 @@ const afterPaste = (evt)=>{
   const categories = data1 && data1.getCategory.filter(item => item.parent_id == null)
   const Subcategories = []
  data1 && data1.getCategory.map( item => item.subcategories.map( item => Subcategories.push(item) ))
-//  const getSubCategory = (Subcategories)=>{
-//   const sub = type.length>0?data && Subcategories.filter(item=>item.parent_id==type[0].id):""
-//   console.log("dataaaaaa",sub)
-//   return sub
-// }
+ const getSubCategory = (Subcategories)=>{
+  const sub = type.length>0?data && Subcategories.filter(item=>item.parent_id==type[0].id):""
+  console.log("dataaaaaa",sub)
+  return sub
+}
 
   React.useEffect(() => {
     register({ name: 'type' });
@@ -443,7 +443,7 @@ const relatedProducts = []
         brand: brand.name,
         // discountInPercent: Number(data.discountInPercent),
         name: data.name,
-        description: description,
+        description: description?description:null,
         actual_size: data.actual_size,
         nominal_size: data.nominal_size,
         file: typeof(newfiles)=='object'?newfiles:"",
@@ -703,7 +703,7 @@ const relatedProducts = []
                 <FormFields>
                   <FormLabel>Categories</FormLabel>
                   <Select
-                    // options={data1 && getSubCategory(Subcategories)}
+                    options={data1 && getSubCategory(Subcategories)}
                     labelKey="name"
                     valueKey="id"
                     placeholder="Product Tag"
@@ -806,7 +806,7 @@ const relatedProducts = []
           </Button>
 
           <Button
-            type="submit"
+            type="submit"  className="mr-10"
             overrides={{
               BaseButton: {
                 style: ({ $theme }) => ({
@@ -824,7 +824,7 @@ const relatedProducts = []
  
           <Button
           type="button"
-           className="col-md-6 col-sm-6 col-12 col-lg-4 cat-del-btn"
+           className="col-md-6 col-sm-6 col-12 col-lg-4 cat-del-btn m-0"
             onClick={()=>handleDelete(data.id)}
             // className=""
             overrides={{

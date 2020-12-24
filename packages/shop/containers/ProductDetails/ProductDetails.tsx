@@ -182,14 +182,15 @@ const getVariation = (id)=>{
     if (Object.keys(product.productVariations).length > 0) {
        return( <>
     
-    <h1 style={{ "margin": "5px 0px 2.5px 5px" }} >Variations </h1> 
+    {/* <h1 style={{ "margin": "5px 0px 2.5px 5px" }} >Variations </h1>  */}
       
         <select id="data" onChange={(value)=>handleRadioChange(value)} contentEditable="true" style={{
            "borderRadius":"4px",
            "padding":"10px",
-           "margin":"10px 0px 0px 20px",
-           "width":"87%",
-           "border":"1px solid #ccc"
+           "margin":"0px 12px 10px 0px",
+           "width":"40%",
+           "border":"1px solid #ccc",
+           "float":"left"
           }}>
           {data && product.productVariations.map((item, key) =>
           key!==0?
@@ -240,7 +241,7 @@ const getVariation = (id)=>{
           <ProductTitlePriceWrapper>
             <ProductTitle>{product.name}</ProductTitle><br/>
           
-            <ProductPriceWrapper>
+            {/* <ProductPriceWrapper>
               {product.discountInPercent ? (
                 <SalePrice>
                   {CURRENCY}
@@ -254,10 +255,10 @@ const getVariation = (id)=>{
                 {CURRENCY}
                 {product.salePrice ? product.salePrice : product.price}
               </ProductPrice>
-            </ProductPriceWrapper>
+            </ProductPriceWrapper> */}
           </ProductTitlePriceWrapper>
-          <ProductWeight>{`ActualSize : ${product.actual_size}`}</ProductWeight><br/>
-          <ProductWeight>{`NomialSize : ${product.nominal_size}`}</ProductWeight><br/>
+          <ProductWeight>{`Actual size : ${product.actual_size}`}</ProductWeight><br/>
+          <ProductWeight>{`Nomial size : ${product.nominal_size}`}</ProductWeight><br/>
           {variation()}
           <ProductCartBtn>
                 <Button
@@ -266,6 +267,7 @@ const getVariation = (id)=>{
                   iconPosition='left'
                   size='small'
                   className='cart-button'
+                  // style={margin-top: "30px";}
                   icon={<CartIcon />}
                   disabled={vari==="0"||vari===""?true:false}
                   onClick={handleAddClick}
@@ -350,7 +352,7 @@ const getVariation = (id)=>{
           </ProductPreview>
         )}
       </ProductDetailsWrapper>
-
+     { Object.keys(product.relatedProducts).length>0?(
       <RelatedItems>
         <h2>
           <FormattedMessage
@@ -416,6 +418,7 @@ const getVariation = (id)=>{
        
    </ProductsRow>
       </RelatedItems>
+     ): ""}
     </>
   );
 };

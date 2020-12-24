@@ -26,7 +26,7 @@ const ReadMore = ({ children, more, less, character }) => {
   return (
     <>
       {(children && children.length < character) || expanded
-        ? <div dangerouslySetInnerHTML={createMarkup(children)}/>
+        ? <div  className="custome-ul" dangerouslySetInnerHTML={createMarkup(children)}/>
         : children.substring(0, character)}
       {children && children.length > character && !expanded && (
         <>

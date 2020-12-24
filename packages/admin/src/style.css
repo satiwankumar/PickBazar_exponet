@@ -12,7 +12,9 @@ button.cat-del-btn .fa {
 button.cat-del-btn:hover {
     background: red;
 }
-button.edit-btn {padding: 10px;}
+button.edit-btn {padding: 10px;     width: 101px;
+    float: left;
+    margin: 0 10px 10px 0;}
 button.edit-btn .ae svg {width: 12px;height: 12px;}
 button.edit-btn .ae {margin: 0 5px 0 0;}
 
@@ -67,4 +69,30 @@ button.add-pro-btn {padding: 10px;}
 @media (max-width: 767px) {
  
 
+}
+.mt-40{
+    margin-top:40px !important;
+}
+.red-bg{
+    background:#fc5c63 !important;
+}
+.new-del-btn{
+    display: block;
+    width: 100px !important;
+    margin: 0 0 10px !important;
+    height: 44px !important;
+    border-radius: 3px !important;
+}
+.mar-5{
+    margin: 5px 0 0 !important;
+}
+.new-del-btn .ae.f8{
+    float: left !important;
+    display: inline-block;
+}
+.m-0{
+    margin: 0 !important;
+}
+.mr-10{
+    margin-right: 10px !important;
 }

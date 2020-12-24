@@ -10,7 +10,6 @@ export default ({ ...props }) => {
   // console.log("props",props);
   return (
     <Select
-    required
     filterOutSelected={false}
       overrides={{
         SelectArrow: () => {
