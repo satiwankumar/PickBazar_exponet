@@ -40,12 +40,12 @@ function HomePage({ deviceType }) {
     <>
       <SEO title='Humidifier Pads - Exponet' description=' Humidifier Pads Details' />
       <Modal>
-        {/* <Banner
+        <Banner
           intlTitleId='groceriesTitle'
           intlDescriptionId='groceriesSubTitle'
           imageUrl={"https://www.exponet.ca/images/background/intro.jpg"}
 
-        /> */}
+        />
 
         {deviceType.desktop ? (
           <>

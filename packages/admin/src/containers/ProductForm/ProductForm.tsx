@@ -359,20 +359,20 @@ data && data.getproducts.map(item=>
     ( <>
      <Row>
             <Col xl={3} lg={6} md={6}>
-            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+            <div className="mt-10"><FormLabel>Name</FormLabel></div>
                       <input type="text" placeholder="variation" value={variation[i].variation_name}
                     name="variation_name"
                     onChange={((e)=>handleVariationChange(e,i))} className="form-control brand-flied"/>
             </Col>
             <Col  xl={3} lg={6} md={6}>
-            <div className="mt-10"><FormLabel>Variation Price</FormLabel></div>
+            <div className="mt-10"><FormLabel>Price</FormLabel></div>
                       <input type="number" step="any"
                     min="0" placeholder="variation price"  value={variation[i].variation_price}
                     onChange={((e)=>handleVariationChange(e,i))}
                     name="variation_price" className="form-control brand-flied"/>
             </Col>
             <Col xl={3} lg={6} md={6}>
-            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+            <div className="mt-10"><FormLabel>Quantity</FormLabel></div>
                       <input type="number" step="any"
                     min="0" placeholder="variation quantity" value={variation[i].variation_quantity}
                     onChange={((e)=>handleVariationChange(e,i))}

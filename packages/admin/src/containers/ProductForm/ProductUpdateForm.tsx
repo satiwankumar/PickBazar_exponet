@@ -16,6 +16,7 @@ import DrawerBox from '../../components/DrawerBox/DrawerBox';
 import { Row, Col } from '../../components/FlexBox/FlexBox';
 import Input from '../../components/Input/Input';
 import { Textarea } from '../../components/Textarea/Textarea';
+import {Trash, Plus} from '../../components/AllSvgIcon'
 import Select from '../../components/Select/Select';
 import { FormFields, FormLabel } from '../../components/FormFields/FormFields';
 
@@ -299,6 +300,14 @@ const afterPaste = (evt)=>{
     setVariations(newArr)
 
   }
+  const removeVariation  = (i) =>{
+console.log("variation",i)
+    let variaton =[...variation]
+    // console.log("variation",variation)
+    variaton.splice(i,1)
+    setVariations(variaton)
+ 
+   }
   // console.log("dataaaaid",productid)
   const categories = data1 && data1.getCategory.filter(item => item.parent_id == null)
   const Subcategories = []
@@ -342,25 +351,34 @@ const afterPaste = (evt)=>{
     return variation.map((item,i)=>
     ( <>
      <Row>
-            <Col md={4}>
-            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+            <Col md={3}>
+            <div className="mt-10"><FormLabel>Name</FormLabel></div>
                       <input type="text" placeholder="variation name" value={variation[i].variation_name}
                     name="variation_name"
                     onChange={((e)=>handleVariationChange(e,i))} className="form-control brand-flied"/>
             </Col>
-            <Col md={4}>
-            <div className="mt-10"><FormLabel>Variation Price</FormLabel></div>
+            <Col md={3}>
+            <div className="mt-10"><FormLabel>Price</FormLabel></div>
                       <input type="number" step="any"
                     min="0" placeholder="variation price"  value={variation[i].variation_price}
                     onChange={((e)=>handleVariationChange(e,i))}
                     name="variation_price" className="form-control brand-flied"/>
             </Col>
-            <Col md={4}>
-            <div className="mt-10"><FormLabel>Variation</FormLabel></div>
+            <Col md={3}>
+            <div className="mt-10"><FormLabel>Quantity</FormLabel></div>
                       <input type="number" step="any"
                     min="0" placeholder="variation quantity" value={variation[i].variation_quantity}
                     onChange={((e)=>handleVariationChange(e,i))}
                     name="variation_quantity" className="form-control brand-flied"/>
+            </Col>
+            <Col xl={3} lg={6} md={6}>
+                {
+   i == (variation.length - 1)?  (<Button type="button"   startEnhancer={() => <Plus />} title="add variation"  onClick={()=>AddVariation()} className="nm-bt mt-40">add</Button>)
+   :(<Button type="button" title="add variation"  startEnhancer={() => <Trash />} onClick={()=>removeVariation(i)} className="nm-bt mt-40 red-bg">Remove</Button>)
+
+                }
+     
+
             </Col>
             
   </Row>
@@ -631,11 +649,7 @@ const relatedProducts = []
 
                { createdUI()}
      
-               <Row>
-                <Col md={12}>
-             <Button type="button" title="add variation"  onClick={()=>AddVariation()} className="nm-bt">add</Button>
-            </Col>
-            </Row>
+              
                 <FormFields>
                   <FormLabel>Product Quantity</FormLabel>
                   <Input type="number" inputRef={register} min="0" name="qty" />

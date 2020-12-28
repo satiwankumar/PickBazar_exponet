@@ -32,7 +32,7 @@ query getCategory($category_id:Int,$filter_by_name: String){
         image
 }
 
-getBrand(filter_text: null){
+getBrand(filter_text: null,category_id: $category_id){
   id
   name
 },
