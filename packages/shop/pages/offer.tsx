@@ -44,7 +44,9 @@ const GiftCardPage: NextPage<GiftCardProps> = ({ deviceType }) => {
   const { data, error } = useQuery(GET_COUPON,{
     variables:{filter_by_status:null,filter_by_name:null}
   });
+  
   if (error) return <div>{error.message}</div>;
+
 const url="http://s3.amazonaws.com/redqteam.com/pickbazar/gift-card-1.png"
   return (
     <Modal>

@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { ToastContainer, toast } from 'react-toastify';
 import gql from 'graphql-tag';
-
+import { useRouter } from 'next/router'
+import { withApollo } from 'helper/apollo';
 import {
   Wrapper,
   Container,
@@ -13,7 +14,7 @@ import {
   Button,
   LinkButton,
   Offer,
-} from './SignInOutForm.style';
+} from 'containers/SignInOutForm/SignInOutForm.style';
 import { FormattedMessage } from 'react-intl';
 import { AuthContext } from 'contexts/auth/auth.context';
 import Image from 'components/Image/Image';
@@ -32,7 +33,9 @@ forgotPassword(input : $input ) {
 `
 
 toast.configure()
-export default function ForgotCode() {
+function ForgotPass() {
+    const router = useRouter()
+
   const { authDispatch } = useContext<any>(AuthContext);
   const [email, setEmail] = React.useState('');
 
@@ -69,6 +72,8 @@ export default function ForgotCode() {
     
     
             })
+
+            router.push('/resetcode')
           // authDispatch({ type: 'SIGNIN_SUCCESS' });
          
          
@@ -146,7 +151,7 @@ export default function ForgotCode() {
         >
          
         </FormattedMessage> */}
-        <Input type='text' placeholder={"Enter Email Address"}  onChange={(e) => setEmail(e.target.value)} />
+        <Input type='text' placeholder={"Enter Email Address"}   onChange={(e) => setEmail(e.target.value)} />
         <Button
           fullwidth
           title={'Reset Password'}
@@ -157,7 +162,7 @@ export default function ForgotCode() {
         
         <Offer style={{ padding: '20px 0 0' }}>
           <FormattedMessage id='backToSign' defaultMessage='Back to' />{' '}
-          <LinkButton onClick={toggleSignInForm}>
+          <LinkButton onClick={()=>router.push('/signin')}>
             <FormattedMessage id='loginBtnText' defaultMessage='Login' />
           </LinkButton>
         </Offer>
@@ -170,3 +175,4 @@ export default function ForgotCode() {
     </Wrapper>
   );
 }
+export default withApollo(ForgotPass)

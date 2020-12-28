@@ -19,7 +19,21 @@ export const REGISTER = gql`
   }
 }`
 
+export const FORGOT_CODE = gql`
+    mutation forgotCode($code: String){
+      forgotCode(code:$code ) {
+        status
+        message
+  }
+}`
 
+export const RESET_PASSWORD = gql`
+    mutation resetPassword($code:String,$password:String){
+      resetPassword(code:$code,password:$password ) {
+        status
+        message
+  }
+}`
 
 
 export const LOGOUT = gql`
@@ -28,14 +42,7 @@ mutation logout{
 }
 `
 
-export const FORGOT = gql`  
-mutation forgotPassword($input: ForgotPasswordInput!){
-fogotPassword(input : $input ) {
-  status
-  message
-}
-}
-`
+
 
 
 // loginUser(email: "hosting2k17@gmail.com", password: "12345678") {

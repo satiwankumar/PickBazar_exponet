@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { ToastContainer, toast } from 'react-toastify';
 import gql from 'graphql-tag';
-
+import { useRouter } from 'next/router'
+import { withApollo } from 'helper/apollo';
 import {
   Wrapper,
   Container,
@@ -13,50 +14,57 @@ import {
   Button,
   LinkButton,
   Offer,
-} from './SignInOutForm.style';
+} from 'containers/SignInOutForm/SignInOutForm.style';
 import { FormattedMessage } from 'react-intl';
 import { AuthContext } from 'contexts/auth/auth.context';
 import Image from 'components/Image/Image';
 import PickBazar from '../../image/PickBazar.png';
-// import { FORGOT } from 'graphql/mutation/Auth';
+import { RESET_PASSWORD } from 'graphql/mutation/Auth';
 
 
 
-export const FORGOT_PASSWORD = gql`  
-mutation forgotPassword($input: ForgotPasswordInput!){
-forgotPassword(input : $input ) {
-  status
-  message
-}
-}
-`
+
 
 toast.configure()
-export default function ForgotCode() {
-  const { authDispatch } = useContext<any>(AuthContext);
-  const [email, setEmail] = React.useState('');
+function ForgotCode() {
+    const router = useRouter()
 
-  const [forgotPassword] = useMutation(FORGOT_PASSWORD)
+  const { authState:{isAuthenticated}, authDispatch } = useContext<any>(AuthContext);
+  const [newpassword, setNewPassword] = React.useState('');
+  const [confirmpassword,setConfirmPassword] = React.useState('');
+
+
+  const [resetPassword] = useMutation(RESET_PASSWORD)
+
+// let checking = router.query && router.query.code?true:false
+// if(!checking){
+//     //   toast.error(`🦄  Invalid Code `, {
+//     //     position: "top-right",
+//     //     autoClose: 5000,
+//     //     hideProgressBar: false,
+//     //     closeOnClick: true,
+//     //     pauseOnHover: true,
+//     //     draggable: true,
+//     //     progress: undefined,
+
+
+
+
+//     //     })
+//  router.push('/resetpassword')
+let code = router.query.resetCode
+// }
 
   const HandleForgot = async (e) => {
     try {
       e.preventDefault()
       
     //  const ForgotPasswordInput = {email:email}
-  
-  
-      const result = await forgotPassword({
-  
-        variables: {input:{email:email}
-      }
-      });
-      console.log("dataaaa",result.data)
-  
-      if (result.data) {
-        // console.log(result)
-          // localStorage.setItem('access_token', `password Sent Successfully`);
-          // alert("toast")
-          toast.success(`🦄  Reset Code sent Successfully to Email `, {
+    console.log("code",router.query.resetCode)
+
+
+    if(newpassword!==confirmpassword){
+        return  toast.error(`🦄  password Mismatch `, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -69,12 +77,36 @@ export default function ForgotCode() {
     
     
             })
-          // authDispatch({ type: 'SIGNIN_SUCCESS' });
+    }    
+
+      const result = await resetPassword({
+  
+        variables: {code:"2GSF" , password:newpassword}
+      })
+   
+    //   console.log("dataaaa",result.data)
+  
+      if (result.data.resetPassword.status ==200) {
+        // console.log(result)
+          // localStorage.setItem('access_token', `password Sent Successfully`);
+          // alert("toast")
+          toast.success(`🦄  Password Changed Successfully `, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+    
+            })
+            router.push('/signin')
+           
          
          
           // closeModal();
         }else{
-          toast.warn(`🦄  Invalid Credentials `, {
+          toast.warn(`🦄  Invalid Code `, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -87,6 +119,7 @@ export default function ForgotCode() {
     
     
             })
+            
 
         }
     } catch (error) {
@@ -101,23 +134,11 @@ export default function ForgotCode() {
         progress: undefined,
         })
     }
+  }
 
-  
-// else{
-//   console.log("Invalid Credentials")
-// }
-
-  };
-
-
-  const toggleSignInForm = () => {
-    authDispatch({
-      type: 'SIGNIN',
-    });
-  };
-
-
-
+  if(isAuthenticated){
+    router.push('/')
+     }
   return (
     <Wrapper>
       
@@ -146,7 +167,9 @@ export default function ForgotCode() {
         >
          
         </FormattedMessage> */}
-        <Input type='text' placeholder={"Enter Email Address"}  onChange={(e) => setEmail(e.target.value)} />
+        <Input type='password' placeholder={"Enter New Password"} value={newpassword} required="true"  onChange={(e) => setNewPassword(e.target.value)} />
+        <Input type='password' placeholder={"Enter Confirm Password"} value={confirmpassword} required="true"  onChange={(e) => setConfirmPassword(e.target.value)} />
+
         <Button
           fullwidth
           title={'Reset Password'}
@@ -155,12 +178,12 @@ export default function ForgotCode() {
           type="submit"
         />
         
-        <Offer style={{ padding: '20px 0 0' }}>
+        {/* <Offer style={{ padding: '20px 0 0' }}>
           <FormattedMessage id='backToSign' defaultMessage='Back to' />{' '}
-          <LinkButton onClick={toggleSignInForm}>
+          <LinkButton onClick={()=>router.push('/forgot')}>
             <FormattedMessage id='loginBtnText' defaultMessage='Login' />
           </LinkButton>
-        </Offer>
+        </Offer> */}
       </form>
 
       </Container>
@@ -170,3 +193,4 @@ export default function ForgotCode() {
     </Wrapper>
   );
 }
+export default withApollo(ForgotCode)

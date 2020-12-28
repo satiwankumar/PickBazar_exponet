@@ -7,7 +7,7 @@ import { AuthorizedMenu } from '../AuthorizedMenu';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { HelpIcon } from 'components/AllSvgIcon';
 import { RightMenuBox } from './RightMenu.style';
-
+import {useRouter} from 'next/router'
 type Props = {
   onLogout: () => void;
   onJoin: () => void;
@@ -21,6 +21,7 @@ export const RightMenu: React.FC<Props> = ({
   isAuthenticated,
   onJoin
 }) => {
+  const router = useRouter()
   return (
     <RightMenuBox>
       <NavLink
@@ -39,10 +40,10 @@ export const RightMenu: React.FC<Props> = ({
       />
       {/* <LanguageSwitcher /> */}
 
-      {!isAuthenticated ? (
+      {!isAuthenticated ?  (
         <Button
          className="joinButton"
-          onClick={onJoin}
+          onClick={()=>router.push('/signin')}
           size="small"
           title="Join"
           style={{ fontSize: 15, color: '#fff' }}

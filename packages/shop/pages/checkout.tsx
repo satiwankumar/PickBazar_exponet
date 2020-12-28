@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { openModal } from '@redq/reuse-modal';
 import $ from 'jquery';
-
+import {useRouter} from 'next/router'
 import { useQuery } from '@apollo/react-hooks';
 import { Modal } from '@redq/reuse-modal';
 import { withApollo } from 'helper/apollo';
@@ -26,44 +26,45 @@ type Props = {
 };
 
 const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
+  const router = useRouter()
 
-  const handleJoin = () => {
-    authDispatch({
-      type: 'SIGNIN'
-    })
-    openModal({
-      show: true,
-      overlayClassName: 'quick-view-overlay',
-      closeOnClickOutside: true,
-      component: AuthenticationForm,
-      closeComponent: '',
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: 'quick-view-modal',
-        width: 458,
-        height: 'auto',
-      },
-    });
-  }
+//   const handleJoin = () => {
+//     authDispatch({
+//       type: 'SIGNIN'
+//     })
+//     openModal({
+//       show: true,
+//       overlayClassName: 'quick-view-overlay',
+//       closeOnClickOutside: true,
+//       component: AuthenticationForm,
+//       closeComponent: '',
+//       config: {
+//         enableResizing: false,
+//         disableDragging: true,
+//         className: 'quick-view-modal',
+//         width: 458,
+//         height: 'auto',
+//       },
+//     });
+//   }
 
-  const testing = () => {
-    <div id="one" style={{ margin: "50px", zIndex: 1 , padding: "500px" }} onClick={() => openModal({
-     show: true,
-     overlayClassName: 'quick-view-overlay',
-     closeOnClickOutside: true,
-     component: AuthenticationForm,
-     closeComponent: '',
-     config: {
-       enableResizing: false,
-       disableDragging: true,
-       className: 'quick-view-modal',
-       width: 458,
-       height: 'auto',
-     },
-   })}><h1 id="el1" >CLIck me</h1></div>
+//   const testing = () => {
+//     <div id="one" style={{ margin: "50px", zIndex: 1 , padding: "500px" }} onClick={() => openModal({
+//      show: true,
+//      overlayClassName: 'quick-view-overlay',
+//      closeOnClickOutside: true,
+//      component: AuthenticationForm,
+//      closeComponent: '',
+//      config: {
+//        enableResizing: false,
+//        disableDragging: true,
+//        className: 'quick-view-modal',
+//        width: 458,
+//        height: 'auto',
+//      },
+//    })}><h1 id="el1" >CLIck me</h1></div>
  
- }
+//  }
   const {
     authState: { isAuthenticated },
     authDispatch,
@@ -79,9 +80,12 @@ const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
     if (error) return <div>{error} </div>;
   }
   else {
-    console.log("error called");
-
-testing()
+    let pathame = router.pathname
+    router.push({
+      pathname: '/signin',
+      query: { from: pathame },
+})
+    
 
   }
 
@@ -97,7 +101,7 @@ testing()
               <Elements stripe={stripePromise}>
               <Checkout token={token} deviceType={deviceType} />
               </Elements>
-              {testing()}
+              {/* {testing()} */}
             </Modal>
           </ProfileProvider> </> :
         <>
@@ -106,9 +110,9 @@ testing()
             <Modal>
               {/* <Checkout token={token} deviceType={deviceType} /> */}
               
-              {testing()
+              {/* {testing() */}
               
-              }
+              
               
             </Modal>
           </ProfileProvider> </>

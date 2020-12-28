@@ -465,7 +465,7 @@ console.log("shipping",shipping)
 
                 </div>
 
-                  {/* Coupon start */}
+                  Coupon start
                   {coupon ? (
                     <CouponBoxWrapper>
                       <CouponCode>

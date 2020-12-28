@@ -49,7 +49,7 @@ query getCategory($filter_category_id:Int){
     
 }
   }
-  getBrand(filter_text: null){
+  getBrand(filter_text: null,category_id:null){
     name
 },
 

@@ -17,13 +17,13 @@ import { FormattedMessage } from 'react-intl';
 import { AuthContext } from 'contexts/auth/auth.context';
 import Image from 'components/Image/Image';
 import PickBazar from '../../image/PickBazar.png';
-import { FORGOT } from 'graphql/mutation/Auth';
+import { FORGOT_CODE } from 'graphql/mutation/Auth';
 
 export default function ForgotPassModal() {
   const { authDispatch } = useContext<any>(AuthContext);
   const [email, setEmail] = React.useState('');
 
-  const [forgotPassword] = useMutation(FORGOT)
+  const [forgotPassword] = useMutation(FORGOT_CODE)
 
 
   const HandleForgot = async (e) => {

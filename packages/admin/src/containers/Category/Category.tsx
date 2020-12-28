@@ -103,11 +103,14 @@ query getCategory($category_id:Int,$filter_by_name: String){
     id
     image
     name
+    content
     slug
+    content
     type
     subcategories {
       id
       name
+      content
       slug
       position
       is_searchable
@@ -115,6 +118,7 @@ query getCategory($category_id:Int,$filter_by_name: String){
        subcategories {
       name
       slug
+      content
       position
       is_searchable
       parent_id

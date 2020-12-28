@@ -62,17 +62,12 @@ query getCategoryWithoutFilter{
     }
 }`
 const CREATE_CATEGORY = gql`
-  mutation createCategory($parent_id: Int,$name:String!,$slug:String,$file: Upload) {
-    createCategory(parent_id: $parent_id,name:$name,slug:$slug,file:$file)
+  mutation createCategory($parent_id: Int,$name:String!,$slug:String,$content:String,$file: Upload) {
+    createCategory(parent_id: $parent_id,name:$name,slug:$slug,file:$file,content:$content)
   }
 `;
 
-const options = [
-  { value: 'grocery', name: 'Grocery', id: '1' },
-  { value: 'women-cloths', name: 'Women Cloths', id: '2' },
-  { value: 'bags', name: 'Bags', id: '3' },
-  { value: 'makeup', name: 'Makeup', id: '4' },
-];
+
 type Props = any;
 toast.configure()
 
@@ -109,12 +104,12 @@ const AddCategory: React.FC<Props> = props => {
   //   },
   // });
 
-  const onSubmit = async ({ name, slug, parent, image }) => {
+  const onSubmit = async ({ name, slug, parent, image,content }) => {
 
 
 try{
 
-    console.log("daty",name,slug,parent,image)
+    // console.log("daty",name,slug,parent,image,content)
     // const newCategory = {
     //   id: uuidv4(),
     //   name: name,
@@ -128,6 +123,7 @@ try{
         parent_id:parent?parent[0].id:null,
         name:name,
         slug:slug,
+        content:content,
         file:image
 
       },
@@ -269,6 +265,13 @@ else{
                   <Input
                     inputRef={register({ required: true, maxLength: 20 })}
                     name="slug"
+                  />
+                </FormFields>
+                <FormFields>
+                  <FormLabel>Content</FormLabel>
+                  <Input
+                    inputRef={register({ required: true, maxLength: 20 })}
+                    name="content"
                   />
                 </FormFields>
                 <ToastContainer autoClose={2000} />

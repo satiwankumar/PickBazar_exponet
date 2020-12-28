@@ -65,17 +65,12 @@ query getCategoryWithoutFilter{
 }`
 const Edit_CATEGORY = gql`
 
-  mutation editCategory($parent_id: Int,$name:String!,$slug:String,$file: Upload,$category_id:Int) {
-    editCategory(parent_id: $parent_id,name:$name,slug:$slug,file:$file,category_id:$category_id)
+  mutation editCategory($parent_id: Int,$name:String!,$slug:String,$file: Upload,$category_id:Int,$content:String) {
+    editCategory(parent_id: $parent_id,name:$name,slug:$slug,file:$file,category_id:$category_id,content:$content)
   }
 `;
 
-const options = [
-  { value: 'grocery', name: 'Grocery', id: '1' },
-  { value: 'women-cloths', name: 'Women Cloths', id: '2' },
-  { value: 'bags', name: 'Bags', id: '3' },
-  { value: 'makeup', name: 'Makeup', id: '4' },
-];
+
 type Props = any;
 toast.configure()
 
@@ -109,8 +104,13 @@ const AddCategory: React.FC<Props> = props => {
 
 
   const categories= data && data.getCategoryWithoutFilter.filter(item=> item.parent_id==null)
+  
+  
+  
   const valueData =data && categories.filter(item=> item.id===formdata.parent_id)
-console.log("valueData",valueData)
+  
+  
+  
   const [Parentcategory, setCategory] = useState(data&& valueData);
 
 
@@ -151,6 +151,7 @@ try{
         parent_id:Parentcategory.length>0?Parentcategory[0].id:null,
         name:formdata.name,
         slug:formdata.slug,
+        content:formdata.content?formdata.content:null,
         file:image
 
       },
@@ -161,7 +162,7 @@ try{
        
    
               
-      toast.success(`🦄  ${resulting.data.editCategory} `, {
+      toast.success(`🦄 Category Updated Successfully`, {
                   position: "top-right",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -181,19 +182,6 @@ setTimeout(() => {
 
 } 
 
-else{
-            toast.error(`🦄 SomeThing Went Wrong`, {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              })
-
-
-}
 
 
 
@@ -202,6 +190,7 @@ else{
 
     closeDrawer();
   } catch (error) {
+    console.log("errrorrrr",error)
     toast.error(`🦄 SomeThing Went Wrong`, {
       position: "top-right",
       autoClose: 3000,
@@ -303,6 +292,16 @@ else{
                     name="slug"
                     value={formdata.slug}
                     disabled={true}
+                    onChange={(e)=>handleChangeInput(e)}
+
+                  />
+                </FormFields>
+                <FormFields>
+                  <FormLabel>Content</FormLabel>
+                  <Input
+                    // inputRef={register({ required: true, maxLength: 20 })}
+                    value={formdata.content}
+                    name="content"
                     onChange={(e)=>handleChangeInput(e)}
 
                   />

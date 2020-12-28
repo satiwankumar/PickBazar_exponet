@@ -27,6 +27,11 @@ function reducer(state: any, action: any) {
         ...state,
         isAuthenticated: true,
       };
+      case 'SIGNIN_SUCCESS':
+      return {
+        ...state,
+        isAuthenticated: true,
+      };
     case 'SIGN_OUT':
       return {
         ...state,
