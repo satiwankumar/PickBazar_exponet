@@ -1,5 +1,7 @@
-import React,{useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+
+
 import Select from 'components/Select/Select/Select'
 // import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -21,7 +23,6 @@ import {
   MedicineIcon,
   Restaurant,
 } from 'components/AllSvgIcon';
-
 import NavLink from 'components/NavLink/NavLink';
 import {
   GROCERY_PAGE,
@@ -33,7 +34,7 @@ import {
   // MEDICINE_PAGE,
   // RESTAURANT_PAGE,
 } from 'constants/navigation';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import { FormattedMessage } from 'react-intl';
 
 
@@ -96,24 +97,24 @@ import { object } from 'yup';
 //   },
 // ];
 
-const CategoryMenu = ({ onClick,data }) => {
+const CategoryMenu = ({ onClick, data }) => {
   return (
     <>
-    
+
       {
-      Object.keys(data).length>0?(
+        Object.keys(data).length > 0 ? (
           data.getCategory.map((item) => (
-        <NavLink
-          key={item.id}
-          onClick={() => onClick(item)}
-          className='menu-item'
-          href={`/${item.slug.toLowerCase()}`}
-          label={item.name}
-          icon={<Handbag />}
-          iconClass='menu-item-icon'
-          intlId={String(item.id)}
-        />
-      ))):"no record found"}
+            <NavLink
+              key={item.id}
+              onClick={() => onClick(item)}
+              className='menu-item'
+              href={`/${item.slug.toLowerCase()}`}
+              label={item.name}
+              icon={<Handbag />}
+              iconClass='menu-item-icon'
+              intlId={String(item.id)}
+            />
+          ))) : "no record found"}
     </>
   );
 };
@@ -124,24 +125,25 @@ type Props = {
 // alert("called")
 
 export const LeftMenu: React.FC<Props> = ({ logo }) => {
+  const [cat , setCat] = useState("");
 
-  const { data, error, refetch } = useQuery(GET_CATEGORIES,{
-    variables : {category_id:null,filter_by_name: null}
+  const { data, error, refetch } = useQuery(GET_CATEGORIES, {
+    variables: { category_id: null, filter_by_name: null }
   });
 
-    
+
   const categories = data && data.getCategory.filter(item => item.parent_id == null)
-  const { pathname } = useRouter();
+  const router = useRouter();
 
 
-  const initialMenu = data && data.getCategory.map((item) => item.slug === pathname);
-  const [activeMenu, setActiveMenu] = React.useState(data&&data.getCategory[0]);
- 
- 
-  console.log("data",data)
-  console.log("dataactivemenu", data &&activeMenu)
+  const initialMenu = data && data.getCategory.map((item) => item.slug === router.pathname);
+  const [activeMenu, setActiveMenu] = React.useState(data && data.getCategory[0]);
+
+
+  console.log("data", data)
+  console.log("dataactivemenu", data && activeMenu)
   if (error) {
-    
+
     toast.error(`🦄 SomeThing Went Wrong`, {
       position: "top-right",
       autoClose: 3000,
@@ -150,34 +152,40 @@ export const LeftMenu: React.FC<Props> = ({ logo }) => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      })
-      return <div>Error! {error.message}</div>;
+    })
+    return <div>Error! {error.message}</div>;
 
-    
+
   }
 
-
+const handleClick = (e) => {
+  setCat(e.target.value);
+  router.push({
+    pathname : '/home',
+    query : {type:e.target.value}
+  })
+}
 
   return (
     <LeftMenuBox>
-     {data && data.getSiteSetting? (<Logo
-        imageUrl={data&&data.getSiteSetting.image}
-        alt={data&&data.getSiteSetting.image}
-        onClick={() => setActiveMenu(data &&data.getCategory[0])}
-      />):""}
+      {data && data.getSiteSetting ? (<Logo
+        imageUrl={data && data.getSiteSetting.image}
+        alt={data && data.getSiteSetting.image}
+        onClick={() => setActiveMenu(data && data.getCategory[0])}
+      />) : ""}
 
       <MainMenu>
-        <Popover
+        {/* <Popover
           className='right'
           handler={
             <SelectedItem>
               <span>
                 <Icon>{activeMenu?.icon}</Icon>
                 <span>
-                   <FormattedMessage
-                    id={activeMenu?.name?activeMenu?.name:"filters"}
+                  <FormattedMessage
+                    id={activeMenu?.name ? activeMenu?.name : "filters"}
                     defaultMessage={data && activeMenu?.name}
-                  /> 
+                  />
                 </span>
               </span>
               <Arrow>
@@ -186,7 +194,14 @@ export const LeftMenu: React.FC<Props> = ({ logo }) => {
             </SelectedItem>
           }
           content={<CategoryMenu data={data} onClick={setActiveMenu} />}
-        />
+        /> */}
+
+
+       {data && <select className='right' value={cat} onChange={handleClick} name="cars" id="cars">
+          {data && categories.map( (item , index) => (
+            <option key={index} value={item.id}>{item.name}</option>
+          ))}
+        </select>}
       </MainMenu>
       <ToastContainer autoClose={2000} />
 

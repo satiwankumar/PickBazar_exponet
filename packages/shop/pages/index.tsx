@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 const Index: React.FC = () => {
   const router = useRouter();
   React.useEffect(() => {
-    router.replace('/filters');
+    router.replace('/home?type=1');
   });
   return (
     <Head>

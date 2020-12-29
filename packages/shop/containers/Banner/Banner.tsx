@@ -11,16 +11,20 @@ import {
   BannerSubHeading,
   BannerComponent,
 } from './Banner.style';
+import { getURL } from 'next/dist/next-server/lib/utils';
+import { getCategoryURl } from 'utils';
 
 type BannerProps = {
   imageUrl: string;
   intlTitleId: string;
   intlDescriptionId: string;
+  data:any
 };
 
 const Banner: React.FC<BannerProps> = ({
   imageUrl,
   intlTitleId,
+  data,
   intlDescriptionId,
 }) => {
   const { state, dispatch } = useContext(SearchContext);
@@ -48,7 +52,7 @@ const Banner: React.FC<BannerProps> = ({
         query: { ...urlState },
       },
       {
-        pathname: pathname === '/' ? `${pathname}filters` : pathname,
+        pathname: pathname === '/' ? `${pathname}home` : pathname,
         query: { ...urlState },
       },
       { shallow: true }
@@ -68,20 +72,22 @@ const Banner: React.FC<BannerProps> = ({
       setSticky();
     }
   };
-
   return (
     <BannerWrapper
       style={{
         backgroundImage: `url(${imageUrl})`,
+        
       }}
     >
       <BannerComponent>
         <BannerHeading>
-          <FormattedMessage
+          {/* <FormattedMessage
             id={intlTitleId}
             defaultMessage="Set Your Title Through Language File"
             values={{ minute: 90 }}
-          />
+          /> */}
+          {data &&data.content}
+          
         </BannerHeading>
         <BannerSubHeading>
           <FormattedMessage
@@ -101,7 +107,7 @@ const Banner: React.FC<BannerProps> = ({
           value={state.text || ''}
           onClick={handleClickSearchButton}
           className="banner-search"
-          pathname="Humidifier Pads"
+          pathname={data && data.name}
         />
         <Waypoint
           onEnter={removeSticky}

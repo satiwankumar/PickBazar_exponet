@@ -7,17 +7,20 @@ query getCategory($category_id:Int,$filter_by_name: String){
     id
     image
     name
+    content
     slug
     type
     subcategories {
       id
       name
+      content
       slug
       position
       is_searchable
       parent_id
        subcategories {
       name
+      content
       slug
       position
       is_searchable

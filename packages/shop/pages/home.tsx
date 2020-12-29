@@ -9,6 +9,8 @@ import Banner from 'containers/Banner/Banner';
 import Sidebar from 'containers/Sidebar/Sidebar';
 import Products from 'containers/Products/Products';
 import CartPopUp from 'containers/Cart/CartPopUp';
+import gql from 'graphql-tag';
+
 import {
   MainContentArea,
   SidebarSection,
@@ -22,14 +24,25 @@ import BannerImg from 'image/grocery.png';
 import storeType from 'constants/storeType';
 import { AuthContext } from 'contexts/auth/auth.context';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_CATEGORIES } from 'graphql/query/category.query';
+
+
+
+export const GET_CATEGORIES = gql`
+query getCategory($category_id:Int,$filter_by_name: String){
+  getCategory(category_id:$category_id,filter_by_name: $filter_by_name){
+    id
+    image
+    name
+    content
+    slug
+    type
+  }
+}`
+ 
 
 function HomePage({ deviceType }) {
 
- 
-  //   const { data, error, refetch } =  useQuery(GET_CATEGORIES, {
-  //       variables : {category_id:null,filter_by_name: null}
-  //   })
+
   // //   // console.log('filtered again again', data);
   // const { authDispatch } = useContext<any>(AuthContext);
     
@@ -56,6 +69,12 @@ function HomePage({ deviceType }) {
   }, [query]);
 
   const PAGE_TYPE = query.type ? query.type.toString() : "1";
+ 
+  const { data, error, refetch } =  useQuery(GET_CATEGORIES, {
+    variables : {category_id:parseInt(PAGE_TYPE),filter_by_name: null}
+})
+console.log("dataaaaaaaaaaaaaaaa",data && data.getCategory)
+
 
   return (
     <>
@@ -64,7 +83,8 @@ function HomePage({ deviceType }) {
         <Banner
           intlTitleId='groceriesTitle'
           intlDescriptionId='groceriesSubTitle'
-          imageUrl={"https://www.exponet.ca/images/background/intro.jpg"}
+          data={data&&data.getCategory[0]}
+          imageUrl={`https://www.exponet.ca/images/background/intro.jpg`}
         />
 
         {deviceType.desktop ? (

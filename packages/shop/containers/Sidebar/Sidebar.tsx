@@ -61,12 +61,14 @@ const [brands, setBrands] = React.useState([]);
   const selectedQueries = query.category;
 
   const { isRtl } = useLocale();
+  console.log("queryName",pathname, query)
 
   const handleCategorySelection = (id: string) => {
   //  alert(id)
-    const updatedQuery = state.text
-      ? { text: state.text, category: id }
-      : { category: id };
+  let type= query
+    const updatedQuery = state.text 
+      ? { type: query.type, category: id }
+      : { type: query.type,category: id };
     router.push({
       pathname: pathname,
       query: updatedQuery,
@@ -76,8 +78,8 @@ const [brands, setBrands] = React.useState([]);
     // alert(value)
      console.log("brandSelection",e.target.value)
       const updatedQuery = state.text
-        ? { text: state.text, brand: e.target.value}
-        : { brand: e.target.value };
+        ? {  type: query.type, brand: e.target.value}
+        : { type: query.type, brand: e.target.value };
       router.push({
         pathname: pathname,
         query: updatedQuery,
