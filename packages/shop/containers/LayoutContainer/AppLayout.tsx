@@ -28,7 +28,7 @@ const Layout: React.FunctionComponent<LayoutProps> = ({
 }) => {
   const isSticky = useStickyState('isSticky');
   const { pathname } = useRouter();
-console.log("pathnamelayout",pathname)
+
   const isHomePage = isCategoryPage(pathname);
   return (
     <LayoutWrapper className={`layoutWrapper ${className}`}>

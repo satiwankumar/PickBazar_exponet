@@ -1,4 +1,4 @@
-import { Description } from 'containers/ProductDetailsBook/ProductDetailsBook.style';
+// import { Description } from 'containers/ProductDetailsBook/ProductDetailsBook.style';
 import React, { useState } from 'react';
 
 type ReadMoreProps = {

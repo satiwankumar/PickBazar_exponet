@@ -1,6 +1,7 @@
-import React from 'react';
+import React,{useContext,useEffect} from 'react';
 import Link from 'next/link';
 import gql from 'graphql-tag';
+import { AuthContext, } from 'contexts/auth/auth.context';
 
 import Router,{useRouter} from 'next/router'
 import OrderRecivedWrapper, {
@@ -61,17 +62,26 @@ variation_price
 type OrderRecivedProps = {};
 
 const OrderRecived: React.FunctionComponent<OrderRecivedProps> = props => {
-const{query} = useRouter()
-console.log("Checkoutdata",query)
+  const { authState:{isAuthenticated},authDispatch } = useContext<any>(AuthContext);
+  
+const router = useRouter()
+// console.log("Checkoutdata",query)
+
+useEffect(() => {
+  if(!isAuthenticated){ 
+  router.push('/signin');
+  }})
+
+
 const { data, error, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {
 
-  variables: { order_id:query.order_id?query.order_id:null}
+  variables: { order_id:router.query.order_id?router.query.order_id:null}
 
 });
   if(error){
     return <div>Error! {error.message}</div>;
   }
-
+ 
   return (
     
     

@@ -206,9 +206,9 @@ export const Products: React.FC<ProductsProps> = ({
 }) => {
   const router = useRouter();
   const [loadingMore, toggleLoading] = useState(false);
- console.log("dataproducts",router.query)
+//  console.log("dataproducts",router.query)
 
-console.log("typeinproducts",type)
+// console.log("typeinproducts",type)
   const { data, error, loading, fetchMore } = useQuery(GET_PRODUCTS, {
 
     variables: {
@@ -224,7 +224,7 @@ console.log("typeinproducts",type)
       // limit: 5,
     },
   });
-console.log("updatedata",data)
+// console.log("updatedata",data)
 
 
   // Quick View Modal

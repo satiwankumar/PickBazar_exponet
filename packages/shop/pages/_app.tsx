@@ -1,5 +1,7 @@
 import React from 'react';
 import App from 'next/app';
+import Head from 'next/head'
+
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'theme';
 import AuthProvider from 'contexts/auth/auth.provider';
@@ -19,7 +21,6 @@ import localEs from 'data/translation/es.json';
 import localDe from 'data/translation/de.json';
 import localCn from 'data/translation/zh.json';
 import localIl from 'data/translation/he.json';
-import Head from 'next/head'
 // External CSS import here
 import 'rc-drawer/assets/index.css';
 import 'rc-table/assets/index.css';

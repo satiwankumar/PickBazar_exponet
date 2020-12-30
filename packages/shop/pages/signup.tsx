@@ -155,7 +155,7 @@ const [register,{data}]  = useMutation(REGISTER)
         <HelperText style={{ padding: '20px 0 30px' }}>
           <FormattedMessage
             id='signUpText'
-            defaultMessage="By signing up, you agree to Pickbazar's"
+            defaultMessage="By signing up, you agree to Exponet's"
           />{' '}
           <Link href='/'>
             <a>

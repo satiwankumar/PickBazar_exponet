@@ -132,11 +132,11 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ className, pathname }) => {
             <MobileDrawer />
           </DrawerWrapper>
 
-          <LogoWrapper>
+          {/* <LogoWrapper>
             <Logo imageUrl={LogoImage} alt="shop logo" />
-          </LogoWrapper>
+          </LogoWrapper> */}
 
-          <LanguageSwitcher />
+          {/* <LanguageSwitcher /> */}
 
           {isHomePage ? (
             <SearchWrapper

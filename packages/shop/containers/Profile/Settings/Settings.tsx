@@ -44,9 +44,9 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ deviceType }) => {
 
 
 const [formData, setFormData] = useState({
-  first_name:state.first_name,
-  last_name:state.last_name,
-  email:state.email
+  first_name:state.first_name?state.first_name:"",
+  last_name:state.last_name?state.last_name:"",
+  email:state.email?state.email:""
 })
 
 
@@ -124,7 +124,7 @@ const [formData, setFormData] = useState({
    
    
    
-    console.log(first_name,last_name,email)
+    // console.log(first_name,last_name,email)
     const result  = await profileUpdate({
       variables:{
         

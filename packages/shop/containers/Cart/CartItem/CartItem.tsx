@@ -28,14 +28,14 @@ export const CartItem: React.FC<Props> = ({
   onRemove,
 }) => {
   
-console.log("dataaaaaaaaaaaaaaaaa",data.variationId)
+// console.log("dataaaaaaaaaaaaaaaaa",data.variationId)
 
   const { title, productImages, price, salePrice, unit, quantity, variationId,productVariations} = data;
   let filterVariation=  productVariations.length>0?productVariations.filter(item=>item.variations.id==variationId):null
   let filterVariation1 = filterVariation[0]
-  console.log("dataaaaaaaaaaaaaaaa",filterVariation.length>0?filterVariation1.variations.variation_price:false)
+  // console.log("dataaaaaaaaaaaaaaaa",filterVariation.length>0?filterVariation1.variations.variation_price:false)
   let displayPrice = filterVariation.length>0?filterVariation1.variations.variation_price:salePrice ? salePrice : price;
-console.log("display price",displayPrice)
+// console.log("display price",displayPrice)
    displayPrice = parseFloat(displayPrice).toFixed(2)
 
   // const totalPrice = quantity * displayPrice;

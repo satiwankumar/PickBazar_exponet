@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import gql from 'graphql-tag';
 import Moment from 'react-moment';
 
@@ -18,14 +18,18 @@ import {
   ItemPrice,
   NoOrderFound,
 } from './Order.style';
+import { AuthContext, } from 'contexts/auth/auth.context';
 
 import OrderDetails from './SingleOrderDetails/OrderDetails';
 import OrderCard from './OrderCard/OrderCard';
 import OrderCardMobile from './OrderCard/orderCardMobile';
 import useComponentSize from 'helper/useComponentSize';
 import { FormattedMessage } from 'react-intl';
-
+import {useRouter} from 'next/router'
 const progressData = ['Order Received', 'Order On The Way', 'Order Delivered'];
+
+
+
 
 const GET_ORDERS = gql`
 query getOrderByCustomer{
@@ -132,18 +136,30 @@ type OrderTableProps = {
 const OrdersContent: React.FC<OrderTableProps> = ({
   deviceType: { mobile, tablet, desktop },
 }) => {
+  const { authState:{isAuthenticated},authDispatch } = useContext<any>(AuthContext);
+  const router = useRouter()
+ 
+  useEffect(() => {
+    if(!isAuthenticated){ 
+    router.push('/signin');
+    return
+    }
+})
   const [order, setOrder] = useState(null);
   const [active, setActive] = useState('');
 
   const [targetRef, size] = useComponentSize();
   const orderListHeight = size.height - 79;
-  const { data, error, loading } = useQuery(GET_ORDERS);
-  console.log("dataaaa",data)
 
+  const { data, error, loading } = useQuery(GET_ORDERS);
+  // console.log("dataaaa",data)
+
+
+ 
   useEffect(() => {
     if (data && data.getOrderByCustomer && data.getOrderByCustomer.length !== 0) {
-      setOrder(data.getOrderByCustomer[0]);
-      setActive(data.getOrderByCustomer[0].id);
+      setOrder(data &&data.getOrderByCustomer[0]);
+      setActive(data && data.getOrderByCustomer[0].id);
     }
   }, [data && data.getOrderByCustomer]);
 
@@ -158,7 +174,7 @@ const OrdersContent: React.FC<OrderTableProps> = ({
     setActive(order.id);
   };
 
-  console.log(data.getOrderByCustomer, 'data.getOrderByCustomer', order, 'order');
+  // console.log(data.getOrderByCustomer, 'data.getOrderByCustomer', order, 'order');
 const getStatus=(status)=>{
  return  status.toLowerCase()=="pending"?1:status.toLowerCase()=="processing"?2:status.toLowerCase()=="delivered"?3:1
 }

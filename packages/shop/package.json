@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "next build",
+    "build": "next build" ,
     "serve": "http-serve",
     "start": "next start",
-    "shop-dev": "next"
+    "shop-dev": "next -p 8080"
   },
   "dependencies": {
     "@apollo/client": "^3.2.5",

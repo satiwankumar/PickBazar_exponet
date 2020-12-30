@@ -31,11 +31,11 @@ const AUTHORIZED_MENU_ITEMS = [
     label: 'Order',
     intlId: 'sidebarYourOrder',
   },
-  {
-    link: ORDER_RECEIVED,
-    label: 'Order invoice',
-    intlId: 'navlinkOrderReceived',
-  },
+  // {
+  //   link: ORDER_RECEIVED,
+  //   label: 'Order invoice',
+  //   intlId: 'navlinkOrderReceived',
+  // },
 ];
 
 type Props = {

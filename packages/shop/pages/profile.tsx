@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext ,useEffect} from 'react';
+import { AuthContext, } from 'contexts/auth/auth.context';
+
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useQuery } from '@apollo/react-hooks';
@@ -6,6 +8,8 @@ import { Modal } from '@redq/reuse-modal';
 import { GET_LOGGED_IN_CUSTOMER } from 'graphql/query/customer.query';
 import { ProfileProvider } from 'contexts/profile/profile.provider';
 import SettingsContent from 'containers/Profile/Settings/Settings';
+import { useRouter } from 'next/router'
+
 import {
   PageWrapper,
   SidebarSection,
@@ -24,17 +28,38 @@ type Props = {
     desktop: boolean;
   };
 };
+
+
+
+
+
 const ProfilePage: NextPage<Props> = ({ deviceType }) => {
+  const { authState:{isAuthenticated},authDispatch } = useContext<any>(AuthContext);
+  const router = useRouter()
+ 
+  useEffect(() => {
+    if(!isAuthenticated){ 
+    router.push('/signin');
+    }
+}
+
+, []);
+let datass ={}
+  if(isAuthenticated){
   const { data, error, loading } = useQuery(GET_LOGGED_IN_CUSTOMER);
 
   if (!data || loading) {
     return <div>loading...</div>;
   }
+  datass=data&& data.profile
   if (error) return <div>{error.message}</div>;
+
+}
+
   return (
     <>
       <SEO title='Profile - PickBazar' description='Profile Details' />
-      <ProfileProvider initData={data.profile}>
+      <ProfileProvider initData={datass && datass}>
         <Modal>
           <PageWrapper>
             <SidebarSection>

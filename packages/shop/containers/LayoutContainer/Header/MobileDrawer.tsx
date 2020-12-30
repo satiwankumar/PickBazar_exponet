@@ -10,6 +10,7 @@ import { DrawerContext } from 'contexts/drawer/drawer.context';
 import { AuthContext } from 'contexts/auth/auth.context';
 import AuthenticationForm from '../../SignInOutForm/Form';
 import { FormattedMessage } from 'react-intl';
+import {useRouter} from 'next/router'
 import {
   HamburgerIcon,
   DrawerContentWrapper,
@@ -40,7 +41,43 @@ const DrawerMenuItems = [
     id: 1,
     intlLabelId: 'navLinkHome',
     label: 'Home',
-    href: '/',
+    href: '/home/type=1',
+  },
+  
+  // {
+  //   id: 3,
+  //   label: 'Checkout Second',
+  //   intlLabelId: 'alternativeCheckout',
+  //   href: ALTERNATIVE_CHECKOUT_PAGE,
+  // },
+  
+  
+  // {
+  //   id: 6,
+  //   intlLabelId: 'navlinkOrderReceived',
+  //   label: 'Received',
+  //   href: ORDER_RECEIVED,
+  // },
+  {
+    id: 7,
+    intlLabelId: 'navlinkHelp',
+    label: 'Help',
+    href: HELP_PAGE,
+  },
+  {
+    id: 8,
+    intlLabelId: 'navlinkOffer',
+    label: 'Offer',
+    href: OFFER_PAGE,
+  },
+];
+
+const AuthenticatedItems = [
+  {
+    id: 1,
+    intlLabelId: 'navLinkHome',
+    label: 'Home',
+    href: '/home/type=1',
   },
   {
     id: 2,
@@ -66,12 +103,12 @@ const DrawerMenuItems = [
     label: 'Order',
     href: YOUR_ORDER,
   },
-  {
-    id: 6,
-    intlLabelId: 'navlinkOrderReceived',
-    label: 'Received',
-    href: ORDER_RECEIVED,
-  },
+  // {
+  //   id: 6,
+  //   intlLabelId: 'navlinkOrderReceived',
+  //   label: 'Received',
+  //   href: ORDER_RECEIVED,
+  // },
   {
     id: 7,
     intlLabelId: 'navlinkHelp',
@@ -86,7 +123,13 @@ const DrawerMenuItems = [
   },
 ];
 
+
+
+
+
 const MobileDrawer: React.FunctionComponent = () => {
+  const router = useRouter()
+
   const { state, dispatch } = useContext<any>(DrawerContext);
   const {
     authState: { isAuthenticated },
@@ -176,14 +219,14 @@ const MobileDrawer: React.FunctionComponent = () => {
                   size='small'
                   className='sign_in'
                   // variant="primary"
-                  onClick={signInOutForm}
+                  onClick={()=>router.push('/signin')}
                 />
               </LogoutView>
             )}
           </DrawerProfile>
 
           <DrawerMenu>
-            {DrawerMenuItems.map((item) => (
+            {isAuthenticated?AuthenticatedItems.map((item) => (
               <DrawerMenuItem key={item.id}>
                 <NavLink
                   onClick={toggleHandler}
@@ -193,6 +236,19 @@ const MobileDrawer: React.FunctionComponent = () => {
                   className='drawer_menu_item'
                 />
               </DrawerMenuItem>
+            )):
+            DrawerMenuItems.map((item) => (
+              <DrawerMenuItem key={item.id}>
+                <NavLink
+                  onClick={toggleHandler}
+                  href={item.href}
+                  label={item.label}
+                  intlId={item.intlLabelId}
+                  className='drawer_menu_item'
+                />
+              </DrawerMenuItem>
+            
+            
             ))}
           </DrawerMenu>
 

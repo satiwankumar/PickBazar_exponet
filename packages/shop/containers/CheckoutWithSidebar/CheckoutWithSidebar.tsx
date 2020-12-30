@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Router,{useRouter} from 'next/router';
+import {useRouter} from 'next/router';
 
 import Link from 'next/link';
 import InputButton from 'components/Input/Input'
@@ -84,7 +84,6 @@ type CartItemProps = {
 
 const OrderItem: React.FC<CartItemProps> = ({ product }) => {
   
-  const { pathname, query } = useRouter();
 
   const { id, quantity, title, name, unit, price, salePrice } = product;
   const displayPrice = salePrice ? salePrice : price;
@@ -105,6 +104,8 @@ const OrderItem: React.FC<CartItemProps> = ({ product }) => {
 };
 
 const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
+  const router = useRouter();
+
   const stripe = useStripe();
   const elements = useElements();
   const [hasCoupon, setHasCoupon] = useState(false);
@@ -361,7 +362,7 @@ console.log("shipping",shipping)
       const updatedQuery =result.data.checkout?
       { order_id :parseInt(result.data.checkout.order_id) }
       : {order_id:null};
-      Router.push({
+      router.push({
         pathname:'/order-received' ,
         query: updatedQuery,
       });

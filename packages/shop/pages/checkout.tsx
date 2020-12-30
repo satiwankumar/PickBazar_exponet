@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { openModal } from '@redq/reuse-modal';
 import $ from 'jquery';
-import {useRouter} from 'next/router'
 import { useQuery } from '@apollo/react-hooks';
 import { Modal } from '@redq/reuse-modal';
 import { withApollo } from 'helper/apollo';
@@ -11,6 +10,7 @@ import Checkout from 'containers/CheckoutWithSidebar/CheckoutWithSidebar';
 import { GET_LOGGED_IN_CUSTOMER } from 'graphql/query/customer.query';
 import { AuthContext } from 'contexts/auth/auth.context';
 import AuthenticationForm from '../containers/SignInOutForm/Form';
+import {useRouter} from 'next/router'
 
 import { ProfileProvider } from 'contexts/profile/profile.provider';
 import {Elements} from '@stripe/react-stripe-js';
@@ -81,11 +81,11 @@ const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
   }
   else {
     let pathame = router.pathname
+  
     router.push({
       pathname: '/signin',
       query: { from: pathame },
 })
-    
 
   }
 

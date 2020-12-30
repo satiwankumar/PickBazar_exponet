@@ -4,7 +4,7 @@ import { SEO } from 'components/seo';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/react-hooks';
 import ProductDetails from 'containers/ProductDetails/ProductDetails';
-import ProductDetailsBook from 'containers/ProductDetailsBook/ProductDetailsBook';
+// import ProductDetailsBook from 'containers/ProductDetailsBook/ProductDetailsBook';
 import { Modal } from '@redq/reuse-modal';
 import ProductSingleWrapper, {
   ProductSingleContainer,
@@ -25,7 +25,7 @@ const ProductPage: NextPage<Props> = ({ deviceType }) => {
   const {
     query: { slug },
   } = useRouter();
-  console.log("queryslug",slug)
+  // console.log("queryslug",slug)
 
   const { data, error, loading } = useQuery(GET_PRODUCT_DETAILS, {
     variables: { slug },

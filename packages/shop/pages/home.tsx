@@ -73,7 +73,7 @@ function HomePage({ deviceType }) {
   const { data, error, refetch } =  useQuery(GET_CATEGORIES, {
     variables : {category_id:parseInt(PAGE_TYPE),filter_by_name: null}
 })
-console.log("dataaaaaaaaaaaaaaaa",data && data.getCategory)
+// console.log("dataaaaaaaaaaaaaaaa",data && data.getCategory)
 
 
   return (

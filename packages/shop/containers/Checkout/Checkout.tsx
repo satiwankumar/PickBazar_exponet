@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Router from 'next/router';
+import {useRouter} from 'next/router';
 import Button from 'components/Button/Button';
 import RadioCard from 'components/RadioCard/RadioCard';
 import RadioGroup from 'components/RadioGroup/RadioGroup';
@@ -48,6 +48,7 @@ interface MyFormProps {
 }
 
 const Checkout: React.FC<MyFormProps> = ({ token, deviceType }) => {
+  const router = useRouter()
   const {
     removeCoupon,
     coupon,
@@ -76,7 +77,7 @@ const Checkout: React.FC<MyFormProps> = ({ token, deviceType }) => {
     setLoading(true);
     if (isValid) {
       clearCart();
-      Router.push('/order-received');
+      router.push('/order-received');
     }
     setLoading(false);
   };

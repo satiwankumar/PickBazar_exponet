@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext ,useEffect} from 'react';
+
 import { NextPage } from 'next';
+import { AuthContext, } from 'contexts/auth/auth.context';
+
 import { SEO } from 'components/seo';
 import Order from 'containers/Profile/Order/Order';
 import { PageWrapper, SidebarSection } from 'containers/Profile/Profile.style';
 import Sidebar from 'containers/Profile/Sidebar/Sidebar';
 import { withApollo } from 'helper/apollo';
 import { Modal } from '@redq/reuse-modal';
-
+import { useRouter } from 'next/router'
 type Props = {
   deviceType?: {
     mobile: boolean;
@@ -15,6 +18,17 @@ type Props = {
   };
 };
 const OrderPage: NextPage<Props> = ({ deviceType }) => {
+  const { authState:{isAuthenticated},authDispatch } = useContext<any>(AuthContext);
+  const router = useRouter()
+
+  useEffect(() => {
+    if(!isAuthenticated){ 
+    router.push('/');
+    }
+}
+
+, []);
+
   return (
     <>
       <SEO title='Order - PickBazar' description='Order Details' />
