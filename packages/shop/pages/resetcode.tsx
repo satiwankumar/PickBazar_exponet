@@ -88,7 +88,7 @@ function ForgotCode() {
 
 
         }
-        router.push('resetpassword')
+        router.push('/resetpassword')
     } catch (error) {
       console.log("errror",error)
       toast.error(`🦄 SomeThing Went Wrong`, {
@@ -121,6 +121,10 @@ function ForgotCode() {
 
 
   return (
+    <div className="">
+    <div className="container">
+       <div className="row">
+         <div className="col-lg-6 offset-lg-3">
     <Wrapper>
       
       <Container style={{ paddingBottom: 30 }}>
@@ -170,6 +174,10 @@ function ForgotCode() {
       <ToastContainer autoClose={3000}/>
 
     </Wrapper>
+    </div>
+    </div>
+    </div>
+    </div>
   );
 }
 export default withApollo(ForgotCode)

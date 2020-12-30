@@ -129,7 +129,10 @@ router.push('/')
  }
  
   return (
- 
+ <div className="">
+<div className="container">
+   <div className="row">
+     <div className="col-lg-6 offset-lg-3">
     <Wrapper>
       <Container>
         {/* <LogoWrapper>
@@ -242,6 +245,10 @@ router.push('/')
         </Offer>
       </OfferSection>
     </Wrapper>
+    </div>
+   </div>
+   </div>
+   </div>
   );
 }
 

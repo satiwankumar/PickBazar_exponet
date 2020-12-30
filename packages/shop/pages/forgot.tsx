@@ -124,6 +124,10 @@ function ForgotPass() {
 
 
   return (
+    <div className="">
+    <div className="container">
+       <div className="row">
+         <div className="col-lg-6 offset-lg-3">
     <Wrapper>
       
       <Container style={{ paddingBottom: 30 }}>
@@ -173,6 +177,10 @@ function ForgotPass() {
       <ToastContainer autoClose={3000}/>
 
     </Wrapper>
+    </div>
+    </div>
+    </div>
+    </div>
   );
 }
 export default withApollo(ForgotPass)

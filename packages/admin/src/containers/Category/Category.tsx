@@ -496,7 +496,7 @@ button.cat-del-btn .ae.fa {
               padding: 10,
             }}          
             >
-              <div className="col-md-3 col-sm-6 col-12 col-lg-2">
+              <div className="col-md-3 col-sm-6 col-12 ">
                   <Button
                     onClick={handleDelete}
                     startEnhancer={() => <Trash />}

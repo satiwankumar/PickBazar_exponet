@@ -78,6 +78,7 @@ button.add-pro-btn {padding: 10px;}
 }
 .new-del-btn{
     display: block;
+    padding: 0 15px 0px 15px;
     width: 100px !important;
     margin: 0 0 10px !important;
     height: 44px !important;

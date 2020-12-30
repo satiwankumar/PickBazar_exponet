@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { openModal, closeModal } from '@redq/reuse-modal';
 import { DrawerProvider } from 'contexts/drawer/drawer.provider';
 import MobileDrawer from './MobileDrawer';
+
 import {
   MobileHeaderWrapper,
   MobileHeaderInnerWrapper,

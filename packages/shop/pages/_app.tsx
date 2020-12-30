@@ -7,7 +7,7 @@ import { StickyProvider } from 'contexts/app/app.provider';
 import { SearchProvider } from 'contexts/search/search.provider';
 import { HeaderProvider } from 'contexts/header/header.provider';
 import { LanguageProvider } from 'contexts/language/language.provider';
-
+// import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-toastify/dist/ReactToastify.css';
 import AppLayout from 'containers/LayoutContainer/AppLayout';
 import { useDeviceType } from 'helper/useDeviceType';
@@ -19,7 +19,7 @@ import localEs from 'data/translation/es.json';
 import localDe from 'data/translation/de.json';
 import localCn from 'data/translation/zh.json';
 import localIl from 'data/translation/he.json';
-
+import Head from 'next/head'
 // External CSS import here
 import 'rc-drawer/assets/index.css';
 import 'rc-table/assets/index.css';
@@ -52,6 +52,22 @@ export default function ExtendedApp({
   const deviceType = useDeviceType(userAgent);
   return (
     <ThemeProvider theme={theme}>
+        <Head>
+                <link 
+                    rel="stylesheet" 
+                    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+                    />
+                <script 
+                    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"  
+                    />
+                <script 
+                    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+                    />
+                <script 
+                    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
+                 
+                    />
+            </Head>
       <LanguageProvider messages={messages} initLocale={locale}>
         <CartProvider>
           <SearchProvider query={query}>

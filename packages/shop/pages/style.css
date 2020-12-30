@@ -105,6 +105,17 @@
   .breadcrumb li:nth-child(4) a:after { border-left-color: #009E7F; }
   .breadcrumb li:nth-child(5) a       { background:        #009E7F; }
   .breadcrumb li:nth-child(5) a:after { border-left-color: #009E7F; }
+  select#cars {height: 40px;padding: 0 10px;}
+  .igMiEs {margin: 200px 0 0 0;}
+  button.cat-del-btn .ae.hj {display: inline-flex !important;}
+
+.jPdsGW {
+    min-height: 100vh;
+}
+.cBPsdM {
+  padding: 60px 30px !important;
+}
+  .iAvmwD{padding: 140px 60px 0 !important;}
   .breadcrumb li:last-child a {
     background: transparent !important;
     color: black;
