@@ -798,8 +798,9 @@ const relatedProducts = []
           </Row>
         </Scrollbars>
 
-        <ButtonGroup>
+        <ButtonGroup className="update-pro-btns">
           <Button
+          className="cancel-pro-btn"
             kind={KIND.minimal}
             onClick={closeDrawer}
             overrides={{
@@ -820,7 +821,7 @@ const relatedProducts = []
           </Button>
 
           <Button
-            type="submit"  className="mr-10"
+            type="submit"  className="mr-10 update-pro-btn"
             overrides={{
               BaseButton: {
                 style: ({ $theme }) => ({
@@ -838,7 +839,7 @@ const relatedProducts = []
  
           <Button
           type="button"
-           className="col-md-6 col-sm-6 col-12 col-lg-4 cat-del-btn m-0"
+           className="update-pro-del-btn"
             onClick={()=>handleDelete(data.id)}
             // className=""
             overrides={{

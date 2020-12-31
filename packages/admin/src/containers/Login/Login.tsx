@@ -34,13 +34,13 @@ const GET_SITE_DATA = gql`
 
 `
 const initialValues = {
-  username: '',
+  email: '',
   password: '',
 };
 
 const getLoginValidationSchema = () => {
   return Yup.object().shape({
-    username: Yup.string().required('Username is Required!'),
+    email: Yup.string().required('email is Required!'),
     password: Yup.string().required('Password is Required!'),
   });
 };
@@ -70,10 +70,10 @@ export default () => {
   
   
   
-  let loginsubmit =async ({username, password}) => {
+  let loginsubmit =async ({email, password}) => {
 try{
 
-  const LoginInput = {email:username,password:password,role:"Admin"}
+  const LoginInput = {email:email,password:password,role:"Admin"}
 
   const result = await login({    variables: {input:LoginInput} });
   if(result){
@@ -149,8 +149,8 @@ try{
             <Form>
               <FormFields>
                 <LogoWrapper>
-                <LogoImage src={`${data && data.getSiteSetting.image}`} alt="Exponent-Admin" />
-                </LogoWrapper>
+               {data && <LogoImage src={`${data && data.getSiteSetting.image}`} alt="Exponent-Admin" />
+               } </LogoWrapper>
                 <FormTitle>Log in to admin</FormTitle>
               </FormFields>
 
@@ -158,12 +158,12 @@ try{
                 <FormLabel>Email</FormLabel>
                 <Field
                   type="email"
-                  name="username"
+                  name="email"
                   component={MyInput}
                   placeholder="Email"
                 />
-                {errors.username && touched.username && (
-                  <Error>{errors.username}</Error>
+                {errors.email && touched.email && (
+                  <Error>{errors.email}</Error>
                 )}
               </FormFields>
               <FormFields>

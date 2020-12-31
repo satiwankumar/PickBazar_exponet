@@ -136,7 +136,7 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   };
   const [vari, setVari] = useState('');
   const [qty, setQty] = useState('');
-  console.log("productDetail0",product)
+  // console.log("productDetail0",product)
   const { isRtl } = useLocale();
   const { addItem, removeItem, isInCart, getItem, items } = useCart();
   const data = product;
@@ -177,7 +177,7 @@ const getVariation = (id)=>{
 
   const variation = () => {
     // return "hello"
-    console.log("dfdsfsd", product.productVariations);
+    // console.log("dfdsfsd", product.productVariations);
    
     if (Object.keys(product.productVariations).length > 0) {
        return( <>
@@ -205,7 +205,10 @@ const getVariation = (id)=>{
     }
   }
   console.log("qtys: ",qty);
-
+  function createMarkup(description) {
+    return {__html: description};
+  }
+  
   return (
     <>
          <Breadcrumbs/>
@@ -277,7 +280,8 @@ const getVariation = (id)=>{
             </ProductCartBtn>
           {/* <ProductWeight>{product.unit}</ProductWeight> */}
           <ProductDescription>
-            <ReadMore character={600}>{product.description}</ReadMore>
+        <div  className="custome-ul" dangerouslySetInnerHTML={createMarkup(product.description)}></div>
+            {/* // <ReadMore character={0}>{product.description}</ReadMore */}
           </ProductDescription>
 
           <ProductCartWrapper>

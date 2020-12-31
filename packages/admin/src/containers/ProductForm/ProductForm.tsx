@@ -111,7 +111,7 @@ const AddProduct: React.FC<Props> = props => {
   const closeDrawer = useCallback(() => dispatch({ type: 'CLOSE_DRAWER' }), [
     dispatch,
   ]);
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue,errors } = useForm();
   const [type, setType] = useState([]);
   const [variation, setVariations] = useState([{variation_name:"",variation_price :"",variation_quantity:""}]);
   // let [variation_price, setVariationsPrice] = useState({});
@@ -226,7 +226,7 @@ data && data.getproducts.map(item=>
 
   const SelectChange = (e) => {
     // console.log("value", e.target.value)
-    // setValue('type', value);
+  
     setBrands(e.target.value)
 
   };
@@ -258,6 +258,7 @@ data && data.getproducts.map(item=>
     console.log("afterPaste event called with event info: ", evt);
   }
   const onSubmit = async data => {
+    console.log("dataaaaaaaaaa",data,errors)
 
 
     let variationsData = []
@@ -359,22 +360,22 @@ data && data.getproducts.map(item=>
     ( <>
      <Row>
             <Col xl={3} lg={6} md={6}>
-            <div className="mt-10"><FormLabel>Name</FormLabel></div>
-                      <input type="text" placeholder="variation" value={variation[i].variation_name}
+            <div className="mt-10"><FormLabel>name</FormLabel></div>
+                      <input type="text"  value={variation[i].variation_name}
                     name="variation_name"
                     onChange={((e)=>handleVariationChange(e,i))} className="form-control brand-flied"/>
             </Col>
             <Col  xl={3} lg={6} md={6}>
             <div className="mt-10"><FormLabel>Price</FormLabel></div>
                       <input type="number" step="any"
-                    min="0" placeholder="variation price"  value={variation[i].variation_price}
+                    min="0"   value={variation[i].variation_price}
                     onChange={((e)=>handleVariationChange(e,i))}
                     name="variation_price" className="form-control brand-flied"/>
             </Col>
             <Col xl={3} lg={6} md={6}>
             <div className="mt-10"><FormLabel>Quantity</FormLabel></div>
                       <input type="number" step="any"
-                    min="0" placeholder="variation quantity" value={variation[i].variation_quantity}
+                    min="0"  value={variation[i].variation_quantity}
                     onChange={((e)=>handleVariationChange(e,i))}
                     name="variation_quantity" className="form-control brand-flied"/>
             </Col>
@@ -482,20 +483,19 @@ data && data.getproducts.map(item=>
                   <Input
                     inputRef={register({ required: true })}
                     name="name"
-                    required="true"
                   />
                 </FormFields>
 
                 <FormFields>
                   <FormLabel >Brand Name </FormLabel>
-                  <input type="text" list="data" className="form-control brand-flied" onChange={(value) => SelectChange(value)} />
+                  <input type="text" list="data" name="brand" ref={register({ required: true })} className="form-control brand-flied"   onChange={(value) => SelectChange(value)}  />
 
                   <datalist id="data">
                     {data && brandsOptions.map((item, key) =>
                       <option key={key} value={item.name} />
                     )}
                   </datalist>
-
+                  {errors.brand && <span style={{color: "red"}}>This field is required</span>}
 
 
 
@@ -529,7 +529,7 @@ data && data.getproducts.map(item=>
                   <Input
                     inputRef={register({ required: true })}
                     name="actual_size"
-                    required="true"
+                   
                   />
                 </FormFields>
                 <FormFields>
@@ -537,7 +537,7 @@ data && data.getproducts.map(item=>
                   <Input
                     inputRef={register({ required: true })}
                     name="nominal_size"
-                    required="true"
+                    
                   />
                 </FormFields>
                 {/* <FormFields>
@@ -590,7 +590,7 @@ data && data.getproducts.map(item=>
                     labelKey="name"
                     valueKey="id"
                     required
-                    placeholder="Product Type"
+                    // placeholder="Product Type"
                     value={type}
                     searchable={false}
                     onChange={handleTypeChange}
@@ -648,7 +648,7 @@ data && data.getproducts.map(item=>
                     options={data &&getSubCategory(Subcategories)}
                     labelKey="name"
                     valueKey="id"
-                    placeholder="Product Tag"
+                    // placeholder="Product Tag"
                     value={tag}
                     required
                     onChange={handleMultiChange}
@@ -689,7 +689,7 @@ data && data.getproducts.map(item=>
                     options={data &&products}
                     labelKey="brandWithName"
                     valueKey="id"
-                    placeholder="Product Tag"
+                    // placeholder="Product Tag"
                     value={Related}
                     onChange={handleMultiProductsChange}
                     overrides={{

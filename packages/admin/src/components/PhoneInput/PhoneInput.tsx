@@ -8,6 +8,7 @@ import {
 const PhoneInput = ({ ...props }) => {
   return (
     <BasePhoneInput
+    size={SIZE.compact}
       {...props}
     />
   );

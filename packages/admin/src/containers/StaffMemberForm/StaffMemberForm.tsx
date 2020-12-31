@@ -196,9 +196,11 @@ setTimeout(() => {
                   />
                 </FormFields>
 
+                <div className="contact-field">
                 <FormFields>
                   <FormLabel>Contact No.</FormLabel>
                   <PhoneInput
+                    
                     country={country}
                     onCountryChange={({ option }) => setCountry(option)}
                     text={text}
@@ -208,7 +210,7 @@ setTimeout(() => {
                     required="true"
                   />
                 </FormFields>
-
+                </div>
                 <FormFields>
                   <FormLabel>Email</FormLabel>
                   <Input

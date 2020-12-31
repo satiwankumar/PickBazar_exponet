@@ -48,20 +48,20 @@ const SidebarCategory: React.FC<SidebarCategoryProps> = ({
   deviceType: { mobile, tablet, desktop },
   type,
 }) => {
-  console.log("type",type)
+  // console.log("type",type)
   const { state, dispatch } = useContext(SearchContext);
   const router = useRouter();
   const { pathname, query } = router;
   const { loading,error,data } = useQuery(GET_CATEGORIES, {
     variables: { category_id:type?type:null,filter_by_name: null  },
   });
-console.log(error,loading,data)
+// console.log(error,loading,data)
 const [brands, setBrands] = React.useState([]);
 
   const selectedQueries = query.category;
 
   const { isRtl } = useLocale();
-  console.log("queryName",pathname, query)
+  // console.log("queryName",pathname, query)
 
   const handleCategorySelection = (id: string) => {
   //  alert(id)
@@ -76,7 +76,7 @@ const [brands, setBrands] = React.useState([]);
   };
   const handleBrandSelection = (e: any) => {
     // alert(value)
-     console.log("brandSelection",e.target.value)
+    //  console.log("brandSelection",e.target.value)
       const updatedQuery = state.text
         ? {  type: query.type, brand: e.target.value}
         : { type: query.type, brand: e.target.value };
@@ -96,7 +96,7 @@ const [brands, setBrands] = React.useState([]);
       item => Subcategories.push(item)
     ))
     const brandsOptions = data && data.getBrand.map(item => { return item })
-    console.log("brandOptions",brandsOptions)
+    // console.log("brandOptions",brandsOptions)
    data&& brandsOptions.unshift({id:"",name:"Select Brand"})
     const SelectChange = (e) => {
       // console.log("value", e.target.value)
@@ -141,6 +141,7 @@ const [brands, setBrands] = React.useState([]);
         <select id="data" onChange={(value)=>handleBrandSelection(value)} contentEditable="true" style={{
            "borderRadius":"4px",
            "padding":"10px",
+            "display": "block !important",
            "margin":"0px 0px 0px 20px",
            "width":"87%",
            "border":"1px solid #ccc"

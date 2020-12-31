@@ -43,6 +43,10 @@ export const ButtonGroup = styled("div", ({ $theme }) => ({
   boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)",
 
   "@media only screen and (max-width: 767px)": {
-    padding: "20px 30px"
+    padding: "20px 10px"
+  }
+  ,
+  "@media (min-width: 768px) and (max-width: 991px)": {
+    padding: "30px 10px"
   }
 }));

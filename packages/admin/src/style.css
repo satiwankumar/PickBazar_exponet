@@ -8,8 +8,16 @@ button.cat-del-btn .fa {
     margin: 0;
     height: auto;
 }
-
-button.cat-del-btn:hover {
+.update-pro-del-btn {
+    padding: 10px 20px;
+    background: #ca0404;
+    height: 50px;
+    margin: 0 0 0 0 !important;
+}
+.del-pic span.fa {
+    height: auto;
+}
+button.cat-del-btn:hover,.update-pro-del-btn:hover {
     background: red;
 }
 button.edit-btn {padding: 10px;     width: 101px;
@@ -57,7 +65,18 @@ button.add-pro-btn {padding: 10px;}
 
 @media (min-width: 768px) and (max-width: 991px) {
 
+    .update-pro-del-btn {width: auto;height: auto;}
     .add-pro-btn {margin: 20px 0 0 0;}
+   
+    button.cat-del-btn {
+        width: auto;
+        padding: 10px 20px;
+        margin: 0 0 0 0;
+        height: auto;
+    }
+    button.update-pro-btn {
+        padding: 10px 0;
+    }
 
 }
 
@@ -67,7 +86,10 @@ button.add-pro-btn {padding: 10px;}
 }
 
 @media (max-width: 767px) {
- 
+    
+    .update-pro-btns{width: 100%;display: block;}
+    button.update-pro-del-btn{margin: 0 0 0 0;}
+    .update-pro-del-btn,button.update-pro-btn,.cancel-pro-btn {    width: 100% !important;display: block;margin: 0 0 20px 0;padding: 10px 0;}
 
 }
 .mt-40{

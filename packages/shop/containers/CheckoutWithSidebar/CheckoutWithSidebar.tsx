@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import {useRouter} from 'next/router';
-
+import Router from 'next/router';
+import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import InputButton from 'components/Input/Input'
 import Button from 'components/Button/Button';
@@ -104,7 +104,9 @@ const OrderItem: React.FC<CartItemProps> = ({ product }) => {
 };
 
 const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
-  const router = useRouter();
+  const { register, handleSubmit, errors } = useForm();
+  
+  // const router = useRouter();
 
   const stripe = useStripe();
   const elements = useElements();
@@ -189,7 +191,6 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
   });
   const { headerState } = useContext<any>(HeaderContext);
   const totalHeight = headerState?.desktopHeight > 0 ? headerState.desktopHeight + 30 : 76 + 30;
-
   useEffect(() => {
     if (
       calculatePrice() > 0 &&
@@ -287,8 +288,8 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
 
   console.log("orderItems",orderItems)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleCheckout = async (e) => {
+    // e.preventDefault();
     if (!stripe || !elements) {
       return;
     }
@@ -362,7 +363,7 @@ console.log("shipping",shipping)
       const updatedQuery =result.data.checkout?
       { order_id :parseInt(result.data.checkout.order_id) }
       : {order_id:null};
-      router.push({
+      Router.push({
         pathname:'/order-received' ,
         query: updatedQuery,
       });
@@ -387,14 +388,27 @@ console.log("shipping",shipping)
   const CheckoutForm = () => {
     const stripe = useStripe();
     return (
-        <CardElement />
+        <CardElement options={{
+          style: {
+            base: {
+              fontSize: '16px',
+              color: '#424770',
+              '::placeholder': {
+                color: '#aab7c4',
+              },
+            },
+            invalid: {
+              color: '#9e2146',
+            },
+          },
+        }}  />
     );
   };
 
 
 
   return (
-      <form onSubmit={(e)=>handleSubmit(e)} >
+      <form onSubmit={(handleSubmit(handleCheckout))}>
         <CheckoutWrapper>
           <CheckoutContainer>
             <CheckoutInformation>
@@ -405,23 +419,24 @@ console.log("shipping",shipping)
                 </Heading>
 
                 <h4>FirstName</h4>
-                <TextField placeholder="Please enter First Name" type="text" name="first_name" onChange={(e)=>handleBilling(e)}  /><br/>
+                <TextField placeholder="Please enter First Name" type="text" name="first_name"   onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                {errors.first_name && <span>This field is required</span>}
                 <h4>LastName</h4>
-                <TextField placeholder="Please enter Last Name" type="text" name="last_name"onChange={(e)=>handleBilling(e)}/><br/>
+                <TextField placeholder="Please enter Last Name" type="text" name="last_name" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 <h4>Address1</h4>
-                <TextField placeholder="Please enter Address1" type="text" name="address1"   onChange={(e)=>handleBilling(e)} />   <br/>
+                <TextField placeholder="Please enter Address1" type="text" name="address1"   onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 <h4>Address2</h4>
-                <TextField placeholder="Please enter Address2" type="text" name="address2"   onChange={(e)=>handleBilling(e)} />   <br/>
+                <TextField placeholder="Please enter Address2" type="text" name="address2"   onChange={(e)=>handleBilling(e)} /><br/>
                 <h4>Phone</h4>
-                <TextField placeholder="Please enter Phone" type="number" name="Phone"   onChange={(e)=>handleBilling(e)} />   <br/>
+                <TextField placeholder="Please enter Phone" type="number" name="Phone"   onChange={(e)=>handleBilling(e)} /> ref={register({ required: true })}   <br/>
                 <h4>City</h4>
-                <TextField placeholder="Please enter City" type="test" name="city"    onChange={(e)=>handleBilling(e)}/>   <br/>
+                <TextField placeholder="Please enter City" type="test" name="city"    onChange={(e)=>handleBilling(e)}/> ref={register({ required: true })}   <br/>
                 <h4>Zip</h4>
                 <TextField placeholder="Please enter Zip" type="test" name="zip"  onChange={(e)=>handleBilling(e)}  />   <br/>
                 <h4>Country</h4>
-                <TextField placeholder="Please enter Country" type="text" name="country"  onChange={(e)=>handleBilling(e)}  />   <br/>
+                <TextField placeholder="Please enter Country" type="text" name="country"  onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  />   <br/>
                 <h4>State</h4>
-                <TextField placeholder="Please enter State" type="text" name="state"   onChange={(e)=>handleBilling(e)} />   <br/>
+                <TextField placeholder="Please enter State" type="text" name="state"   onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  />   <br/>
 
             
                 
@@ -431,23 +446,23 @@ console.log("shipping",shipping)
                   <h1>Shipping Details</h1>
                 </Heading>
                 <h4>FirstName</h4>
-                <TextField placeholder="Please enter First Name" type="text" name="first_name" onChange={(e)=>handleShipping(e)}  /><br/>
+                <TextField placeholder="Please enter First Name" type="text" name="first_name" onChange={(e)=>handleShipping(e)} ref={register({ required: true })}   /><br/>
                 <h4>LastName</h4>
-                <TextField placeholder="Please enter Last Name" type="text" name="last_name"onChange={(e)=>handleShipping(e)}/><br/>
+                <TextField placeholder="Please enter Last Name" type="text" name="last_name"onChange={(e)=>handleShipping(e)} ref={register({ required: true })} /><br/>
                 <h4>Address1</h4>
-                <TextField placeholder="Please enter Address1" type="text" name="address1"   onChange={(e)=>handleShipping(e)} />   <br/>
+                <TextField placeholder="Please enter Address1" type="text" name="address1"   onChange={(e)=>handleShipping(e)} ref={register({ required: true })} />   <br/>
                 <h4>Address2</h4>
                 <TextField placeholder="Please enter Address2" type="text" name="address2"   onChange={(e)=>handleShipping(e)} />   <br/>
                 <h4>Phone</h4>
-                <TextField placeholder="Please enter Phone" type="number" name="Phone"   onChange={(e)=>handleShipping(e)} />   <br/>
+                <TextField placeholder="Please enter Phone" type="number" name="Phone"   onChange={(e)=>handleShipping(e)} ref={register({ required: true })} />   <br/>
                 <h4>City</h4>
-                <TextField placeholder="Please enter City" type="text" name="city"    onChange={(e)=>handleShipping(e)}/>   <br/>
+                <TextField placeholder="Please enter City" type="text" name="city"    onChange={(e)=>handleShipping(e)} ref={register({ required: true })} />   <br/>
                 <h4>Zip</h4>
                 <TextField placeholder="Please enter Zip" type="text" name="zip"  onChange={(e)=>handleShipping(e)}  />   <br/>
                 <h4>Country</h4>
-                <TextField placeholder="Please enter Country" type="text" name="country"  onChange={(e)=>handleShipping(e)}  />   <br/>
+                <TextField placeholder="Please enter Country" type="text" name="country"  onChange={(e)=>handleShipping(e)} ref={register({ required: true })}   />   <br/>
                 <h4>State</h4>
-                <TextField placeholder="Please enter State" type="text" name="state"   onChange={(e)=>handleShipping(e)} />   <br/>
+                <TextField placeholder="Please enter State" type="text" name="state"   onChange={(e)=>handleShipping(e)}ref={register({ required: true })}  />   <br/>
               </InformationBox>
               {/* DeliverySchedule */}
               <InformationBox
@@ -466,7 +481,7 @@ console.log("shipping",shipping)
 
                 </div>
 
-                  Coupon start
+                  {/* Coupon start */}
                   {coupon ? (
                     <CouponBoxWrapper>
                       <CouponCode>
@@ -539,8 +554,8 @@ console.log("shipping",shipping)
                 {/* CheckoutSubmit */}
                 <CheckoutSubmit>
                   <Button
-                    onClick={handleSubmit}
-                    type='button'
+                    onClick={handleCheckout}
+                    type="submit"
                     disabled={!isValid}
                     title='Proceed to Checkout'
                     intlButtonId='proceesCheckout'

@@ -10,7 +10,7 @@ import Checkout from 'containers/CheckoutWithSidebar/CheckoutWithSidebar';
 import { GET_LOGGED_IN_CUSTOMER } from 'graphql/query/customer.query';
 import { AuthContext } from 'contexts/auth/auth.context';
 import AuthenticationForm from '../containers/SignInOutForm/Form';
-import {useRouter} from 'next/router'
+import Router from 'next/router'
 
 import { ProfileProvider } from 'contexts/profile/profile.provider';
 import {Elements} from '@stripe/react-stripe-js';
@@ -26,7 +26,7 @@ type Props = {
 };
 
 const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
-  const router = useRouter()
+  // const router = useRouter()
 
 //   const handleJoin = () => {
 //     authDispatch({
@@ -80,9 +80,10 @@ const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
     if (error) return <div>{error} </div>;
   }
   else {
-    let pathame = router.pathname
+    let pathame = Router.pathname
   
-    router.push({
+    
+    Router.push({
       pathname: '/signin',
       query: { from: pathame },
 })
