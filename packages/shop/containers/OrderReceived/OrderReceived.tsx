@@ -67,10 +67,10 @@ const OrderRecived: React.FunctionComponent<OrderRecivedProps> = props => {
 const router = useRouter()
 // console.log("Checkoutdata",query)
 
-useEffect(() => {
-  if(!isAuthenticated){ 
-  router.push('/signin');
-  }})
+// useEffect(() => {
+//   if(!isAuthenticated){ 
+//   router.push('/signin');
+//   }})
 
 
 const { data, error, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {

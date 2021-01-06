@@ -28,7 +28,7 @@ export const CartItem: React.FC<Props> = ({
   onRemove,
 }) => {
   
-// console.log("dataaaaaaaaaaaaaaaaa",data.variationId)
+console.log("dataaaaaaaaaaaaaaaaa",data)
 
   const { title, productImages, price, salePrice, unit, quantity, variationId,productVariations} = data;
   let filterVariation=  productVariations.length>0?productVariations.filter(item=>item.variations.id==variationId):null
@@ -47,7 +47,7 @@ export const CartItem: React.FC<Props> = ({
         onIncrement={onIncrement}
         variant='lightVertical'
       /> */}
-      <Image src={getURl(productImages[0].image)} />
+      <Image src={productImages.length>0?getURl(productImages[0].image):""} />
       <Information>
         <Name>{title}</Name>
         <Price>

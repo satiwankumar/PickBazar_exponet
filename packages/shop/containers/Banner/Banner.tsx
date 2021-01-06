@@ -112,7 +112,7 @@ const Banner: React.FC<BannerProps> = ({
         <Waypoint
           onEnter={removeSticky}
           onLeave={setSticky}
-          onPositionChange={onWaypointPositionChange}
+          // onPositionChange={onWaypointPositionChange}
         />
       </BannerComponent>
     </BannerWrapper>

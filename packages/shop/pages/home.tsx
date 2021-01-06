@@ -61,10 +61,10 @@ function HomePage({ deviceType }) {
   
 
     if ((query.text || query.category || query.type) && targetRef.current) {
-      window.scrollTo({
-        top: targetRef.current.offsetTop - 110,
-        behavior: 'smooth',
-      });
+      // window.scrollTo({
+      //   top: targetRef.current.offsetTop - 110,
+      //   behavior: 'smooth',
+      // });
     }
   }, [query]);
 

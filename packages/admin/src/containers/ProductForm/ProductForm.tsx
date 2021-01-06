@@ -113,7 +113,7 @@ const AddProduct: React.FC<Props> = props => {
   ]);
   const { register, handleSubmit, setValue,errors } = useForm();
   const [type, setType] = useState([]);
-  const [variation, setVariations] = useState([{variation_name:"",variation_price :"",variation_quantity:""}]);
+  const [variation, setVariations] = useState([{variation_name:"",variation_price :"",variation_quantity:"",variation_sell_price:""}]);
   // let [variation_price, setVariationsPrice] = useState({});
   const [tag, setTag] = useState([]);
   const [Related, setRelatedProducts] = useState([]);
@@ -164,7 +164,7 @@ data && data.getproducts.map(item=>
   products.push(branditems)}) 
    console.log("productssssssssssssssssssssssss",products)
   const AddVariation  = () =>{
-    setVariations((previous)=>[...previous,{variation_name:"",variation_price:"",variation_quantity:""}])
+    setVariations((previous)=>[...previous,{variation_name:"",variation_price:"",variation_quantity:"",variation_sell_price:""}])
 
   }
   const removeVariation  = (i) =>{
@@ -379,7 +379,13 @@ data && data.getproducts.map(item=>
                     onChange={((e)=>handleVariationChange(e,i))}
                     name="variation_quantity" className="form-control brand-flied"/>
             </Col>
-            
+            <Col xl={3} lg={6} md={6}>
+            <div className="mt-10"><FormLabel>Sell Price</FormLabel></div>
+                      <input type="number" step="any"
+                    min="0"  value={variation[i].variation_sell_price}
+                    onChange={((e)=>handleVariationChange(e,i))}
+                    name="variation_sell_price" className="form-control brand-flied"/>
+            </Col>
                 <Col xl={3} lg={6} md={6}>
                 {
    i == (variation.length - 1)?  (<Button type="button"   startEnhancer={() => <Plus />} title="add variation"  onClick={()=>AddVariation()} className="nm-bt mt-40">add</Button>)

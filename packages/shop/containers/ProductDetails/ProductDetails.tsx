@@ -184,7 +184,7 @@ const getVariation = (id)=>{
     
     {/* <h1 style={{ "margin": "5px 0px 2.5px 5px" }} >Variations </h1>  */}
       
-        <select id="data" onChange={(value)=>handleRadioChange(value)} contentEditable="true" style={{
+        <select id="data" onChange={(value)=>handleRadioChange(value)}  style={{
            "borderRadius":"4px",
            "padding":"10px",
            "margin":"0px 12px 10px 0px",

@@ -101,7 +101,8 @@ query getproducts($filter_category_id:Int,$filter_by_name: String,){
           id
           variation_name
           variation_quantity
-         variation_price
+         variation_price,
+         variation_sell_price
       }
       }
    categories{

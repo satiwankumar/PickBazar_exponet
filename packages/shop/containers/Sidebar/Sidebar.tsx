@@ -138,7 +138,7 @@ const [brands, setBrands] = React.useState([]);
           }}
          className="form-control brand-flied"  onChange={(value) => handleBrandSelection(value)} />  */}
 
-        <select id="data" onChange={(value)=>handleBrandSelection(value)} contentEditable="true" style={{
+        <select id="data" onChange={(value)=>handleBrandSelection(value)} style={{
            "borderRadius":"4px",
            "padding":"10px",
             "display": "block !important",

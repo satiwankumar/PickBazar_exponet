@@ -99,6 +99,18 @@ let icons = {
 };
 const GET_CATEGORIES = gql`
 query getCategory($category_id:Int,$filter_by_name: String){
+
+  getCategoryWithoutFilter{
+    id
+    name
+    slug
+    is_searchable
+    parent_id
+    image
+    type
+    
+    }
+    ,
   getCategory(category_id:$category_id,filter_by_name: $filter_by_name){
     id
     image
@@ -180,6 +192,7 @@ toast.configure()
 export default function Category() {
   const [category, setCategory] = useState([]);
   const [search, setSearch] = useState('');
+  const [isParent, setIsParent] = useState(true);
   const dispatch = useDrawerDispatch();
   const [checkedId, setCheckedId] = useState([]);
   const [checked, setChecked] = useState(false);
@@ -361,6 +374,9 @@ if(checkedId.length>0){
     item=> Subcategories.push(item)
     ))
 
+    const categories= data && data.getCategoryWithoutFilter.filter(item=> item.parent_id==null)
+
+   
   function onAllCheck(event) {
   
     if (event.target.checked) {
@@ -414,6 +430,10 @@ setCheckedId(newarray)
     const Component = icons.hasOwnProperty(icon) ? icons[icon] : 'span';
     return <Component />;
   }
+function toggleParent(){
+    setIsParent(!isParent)
+}
+
 
 
   return (
@@ -434,7 +454,8 @@ setCheckedId(newarray)
               <Row>
                 <Col md={3} lg={3}>
                   <Select
-                    options={data&& data.getCategory}
+                    clearable={false}
+                    options={data&& categories}
                     labelKey='name'
                     valueKey='id'
                     placeholder='Category Type'
@@ -514,8 +535,28 @@ button.cat-del-btn .ae.fa {
                Multiple Delete
               </Button>                
               </div>
-          </div>          
+              <div className="col-md-3 col-sm-6 col-12 ">
+                  <Button
+                    onClick={toggleParent}
+                    // startEnhancer={() => <Trash />}
+                    className="cat-del-btn"
 
+                    overrides={{
+                      BaseButton: {
+                        style: () => ({
+                          marginBottom: '10px',
+                          color:'white',
+                           
+                        }),
+                      },
+                    }}
+                  >
+                    
+               
+              { !isParent ? "Show Parents":"Show Child"}              
+               </Button>                
+              </div>
+          </div>          
 
             <TableWrapper>
               <StyledTable $gridTemplateColumns='minmax(70px, 70px) minmax(70px, 70px) minmax(70px, 70px) minmax(150px, auto) minmax(150px, auto)  minmax(150px, 70px)   auto'>
@@ -544,7 +585,8 @@ button.cat-del-btn .ae.fa {
 
 
                 {data ? (
-                  Object.keys(data.getCategory).length > 0 ? (
+                  Object.keys(data.getCategory).length > 0 ?  (
+                    !isParent?(
                     data.getCategory
                       .map((item) => 
                       item.subcategories.map((subItem , index)=> (
@@ -603,8 +645,75 @@ button.cat-del-btn .ae.fa {
                       // .map((row, index,array1) => (
                         
                       // ))
-                      )
-                  ) : (
+                      )):(data.getCategory
+                        .map((subItem,index) => 
+        
+                          // subItem.name
+                          <React.Fragment key={index}>
+                            <StyledCell>
+                        
+                            <Checkbox
+                                name={subItem.id}
+                                checked={checkedId.includes(subItem.id)}
+                                onChange={ () => handleCheckbox(subItem.id)}
+                                overrides={{
+                                  Checkmark: {
+                                    style: {
+                                      borderWidth: '2px',
+                                      borderRadius: '4px',
+                                    },
+                                  },
+                                }}
+                              />
+                              {/* <button onClick={()=>handleDelete(subItem.id)} >Delete</button> */}
+                            </StyledCell>
+                            <StyledCell>{subItem.id}</StyledCell>
+                            <StyledCell>
+                              <ImageWrapper>
+                                <img src={`https://ui-avatars.com/api/?background=random&name=${subItem.name} &rounded=2`} />
+                              </ImageWrapper>
+                            </StyledCell>
+                            <StyledCell>{subItem.name}</StyledCell>
+                            <StyledCell>{subItem.slug}</StyledCell>
+                            <StyledCell>{subItem.parent_id}</StyledCell>
+                            
+                            <StyledCell><Button startEnhancer={() => <PencilIcon/>}  onClick={()=>openCategoryEditDrawer(subItem)} className="edit-btn">Edit</Button>
+                          
+                    <Button
+                      onClick={()=>handleSingleDelete(subItem.id)}
+                      startEnhancer={() => <TrashNew />}
+                      className="cat-del-btn new-del-btn"
+                      overrides={{
+                        BaseButton: {
+                          style: () => ({
+                            marginBottom: '10px',
+                             
+                          }),
+                        },
+                      }}
+                    >
+                      
+                  Delete
+                </Button>   </StyledCell>              
+               
+                          </React.Fragment>
+                          
+                        
+                        // Object.values(array[index].subcategories )
+                        // .map((row, index,array1) => (
+                          
+                        // ))
+                        ))
+                  ) 
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  : (
                     <NoResult
                       hideButton={false}
                       style={{

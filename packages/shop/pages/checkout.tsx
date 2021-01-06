@@ -79,22 +79,22 @@ const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
     }
     if (error) return <div>{error} </div>;
   }
-  else {
-    let pathame = Router.pathname
+//   else {
+//     let pathame = Router.pathname
   
     
-    Router.push({
-      pathname: '/signin',
-      query: { from: pathame },
-})
+//     Router.push({
+//       pathname: '/signin',
+//       query: { from: pathame },
+// })
 
-  }
+//   }
 
 
   const token = 'true';
   return (
     <>
-      {isAuthenticated ?
+      {/* {isAuthenticated ? */}
         <>
           <SEO title='Checkout - Exponet' description='Checkout Details' />
           <ProfileProvider initData={data}>
@@ -117,7 +117,7 @@ const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
               
             </Modal>
           </ProfileProvider> </>
-      }
+      {/* } */}
     </>
   );
 };

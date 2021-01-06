@@ -45,16 +45,16 @@ export default ({ ...props }) => {
             color: $theme.colors.textDark,
           }),
         },
-        OptionContent: {
-          style: ({ $theme, $selected }) => {
-            return {
-              ...$theme.typography.fontBold14,
-              color: $selected
-                ? $theme.colors.textDark
-                : $theme.colors.textNormal,
-            };
-          },
-        },
+        // OptionContent: {
+        //   style: ({ $theme, $selected }) => {
+        //     return {
+        //       ...$theme.typography.fontBold14,
+        //       color: $selected
+        //         ? $theme.colors.textDark
+        //         : $theme.colors.textNormal,
+        //     };
+        //   },
+        // },
         DropdownOption: {
           style: ({ $theme }) => ({
             fontSize: '14px',
