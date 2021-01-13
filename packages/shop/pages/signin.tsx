@@ -19,7 +19,7 @@ import {
   Divider,
 } from 'containers/SignInOutForm/SignInOutForm.style';
 
-import { Facebook, Google } from 'components/AllSvgIcon';
+import { Facebook, Google } from 'components/AllSvgIcon';//ye he na bas jo function banao iske andar naam de do
 import { AuthContext } from 'contexts/auth/auth.context';
 import { FormattedMessage } from 'react-intl';
 import { closeModal } from '@redq/reuse-modal';
@@ -164,7 +164,7 @@ router.push('/')
               />
             )}
           </FormattedMessage>
-
+              <div className="position-relative">
           <FormattedMessage
             id='passwordPlaceholder'
             defaultMessage='Password (min 6 characters)'
@@ -179,7 +179,11 @@ router.push('/')
                 required
               />
             )}
+            
           </FormattedMessage>
+          <button className="view-pass-btn" ><i className="fa fa-eye"></i></button>
+          </div>
+          
 
           <Button
             fullwidth
@@ -229,6 +233,7 @@ router.push('/')
             <FormattedMessage id='signUpBtnText' defaultMessage='Sign Up' />
           </LinkButton>
         </Offer>
+        <a href="#" className="back-to-login"><i className="fa fa-angle-left"></i> back to login</a>
       <ToastContainer />
 
       </Container>

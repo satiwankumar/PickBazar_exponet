@@ -77,7 +77,7 @@ export default function () {
       <SEO title='F.A.Q - Exponet' description='F.A.Q Details' />
       <HelpPageWrapper>
         <HelpPageContainer>
-          <Heading>F.A.Q</Heading>
+          <Heading>F.A.Q's</Heading>
           <Accordion items={accor} />
         </HelpPageContainer>
 

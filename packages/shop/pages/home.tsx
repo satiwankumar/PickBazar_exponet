@@ -24,6 +24,7 @@ import BannerImg from 'image/grocery.png';
 import storeType from 'constants/storeType';
 import { AuthContext } from 'contexts/auth/auth.context';
 import { useQuery } from '@apollo/react-hooks';
+import signin from './signin';
 
 
 
@@ -93,11 +94,11 @@ function HomePage({ deviceType }) {
               <StoreNav items={storeType} />
               <Sidebar type={PAGE_TYPE} deviceType={deviceType} />
             </MobileCarouselDropdown>
-            <OfferSection>
+            {/* <OfferSection>
               <div style={{ margin: '0 -10px' }}>
                 <Carousel deviceType={deviceType} data={OFFERS} />
               </div>
-            </OfferSection>
+            </OfferSection> */}
             <MainContentArea>
               <SidebarSection>
                 <Sidebar type={PAGE_TYPE} deviceType={deviceType} />

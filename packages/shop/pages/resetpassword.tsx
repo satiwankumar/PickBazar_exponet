@@ -171,9 +171,14 @@ let code = router.query.resetCode
         >
          
         </FormattedMessage> */}
+        <div className="position-relative">
         <Input type='password' placeholder={"Enter New Password"} value={newpassword} required="true"  onChange={(e) => setNewPassword(e.target.value)} />
+        <button className="view-pass-btn" ><i className="fa fa-eye"></i></button>
+        </div>
+        <div className="position-relative">
         <Input type='password' placeholder={"Enter Confirm Password"} value={confirmpassword} required="true"  onChange={(e) => setConfirmPassword(e.target.value)} />
-
+        <button className="view-pass-btn" ><i className="fa fa-eye"></i></button>
+        </div>
         <Button
           fullwidth
           title={'Reset Password'}

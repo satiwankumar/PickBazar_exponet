@@ -215,7 +215,7 @@ const MobileDrawer: React.FunctionComponent = () => {
               <LogoutView>
                 <Button
                   intlButtonId='mobileSignInButtonText'
-                  title='Join In'
+                  title='Login'
                   size='small'
                   className='sign_in'
                   // variant="primary"

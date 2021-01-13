@@ -144,13 +144,24 @@ const [register,{data}]  = useMutation(REGISTER)
         >
           {placeholder => <Input type='email' value={email} name="email" placeholder="Email" onChange={(e)=>setEmail(e.target.value)} required/>}
         </FormattedMessage>
+        <div className="position-relative">
         <FormattedMessage
           id='passwordPlaceholder'
           defaultMessage='Password (min 6 characters)'
         >
           {placeholder => <Input type='password' value={password} name="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} minlength="8" required/>}
         </FormattedMessage>
-        
+        <button className="view-pass-btn" ><i className="fa fa-eye"></i></button>
+        </div>
+        <div className="position-relative">
+        <FormattedMessage
+          id='passwordPlaceholder'
+          defaultMessage='Password (min 6 characters)'
+        >
+          {placeholder => <Input type='password' value={password} name="password" placeholder="Confirm Password" onChange={(e)=>setPassword(e.target.value)} minlength="8" required/>}
+        </FormattedMessage>
+        <button className="view-pass-btn" ><i className="fa fa-eye"></i></button>
+        </div>
 
         <HelperText style={{ padding: '20px 0 30px' }}>
           <FormattedMessage

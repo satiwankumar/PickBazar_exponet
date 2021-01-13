@@ -160,7 +160,7 @@ function ForgotCode() {
           style={{ color: '#fff' }}
           type="submit"
         />
-        
+        <a href="#" className="back-to-login"><i className="fa fa-angle-left"></i> back to login</a>
         {/* <Offer style={{ padding: '20px 0 0' }}>
           <FormattedMessage id='backToSign' defaultMessage='Back to' />{' '}
           <LinkButton onClick={()=>router.push('/forgot')}>

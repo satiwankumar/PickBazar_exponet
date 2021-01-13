@@ -269,18 +269,19 @@ export default function Customers() {
       <Row>
         <Col md={12}>
           <Header
+            className="customer-header"
             style={{
               marginBottom: 30,
               boxShadow: '0 0 5px rgba(0, 0 ,0, 0.05)',
             }}
           >
-            <Col md={3}>
+            <Col md={3} lg={2}>
               <Heading>Customers</Heading>
             </Col>
 
-            <Col md={9}>
+            <Col md={9} lg={10}>
               <Row>
-                <Col md={9}>
+                <Col lg={9} md={12}>
                   <Input
                     value={search}
                     placeholder='Ex: Search By Name'
@@ -288,7 +289,7 @@ export default function Customers() {
                     clearable
                   />
                 </Col>
-                <Col md={4} lg={3}>
+                <Col md={12} lg={3}>
                   <Button
                     onClick={openDrawer}
                     startEnhancer={() => <Plus />}

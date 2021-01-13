@@ -96,7 +96,7 @@ const Banner: React.FC<BannerProps> = ({
           />
         </BannerSubHeading>
 
-        <SearchBox
+        <SearchBox 
           style={{
             width: 700,
             boxShadow: '0 21px 36px rgba(0,0,0,0.05)',

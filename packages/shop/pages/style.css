@@ -1,7 +1,54 @@
+button.view-pass-btn {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  padding: 0;
+  font-size: 15px;
+  background: transparent;
+  color: black;
+  border: 0;
+}
 .breadcrumb {
   margin: 23px 0 10px 20px;
   padding: 0;
   background: #fff;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .banner-search {
+    display: block !important;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 991px) {
+  .SignInOutFormstyle__Wrapper-sc-1o2t5az-1 {
+    margin: 100px 0 50px 0;
+  }
+}
+
+@media (max-width: 767px) {
+}
+@media (max-width: 575px) {
+  .banner-search {
+    width: 100% !important;
+  }
+  .banner-search button {
+    padding: 0 10px 0 5px !important;
+  }
+}
+
+.back-to-login {
+  text-decoration: none !important;
+  text-transform: capitalize;
+  color: #009e7f;
+  font-size: 16px;
+  font-weight: 600;
+}
+.back-to-login i {
+  margin: 0 5px 0 0;
+}
+.back-to-login:hover {
+  color: #006a55;
 }
 
 .breadcrumb ul {
@@ -44,103 +91,130 @@
   color: var(--color-primary);
 }
 
-.breadcrumb { 
-    list-style: none; 
-    overflow: hidden; 
-    font: 18px Sans-Serif;
-  }
-  .breadcrumb li { 
-    float: left; 
-  }
-  .breadcrumb li a {
-    color: white;
-    text-decoration: none; 
-    padding: 10px 0 10px 65px;
-    background: brown; /* fallback color */
-    background: #009E7F; 
-    position: relative; 
-    display: block;
-    float: left;
-  }
+.breadcrumb {
+  list-style: none;
+  overflow: hidden;
+  font: 18px Sans-Serif;
+}
+.breadcrumb li {
+  float: left;
+}
+.breadcrumb li a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 0 10px 65px;
+  background: brown; /* fallback color */
+  background: #009e7f;
+  position: relative;
+  display: block;
+  float: left;
+}
 
-  .breadcrumb li a::after { 
-    content: " "; 
-    display: block; 
-    width: 0; 
-    height: 0;
-    border-top: 50px solid transparent; /* Go big on the size, and let overflow hide */
-    border-bottom: 50px solid transparent;
-    border-left: 30px solid #009E7F;
-    position: absolute;
-    top: 50%;
-    margin-top: -50px; 
-    left: 100%;
-    z-index: 2; 
-  }
+.breadcrumb li a::after {
+  content: ' ';
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 50px solid transparent; /* Go big on the size, and let overflow hide */
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid #009e7f;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  left: 100%;
+  z-index: 2;
+}
 
-  .breadcrumb li a::before { 
-    content: " "; 
-    display: block; 
-    width: 0; 
-    height: 0;
-    border-top: 50px solid transparent;       
-    border-bottom: 50px solid transparent;
-    border-left: 30px solid white;
-    position: absolute;
-    top: 50%;
-    margin-top: -50px; 
-    margin-left: 1px;
-    left: 100%;
-    z-index: 1; 
-  }
+.breadcrumb li a::before {
+  content: ' ';
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid white;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  margin-left: 1px;
+  left: 100%;
+  z-index: 1;
+}
 
-  .breadcrumb li:first-child a {
-    padding-left: 10px;
-  }
-  .breadcrumb li:nth-child(2) a       { background:       #009E7F; }
-  .breadcrumb li:nth-child(2) a:after { border-left-color:#009E7F; }
-  .breadcrumb li:nth-child(3) a       { background:        #009E7F; }
-  .breadcrumb li:nth-child(3) a:after { border-left-color: #009E7F; }
-  .breadcrumb li:nth-child(4) a       { background:        #009E7F; }
-  .breadcrumb li:nth-child(4) a:after { border-left-color: #009E7F; }
-  .breadcrumb li:nth-child(5) a       { background:        #009E7F; }
-  .breadcrumb li:nth-child(5) a:after { border-left-color: #009E7F; }
-  select#cars {height: 40px;padding: 0 10px;}
-  .SignInOutFormstyle__Wrapper-sc-1o2t5az-1 {margin: 200px 0 0 0;}
-  button.cat-del-btn .ae.hj {display: inline-flex !important;}
+.breadcrumb li:first-child a {
+  padding-left: 10px;
+}
+.breadcrumb li:nth-child(2) a {
+  background: #009e7f;
+}
+.breadcrumb li:nth-child(2) a:after {
+  border-left-color: #009e7f;
+}
+.breadcrumb li:nth-child(3) a {
+  background: #009e7f;
+}
+.breadcrumb li:nth-child(3) a:after {
+  border-left-color: #009e7f;
+}
+.breadcrumb li:nth-child(4) a {
+  background: #009e7f;
+}
+.breadcrumb li:nth-child(4) a:after {
+  border-left-color: #009e7f;
+}
+.breadcrumb li:nth-child(5) a {
+  background: #009e7f;
+}
+.breadcrumb li:nth-child(5) a:after {
+  border-left-color: #009e7f;
+}
+select#cars {
+  height: 40px;
+  padding: 0 10px;
+}
+.SignInOutFormstyle__Wrapper-sc-1o2t5az-1 {
+  margin: 200px 0 0 0;
+}
+button.cat-del-btn .ae.hj {
+  display: inline-flex !important;
+}
 
 .Layoutstyle__LayoutWrapper-sc-14p4e1l-0 {
-    min-height: 100vh;
+  min-height: 100vh;
 }
-.SignInOutFormstyle__Container-sc-1o2t5az-2  {
+.SignInOutFormstyle__Container-sc-1o2t5az-2 {
   padding: 60px 30px !important;
 }
 
-.iAvmwD{padding: 140px 60px 0 !important;}
+.iAvmwD {
+  padding: 140px 60px 0 !important;
+}
 
 .breadcrumb li:last-child a {
-    background: transparent !important;
-    color: black;
-    pointer-events: none;
-    cursor: default;
-  }
-  .breadcrumb li:last-child a::after { 
-    border: 0; 
-  }
+  background: transparent !important;
+  color: black;
+  pointer-events: none;
+  cursor: default;
+}
+.breadcrumb li:last-child a::after {
+  border: 0;
+}
 
-  .breadcrumb li a:hover { 
-    background: #065041; 
-  }
-  .breadcrumb li a:hover:after { 
-    border-left-color: #065041 !important; 
-  }
-  .custome-ul ul li{
-    list-style: disc !important;
-  }
-  .Layoutstyle__LayoutWrapper-sc-14p4e1l-0 {
-    min-height: 100vh;
+.breadcrumb li a:hover {
+  background: #065041;
+}
+.breadcrumb li a:hover:after {
+  border-left-color: #065041 !important;
+}
+.custome-ul ul li {
+  list-style: disc !important;
+}
+.Layoutstyle__LayoutWrapper-sc-14p4e1l-0 {
+  min-height: 100vh;
 }
 .cBPsdM {
-  padding: 60px 30px !important;
+  padding: 40px 30px 20px 30px !important;
 }
-  .iAvmwD{padding: 140px 60px 0 !important;}
+.iAvmwD {
+  padding: 140px 60px 0 !important;
+}

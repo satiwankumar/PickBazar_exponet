@@ -125,7 +125,7 @@ const [brands, setBrands] = React.useState([]);
   
 
         <h1 style={{
-           "margin": "19px 0px 10px 20px",
+           "margin": "25px 0px 10px 20px",
            "fontSize": "24px"
           }} >Filter By Brand </h1> 
          {/* <input type="text" list="data" 

@@ -8,7 +8,7 @@
     "build": "next build" ,
     "serve": "http-serve",
     "start": "next start",
-    "shop-dev": "next -p 8080"
+    "shop-dev": "next"
   },
   "dependencies": {
     "@apollo/client": "^3.2.5",
