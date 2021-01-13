@@ -233,7 +233,7 @@ router.push('/')
             <FormattedMessage id='signUpBtnText' defaultMessage='Sign Up' />
           </LinkButton>
         </Offer>
-        <a href="#" className="back-to-login"><i className="fa fa-angle-left"></i> back to login</a>
+        {/* <a href="#" className="back-to-login"><i className="fa fa-angle-left"></i> back to login</a> */}
       <ToastContainer />
 
       </Container>

@@ -100,7 +100,7 @@ query getCategory($filter_category_id:Int){
 
 
 const CREATE_PRODUCT = gql`
-  mutation createProduct($brand:String!,$name:String!,$file:[Upload],$price:Float,$unit:String,$description:String,$actual_size:String!,$nominal_size:String!,$variation:String, $selling_price:Float,$category_id:Int!,$qty:Int!,$sub_category_id:Int!,$related_products:String) {  
+  mutation createProduct($brand:String!,$name:String!,$file:[Upload],$price:Float,$unit:String,$description:String,$actual_size:String!,$nominal_size:String!,$variation:String, $selling_price:Float,$category_id:Int!,$qty:Int,$sub_category_id:Int!,$related_products:String) {  
       createProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,nominal_size:$nominal_size,variation:$variation,selling_price:$selling_price,qty:$qty,category_id:$category_id,sub_category_id:$sub_category_id,related_products:$related_products)
          }`;
 
@@ -291,7 +291,7 @@ data && data.getproducts.map(item=>
           price: data.price?data.price:0.0,
           unit: "",
           selling_price: data.salePrice ? data.salePrice : 0.0,
-          qty: data.quantity,
+          qty: data.quantity?data.quantity:0,
           variation: variation.length > 0 ? JSON.stringify(variation) : "",
           // variation_price: variationPrice.length > 0 ? JSON.stringify(variationPrice) : "",
           category_id: type[0].id,
@@ -365,19 +365,20 @@ data && data.getproducts.map(item=>
                     name="variation_name"
                     onChange={((e)=>handleVariationChange(e,i))} className="form-control brand-flied"/>
             </Col>
-            <Col  xl={3} lg={6} md={6}>
-            <div className="mt-10"><FormLabel>Price</FormLabel></div>
-                      <input type="number" step="any"
-                    min="0"   value={variation[i].variation_price}
-                    onChange={((e)=>handleVariationChange(e,i))}
-                    name="variation_price" className="form-control brand-flied"/>
-            </Col>
+         
             <Col xl={3} lg={6} md={6}>
             <div className="mt-10"><FormLabel>Quantity</FormLabel></div>
                       <input type="number" step="any"
                     min="0"  value={variation[i].variation_quantity}
                     onChange={((e)=>handleVariationChange(e,i))}
                     name="variation_quantity" className="form-control brand-flied"/>
+            </Col>
+               <Col  xl={3} lg={6} md={6}>
+            <div className="mt-10"><FormLabel>Price</FormLabel></div>
+                      <input type="number" step="any"
+                    min="0"   value={variation[i].variation_price}
+                    onChange={((e)=>handleVariationChange(e,i))}
+                    name="variation_price" className="form-control brand-flied"/>
             </Col>
             <Col xl={3} lg={6} md={6}>
             <div className="mt-10"><FormLabel>Sell Price</FormLabel></div>
@@ -577,7 +578,7 @@ data && data.getproducts.map(item=>
                 </FormFields> */}
 
                 
-                <FormFields>
+                {/* <FormFields>
                   <FormLabel>Product Quantity</FormLabel>
                   <Input
                     type="number"
@@ -585,7 +586,7 @@ data && data.getproducts.map(item=>
                     inputRef={register({ required: true })}
                     name="quantity"
                   />
-                </FormFields>
+                </FormFields> */}
 
 
                 <FormFields>

@@ -33,6 +33,8 @@ import PickBazar from '../../image/PickBazar.png';
   const [email, setEmail] = React.useState('');
 
   const [password, setPassword] = React.useState('');
+  const [confirmpassword, setConfirmPassword] = React.useState('');
+
   const [first_name, setfirstname] = React.useState('');
   const [last_name, setlastname] = React.useState('');
   const toggleSignInForm = () => {
@@ -54,7 +56,23 @@ const [register,{data}]  = useMutation(REGISTER)
     
     try {
       e.preventDefault()
-      console.log("dataaa",email,password,first_name,last_name)
+      console.log("dataaa",email,password,first_name,last_name,confirmpassword)
+
+      if(confirmpassword!==password){
+
+        toast.error(`🦄 Confirm Password doesnot Match`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          })
+        return 
+      }
+
+
   
       const result =  await register({
         variables: {input:{ first_name:first_name,last_name:last_name,email: email, password: password,roles:"2"}}
@@ -158,7 +176,7 @@ const [register,{data}]  = useMutation(REGISTER)
           id='passwordPlaceholder'
           defaultMessage='Password (min 6 characters)'
         >
-          {placeholder => <Input type='password' value={password} name="password" placeholder="Confirm Password" onChange={(e)=>setPassword(e.target.value)} minlength="8" required/>}
+          {placeholder => <Input type='password' value={confirmpassword} name="confirmpassword" placeholder="Confirm Password" onChange={(e)=>setConfirmPassword(e.target.value)} minlength="8" required/>}
         </FormattedMessage>
         <button className="view-pass-btn" ><i className="fa fa-eye"></i></button>
         </div>

@@ -136,7 +136,11 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   };
   const [vari, setVari] = useState('');
   const [qty, setQty] = useState('');
-  // console.log("productDetail0",product)
+  const [varprice, setVariPrice] = useState('');
+  
+  console.log("vari",vari)
+  console.log("qty",qty)
+  
   const { isRtl } = useLocale();
   const { addItem, removeItem, isInCart, getItem, items } = useCart();
   const data = product;
@@ -163,6 +167,7 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   }, []);
 const getVariation = (id)=>{
   let variationOptions = data && product.productVariations.filter((item, key) =>{return item.variations.id==id})
+  
     return variationOptions[0]
 }
   
@@ -170,6 +175,7 @@ const getVariation = (id)=>{
     // "foo3bar5".match(/\d+/)[0]
     let selected = getVariation(e.target.value)
     setVari(selected.variations.id);
+    setVariPrice(selected.variations.variation_price)
   //  console.log("selected",selected.variations.id)
     // console.log("qty",selected.variations.variation_quantity)
     setQty(selected.variations.variation_quantity);
@@ -244,21 +250,21 @@ const getVariation = (id)=>{
           <ProductTitlePriceWrapper>
             <ProductTitle>{product.name}</ProductTitle><br/>
           
-            {/* <ProductPriceWrapper>
-              {product.discountInPercent ? (
+           <ProductPriceWrapper>
+              {/* {product.discountInPercent ? (
                 <SalePrice>
                   {CURRENCY}
-                  {product.price}
+                  {varprice?varprice:0}
                 </SalePrice>
               ) : (
                 ''
-              )}
+              )} */}
 
               <ProductPrice>
-                {CURRENCY}
-                {product.salePrice ? product.salePrice : product.price}
+                {varprice!=""? CURRENCY:""}
+                {product.salePrice ? product.salePrice: `${varprice}`  }
               </ProductPrice>
-            </ProductPriceWrapper> */}
+            </ProductPriceWrapper> 
           </ProductTitlePriceWrapper>
           <ProductWeight>{`Actual size : ${product.actual_size}`}</ProductWeight><br/>
           <ProductWeight>{`Nominal size : ${product.nominal_size}`}</ProductWeight><br/>

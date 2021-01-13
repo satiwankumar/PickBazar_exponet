@@ -98,7 +98,7 @@ query getCategory($filter_category_id:Int){
 
 const UPDATE_PRODUCT = gql`
 # 
-  mutation updateProduct($brand:String!,$name:String!,$file:[Upload],$price:Float,$unit:String,$description:String,$actual_size:String!,$variation:String,$nominal_size:String!,$selling_price:Float,$category_id:Int!,$sub_category_id:Int!,$qty:Int!,$product_id:Int!,$related_products:String!) {  
+  mutation updateProduct($brand:String!,$name:String!,$file:[Upload],$price:Float,$unit:String,$description:String,$actual_size:String!,$variation:String,$nominal_size:String!,$selling_price:Float,$category_id:Int!,$sub_category_id:Int!,$qty:Int,$product_id:Int!,$related_products:String) {  
     updateProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,variation:$variation,nominal_size:$nominal_size,selling_price:$selling_price,qty:$qty,category_id:$category_id,sub_category_id:$sub_category_id,product_id:$product_id,related_products:$related_products)
  
     
@@ -357,19 +357,20 @@ console.log("variation",i)
                     name="variation_name"
                     onChange={((e)=>handleVariationChange(e,i))} className="form-control brand-flied"/>
             </Col>
-            <Col md={3}>
-            <div className="mt-10"><FormLabel>Price</FormLabel></div>
-                      <input type="number" step="any"
-                    min="0" placeholder="variation price"  value={variation[i].variation_price}
-                    onChange={((e)=>handleVariationChange(e,i))}
-                    name="variation_price" className="form-control brand-flied"/>
-            </Col>
+        
             <Col md={3}>
             <div className="mt-10"><FormLabel>Quantity</FormLabel></div>
                       <input type="number" step="any"
                     min="0" placeholder="variation quantity" value={variation[i].variation_quantity}
                     onChange={((e)=>handleVariationChange(e,i))}
                     name="variation_quantity" className="form-control brand-flied"/>
+            </Col>
+            <Col md={3}>
+            <div className="mt-10"><FormLabel>Price</FormLabel></div>
+                      <input type="number" step="any"
+                    min="0" placeholder="variation price"  value={variation[i].variation_price}
+                    onChange={((e)=>handleVariationChange(e,i))}
+                    name="variation_price" className="form-control brand-flied"/>
             </Col>
             <Col md={3}>
             <div className="mt-10"><FormLabel>Sale Price</FormLabel></div>
@@ -475,7 +476,7 @@ const relatedProducts = []
         price:data.price?data.price:0,
         unit: "",
         selling_price: data.selling_price?data.selling_price:0,
-        qty: data.qty,
+        qty: data.qty?data.qty:0,
         variation: variation.length > 0 ? JSON.stringify(variation) : "",
         category_id: type[0].id,
         sub_category_id: tag[0].id,
@@ -657,10 +658,10 @@ const relatedProducts = []
                { createdUI()}
      
               
-                <FormFields>
+                {/* <FormFields>
                   <FormLabel>Product Quantity</FormLabel>
                   <Input type="number" inputRef={register} min="0" name="qty" />
-                </FormFields>
+                </FormFields> */}
 
                 <FormFields>
                   <FormLabel>Type</FormLabel>
