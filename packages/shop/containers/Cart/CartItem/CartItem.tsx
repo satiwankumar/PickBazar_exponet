@@ -35,6 +35,7 @@ console.log("dataaaaaaaaaaaaaaaaa",data)
   let filterVariation1 = filterVariation[0]
   // console.log("dataaaaaaaaaaaaaaaa",filterVariation.length>0?filterVariation1.variations.variation_price:false)
   let displayPrice = filterVariation.length>0?filterVariation1.variations.variation_price:salePrice ? salePrice : price;
+  let variationname= filterVariation.length>0?filterVariation1.variations.variation_name:title 
 // console.log("display price",displayPrice)
    displayPrice = parseFloat(displayPrice).toFixed(2)
 
@@ -49,7 +50,7 @@ console.log("dataaaaaaaaaaaaaaaaa",data)
       /> */}
       <Image src={productImages.length>0?getURl(productImages[0].image):""} />
       <Information>
-        <Name>{title}</Name>
+        <Name>{variationname}</Name>
         <Price>
           {CURRENCY}
           {displayPrice}

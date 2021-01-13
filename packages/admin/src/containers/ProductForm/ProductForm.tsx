@@ -113,7 +113,7 @@ const AddProduct: React.FC<Props> = props => {
   ]);
   const { register, handleSubmit, setValue,errors } = useForm();
   const [type, setType] = useState([]);
-  const [variation, setVariations] = useState([{variation_name:"",variation_price :"",variation_quantity:"",variation_sell_price:""}]);
+  const [variation, setVariations] = useState([{variation_name:"",variation_price :0,variation_quantity:0,variation_sell_price:0}]);
   // let [variation_price, setVariationsPrice] = useState({});
   const [tag, setTag] = useState([]);
   const [Related, setRelatedProducts] = useState([]);
@@ -164,7 +164,7 @@ data && data.getproducts.map(item=>
   products.push(branditems)}) 
    console.log("productssssssssssssssssssssssss",products)
   const AddVariation  = () =>{
-    setVariations((previous)=>[...previous,{variation_name:"",variation_price:"",variation_quantity:"",variation_sell_price:""}])
+    setVariations((previous)=>[...previous,{variation_name:"",variation_price:0,variation_quantity:0,variation_sell_price:0}])
 
   }
   const removeVariation  = (i) =>{

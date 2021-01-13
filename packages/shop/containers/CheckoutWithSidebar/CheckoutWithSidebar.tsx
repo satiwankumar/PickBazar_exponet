@@ -79,22 +79,27 @@ interface MyFormProps {
 }
 
 type CartItemProps = {
-  product: Product;
+  product: any;
 };
 
 const OrderItem: React.FC<CartItemProps> = ({ product }) => {
   
-
-  const { id, quantity, title, name, unit, price, salePrice } = product;
-  const displayPrice = salePrice ? salePrice : price;
-  
+// console.log("product",productVariations)
+  const { id, quantity, title, name, unit, price, salePrice,productVariations,variationId } = product;
+  let filterVariation=  productVariations.length>0?productVariations.filter(item=>item.variations.id==variationId):null
+  let filterVariation1 = filterVariation[0]
+  console.log("filter",filterVariation)
+  let displayPrice = filterVariation.length>0?filterVariation1.variations.variation_price:"";
+  let variationname= filterVariation.length>0?filterVariation1.variations.variation_name:title 
+  let variationquantity = filterVariation.length>0?filterVariation1.variations.variation_quantity:title 
   return (
     <Items key={id}>
-      <Quantity>{quantity}</Quantity>
-      <Multiplier>x</Multiplier>
+      {/* <Quantity>{quantity}</Quantity>
+      <Multiplier>For</Multiplier> */}
       <ItemInfo>
-        {name ? name : title} {unit ? `| ${unit}` : ''}
+        {`${variationname} of ${variationquantity} `} 
       </ItemInfo>
+    <Multiplier>For</Multiplier>
       <Price>
         {CURRENCY}
         {displayPrice}
@@ -144,6 +149,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
   const [appliedCoupon] = useMutation(APPLY_COUPON);
 
   let orderItems  = []
+  
   items.forEach(item=> {
   let variation = item.productVariations.find((variation)=>variation.variations.id == item.variationId);
   // console.log('items reducer',variation);
