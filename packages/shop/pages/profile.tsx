@@ -58,7 +58,7 @@ let datass ={}
 
   return (
     <>
-      <SEO title='Profile - PickBazar' description='Profile Details' />
+      <SEO title='Profile - Exponet' description='Profile Details' />
       <ProfileProvider initData={datass && datass}>
         <Modal>
           <PageWrapper>

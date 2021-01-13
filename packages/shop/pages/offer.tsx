@@ -50,7 +50,7 @@ const GiftCardPage: NextPage<GiftCardProps> = ({ deviceType }) => {
 const url="http://s3.amazonaws.com/redqteam.com/pickbazar/gift-card-1.png"
   return (
     <Modal>
-      <SEO title='Offer - PickBazar' description='Offer Details' />
+      <SEO title='Offer - Exponet' description='Offer Details' />
       <OfferPageWrapper>
         <MainContentArea>
           <div style={{ width: '100%' }}>

@@ -4,6 +4,7 @@ import Moment from 'react-moment';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useQuery } from '@apollo/react-hooks';
+import {getURl} from '../../../utils'
 import {
   OrderBox,
   OrderListWrapper,
@@ -43,10 +44,14 @@ query getOrderByCustomer{
     customer_phone
     status
     products{
-id
-price
-name
+      id
+      slug
+   
 qty
+actual_size
+nominal_size
+name
+description
 productImages{
   id
   product_id
@@ -88,17 +93,17 @@ const orderTableColumns = [
     width: 250,
     ellipsis: true,
     render: (text, record) => {
-    
+    console.log("record",record)
       return (
         <ItemWrapper>
           <ImageWrapper>
-            <img src={record.image} alt={record.name} />
+            <img src={record.productImages.length>0&& record.productImages[0].image!==undefined?getURl(record.productImages[0].image):""} alt={record.name} />
           </ImageWrapper>
 
           <ItemDetails>
             <ItemName>{record.name}</ItemName>
-            <ItemSize>{record.qty}</ItemSize>
-            <ItemPrice>${record.price}</ItemPrice>
+            {/* <ItemSize>{record.qty}</ItemSize>
+            <ItemPrice>${record.price}</ItemPrice> */}
           </ItemDetails>
         </ItemWrapper>
       );
@@ -108,19 +113,19 @@ const orderTableColumns = [
     title: (
       <FormattedMessage id='intlTableColTitle2' defaultMessage='Quantity' />
     ),
-    dataIndex: 'quantity',
-    key: 'quantity',
+    dataIndex: 'qty',
+    key: 'qty',
     align: 'center',
     width: 100,
   },
   {
     title: <FormattedMessage id='intlTableColTitle3' defaultMessage='Price' />,
-    dataIndex: '',
+    dataIndex: 'price',
     key: 'price',
     align: 'right',
     width: 100,
     render: (text, record) => {
-      return <p>${record.total}</p>;
+      return <p>${record.price}</p>;
     },
   },
 ];
@@ -152,7 +157,7 @@ const OrdersContent: React.FC<OrderTableProps> = ({
   const orderListHeight = size.height - 79;
 
   const { data, error, loading } = useQuery(GET_ORDERS);
-  // console.log("dataaaa",data)
+  console.log("dataaaa",data)
 
 
  

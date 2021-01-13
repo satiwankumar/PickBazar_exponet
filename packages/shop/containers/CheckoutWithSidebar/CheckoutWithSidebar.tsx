@@ -130,6 +130,9 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
     toggleRestaurant,
   } = useCart();
 
+  console.log("calculatePrice",cartItemsCount)
+
+
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const { address, contact, card, schedules } = state;
@@ -179,6 +182,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
   const [Billing,setBilling] = useState({
     first_name:"",
     last_name:"",
+    email:"",
     address1:"",
     address2:"",
     phone:"",
@@ -310,15 +314,15 @@ console.log("shipping",shipping)
         variables:{
           input:{
             token: stripeToken?stripeToken:"",
-            customer_email: "test@gmail.com",
+            customer_email:Billing.email,
             customer_phone: "+1 (772) 895-7472",
             is_billing: "false",
             is_shipping: "false",
-            sub_total: 200,
+            sub_total: calculateSubTotalPrice(),
             shipping_cost: 0,
             coupon_id: couponCode,
             discount: 0,
-            total: 200,
+            total: calculatePrice(),
             currency: "$",
             currency_rate: "27.5",
             billing:{
@@ -423,14 +427,16 @@ console.log("shipping",shipping)
                 {errors.first_name && <span>This field is required</span>}
                 <h4>LastName</h4>
                 <TextField placeholder="Please enter Last Name" type="text" name="last_name" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <h4>Email</h4>
+                <TextField placeholder="Please enter Email " type="email" name="email" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 <h4>Address1</h4>
                 <TextField placeholder="Please enter Address1" type="text" name="address1"   onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 <h4>Address2</h4>
                 <TextField placeholder="Please enter Address2" type="text" name="address2"   onChange={(e)=>handleBilling(e)} /><br/>
                 <h4>Phone</h4>
-                <TextField placeholder="Please enter Phone" type="number" name="Phone"   onChange={(e)=>handleBilling(e)} /> ref={register({ required: true })}   <br/>
+                <TextField placeholder="Please enter Phone" type="number" name="Phone"   onChange={(e)=>handleBilling(e)}  ref={register({ required: true })} />  <br/>
                 <h4>City</h4>
-                <TextField placeholder="Please enter City" type="test" name="city"    onChange={(e)=>handleBilling(e)}/> ref={register({ required: true })}   <br/>
+                <TextField placeholder="Please enter City" type="test" name="city"    onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /> <br/>
                 <h4>Zip</h4>
                 <TextField placeholder="Please enter Zip" type="test" name="zip"  onChange={(e)=>handleBilling(e)}  />   <br/>
                 <h4>Country</h4>

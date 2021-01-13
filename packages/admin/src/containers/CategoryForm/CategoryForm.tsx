@@ -120,7 +120,7 @@ try{
     // };
  const resulting = await createCategory({
       variables: { 
-        parent_id:parent?parent[0].id:null,
+        parent_id:parent.length>0?parent[0].id:null,
         name:name,
         slug:slug,
         content:content,
@@ -153,6 +153,7 @@ setTimeout(() => {
 } 
 
 else{
+  
             toast.error(`🦄 SomeThing Went Wrong`, {
               position: "top-right",
               autoClose: 5000,
@@ -173,6 +174,7 @@ else{
 
     closeDrawer();
   } catch (error) {
+    console.log("error",error)
     toast.error(`🦄 SomeThing Went Wrong`, {
       position: "top-right",
       autoClose: 3000,

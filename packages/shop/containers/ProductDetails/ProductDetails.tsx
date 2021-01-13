@@ -261,7 +261,7 @@ const getVariation = (id)=>{
             </ProductPriceWrapper> */}
           </ProductTitlePriceWrapper>
           <ProductWeight>{`Actual size : ${product.actual_size}`}</ProductWeight><br/>
-          <ProductWeight>{`Nomial size : ${product.nominal_size}`}</ProductWeight><br/>
+          <ProductWeight>{`Nominal size : ${product.nominal_size}`}</ProductWeight><br/>
           {variation()}
           <ProductCartBtn>
                 <Button

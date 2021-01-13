@@ -79,7 +79,7 @@ function HomePage({ deviceType }) {
 
   return (
     <>
-      <SEO title='Filters - Exponent' description='Filters Details' />
+      <SEO title='Home - Exponent' description='Filters Details' />
       <Modal>
         <Banner
           intlTitleId='groceriesTitle'

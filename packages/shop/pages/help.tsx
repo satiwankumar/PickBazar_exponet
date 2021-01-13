@@ -5,6 +5,7 @@ import { SEO } from 'components/seo';
 import SiteFooter from 'components/SiteFooter/SiteFooter';
 import Accordion from 'components/Accordion/Accordion';
 import { FormattedMessage } from 'react-intl';
+import Link from 'next/link';
 
 const accor = [
   {
@@ -86,7 +87,7 @@ export default function () {
             id='siteFooter'
             defaultMessage='Pickbazar is a product of'
           />
-          &nbsp; <a href='#'>Redq, Inc.</a>
+                  &nbsp; <Link href='#'>&copy;2020</Link>
         </SiteFooter>
       </HelpPageWrapper>
     </Modal>

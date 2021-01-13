@@ -81,6 +81,7 @@ const { data, error, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {
   if(error){
     return <div>Error! {error.message}</div>;
   }
+  console.log("dataaaaaaaaa",data)
  
   return (
     
@@ -165,9 +166,10 @@ const { data, error, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {
               </Text>
             </ListTitle>
             <ListDes>
-              <Text>6 Items</Text>
+              <Text>{data&&data.getOrderById[0].products.length}</Text>
             </ListDes>
           </ListItem>
+     
 
           <ListItem>
             <ListTitle>

@@ -95,8 +95,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </ProductImageWrapper>
       <ProductInfo>
         <h3 className="product-title">{`${brand }   ${ title}`}</h3>
-        <span className="product-weight">{`Actualsize : ${actual_size}`}</span><br></br>
-        <span className="product-weight">{`Nomialsize:${nominal_size}`}</span>
+        <span className="product-weight">{`Actual size : ${actual_size}`}</span><br></br>
+        <span className="product-weight">{`Nominal size:${nominal_size}`}</span>
         {/* {Object.keys(variations).length>0?} */}
 
         <div className="product-meta">

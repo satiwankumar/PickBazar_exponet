@@ -111,10 +111,10 @@ const AddCategory: React.FC<Props> = props => {
   
   
   
-  const [Parentcategory, setCategory] = useState(data&& valueData);
+  const [Parentcategory, setCategory] = useState(data&& valueData!==undefined? valueData:[]);
 
 
-  // console.log("category ",typeof(categories),categories)
+  console.log("category ",typeof(Parentcategory))
   const Subcategories = data && data.getCategoryWithoutFilter.map(item=>item.subcategories.map(
         item=> {return item}
   ))
