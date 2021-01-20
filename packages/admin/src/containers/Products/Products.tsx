@@ -144,7 +144,16 @@ query getproducts($filter_category_id:Int,$filter_by_name: String,){
  }
 
   },  
- 
+  getCategoryWithoutFilter{
+    id
+    name
+    slug
+    is_searchable
+    parent_id
+    image
+    type
+    
+    },
 
   getCategory(category_id:$filter_category_id,filter_by_name: null){
     id
@@ -177,13 +186,7 @@ query getproducts($filter_category_id:Int,$filter_by_name: String,){
   #     position
   #     is_searchable
   #     parent_id
-  #      subcategories {
-  #     name
-  #     slug
-  #     position
-  #     is_searchable
-  #     parent_id
-  #   }
+  #     
   #   }
 
   #   },
@@ -231,16 +234,16 @@ query getproducts($filter_category_id:Int,$filter_by_name: String,){
 // }`
 
 
-const typeSelectOptions = [
-  { value: 'grocery', label: 'Grocery' },
-  { value: 'women-cloths', label: 'Women Cloths' },
-  { value: 'bags', label: 'Bags' },
-  { value: 'makeup', label: 'Makeup' },
-];
-const priceSelectOptions = [
-  { value: 'highestToLowest', label: 'Highest To Lowest' },
-  { value: 'lowestToHighest', label: 'Lowest To Highest' },
-];
+// const typeSelectOptions = [
+//   { value: 'grocery', label: 'Grocery' },
+//   { value: 'women-cloths', label: 'Women Cloths' },
+//   { value: 'bags', label: 'Bags' },
+//   { value: 'makeup', label: 'Makeup' },
+// ];
+// const priceSelectOptions = [
+//   { value: 'highestToLowest', label: 'Highest To Lowest' },
+//   { value: 'lowestToHighest', label: 'Lowest To Highest' },
+// ];
 
 toast.configure()
 export default function Products() {
@@ -281,7 +284,7 @@ export default function Products() {
 
   }
 
-  const categories = data && data.getCategory.filter(item => item.parent_id == null)
+  const categories = data && data.getCategoryWithoutFilter.filter(item => item.parent_id == null)
   // console.log("category ",typeof(categories),categories)
 
   const Subcategories = []

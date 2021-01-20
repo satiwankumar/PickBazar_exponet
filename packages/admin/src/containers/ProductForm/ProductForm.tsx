@@ -100,7 +100,7 @@ query getCategory($filter_category_id:Int){
 
 
 const CREATE_PRODUCT = gql`
-  mutation createProduct($brand:String!,$name:String!,$file:[Upload],$price:Float,$unit:String,$description:String,$actual_size:String!,$nominal_size:String!,$variation:String, $selling_price:Float,$category_id:Int!,$qty:Int,$sub_category_id:Int!,$related_products:String) {  
+  mutation createProduct($brand:String!,$name:String!,$file:[Upload],$price:Float,$unit:String,$description:String,$actual_size:String!,$nominal_size:String!,$variation:String, $selling_price:Float,$category_id:Int!,$qty:Int,$sub_category_id:Int,$related_products:String) {  
       createProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,nominal_size:$nominal_size,variation:$variation,selling_price:$selling_price,qty:$qty,category_id:$category_id,sub_category_id:$sub_category_id,related_products:$related_products)
          }`;
 
@@ -295,7 +295,7 @@ data && data.getproducts.map(item=>
           variation: variation.length > 0 ? JSON.stringify(variation) : "",
           // variation_price: variationPrice.length > 0 ? JSON.stringify(variationPrice) : "",
           category_id: type[0].id,
-          sub_category_id: tag[0].id,
+          sub_category_id: tag.length>0?tag[0].id:null,
           related_products:relatedProducts.length > 0 ? JSON.stringify(relatedProducts) : ""
 
         }
@@ -356,7 +356,8 @@ data && data.getproducts.map(item=>
   
 
   const getvariation = () =>{
-    return variation.map((item,i)=>
+    return   variation.length>0?(
+     variation.map((item,i)=>
     ( <>
      <Row>
             <Col xl={3} lg={6} md={6}>
@@ -389,8 +390,10 @@ data && data.getproducts.map(item=>
             </Col>
                 <Col xl={3} lg={6} md={6}>
                 {
-   i == (variation.length - 1)?  (<Button type="button"   startEnhancer={() => <Plus />} title="add variation"  onClick={()=>AddVariation()} className="nm-bt mt-40">add</Button>)
-   :(<Button type="button" title="add variation"  startEnhancer={() => <Trash />} onClick={()=>removeVariation(i)} className="nm-bt mt-40 red-bg">Remove</Button>)
+   i == (variation.length - 1)?  (<><Button type="button"   startEnhancer={() => <Plus />} title="add variation"  onClick={()=>AddVariation()} className="nm-bt mt-40"></Button>
+   <Button type="button" title="add variation"  startEnhancer={() => <Trash />} onClick={()=>removeVariation(i)} className="nm-bt mt-40 red-bg"></Button></>
+   )
+   :(<Button type="button" title="add variation"  startEnhancer={() => <Trash />} onClick={()=>removeVariation(i)} className="nm-bt mt-40 red-bg"></Button>)
 
                 }
      
@@ -405,7 +408,8 @@ data && data.getproducts.map(item=>
   
     )
         
-      )
+      )):(<><Button type="button"   startEnhancer={() => <Plus />} title="add variation"  onClick={()=>AddVariation()} className="nm-bt mt-40">Add Varitation</Button></>
+     )
   } 
 
   const handleVariationChange = (e,index)=>{
@@ -592,14 +596,13 @@ data && data.getproducts.map(item=>
                 <FormFields>
                   <FormLabel>Type</FormLabel>
                   <Select
-
                     options={data && categories}
                     labelKey="name"
                     valueKey="id"
-                    required
-                    // placeholder="Product Type"
                     value={type}
-                    searchable={false}
+                    required
+                    
+                    // searchable={false}
                     onChange={handleTypeChange}
                     overrides={{
                       Placeholder: {
@@ -657,7 +660,6 @@ data && data.getproducts.map(item=>
                     valueKey="id"
                     // placeholder="Product Tag"
                     value={tag}
-                    required
                     onChange={handleMultiChange}
                     overrides={{
                       Placeholder: {

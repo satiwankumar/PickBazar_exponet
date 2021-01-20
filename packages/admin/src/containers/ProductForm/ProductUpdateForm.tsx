@@ -48,7 +48,17 @@ query getCategory($filter_category_id:Int){
   
     
 }
-  }
+  },
+  getCategoryWithoutFilter{
+    id
+    name
+    slug
+    is_searchable
+    parent_id
+    image
+    type
+    
+    },
   getBrand(filter_text: null,category_id:null){
     name
 },
@@ -98,7 +108,7 @@ query getCategory($filter_category_id:Int){
 
 const UPDATE_PRODUCT = gql`
 # 
-  mutation updateProduct($brand:String!,$name:String!,$file:[Upload],$price:Float,$unit:String,$description:String,$actual_size:String!,$variation:String,$nominal_size:String!,$selling_price:Float,$category_id:Int!,$sub_category_id:Int!,$qty:Int,$product_id:Int!,$related_products:String) {  
+  mutation updateProduct($brand:String!,$name:String!,$file:[Upload],$price:Float,$unit:String,$description:String,$actual_size:String!,$variation:String,$nominal_size:String!,$selling_price:Float,$category_id:Int!,$sub_category_id:Int,$qty:Int,$product_id:Int!,$related_products:String) {  
     updateProduct(brand:$brand,name:$name,file:$file,price:$price,unit:$unit,description:$description,actual_size:$actual_size,variation:$variation,nominal_size:$nominal_size,selling_price:$selling_price,qty:$qty,category_id:$category_id,sub_category_id:$sub_category_id,product_id:$product_id,related_products:$related_products)
  
     
@@ -132,9 +142,11 @@ console.log("updatedata",data)
   ]);
 
 
-  const { register, handleSubmit, setValue } = useForm({
+  const { register, handleSubmit, errors, setValue } = useForm({
     defaultValues: data,
   });
+  console.log("errors",errors)
+
   const {data:data1,refetch,error} = useQuery(GET_CATEGORIES,{
     variables: { filter_category_id: null, filter_by_name: null }
   })
@@ -153,23 +165,17 @@ data1 && data1.getproducts.map(item=>products.push(item))
 const filterVariation =[]
 data.productVariations.map(item=>
   {filterVariation.push(item.variations)})
-// console.log("filterVariation",filterVariation,'   strinignf ',JSON.stringify(filterVariation))
 
-
+console.log(data.categories[1])
   const [variation, setVariations] = useState( data && filterVariation);
-  // console.log("dataaaaaaaaaaaaaaaaaaa",variation)
-
-  const [type, setType] = useState([ data.categories[0] ]);
+  const [type, setType] = useState(data.categories[0]!==undefined?[data.categories[0]]:[]);
   const [brand, setBrands] = useState(data && data.brand);
-  const [tag, setTag] = useState([data.categories[1]]);
+  const [tag, setTag] = useState(data.categories[1]!==undefined?[data.categories[1]]:[]);
   const [description, setDescription] = useState(data.description);
-  
   const [files, setFiles] = React.useState(data && data.productImages);
   const [Related, setRelatedProducts] = useState(data && data.relatedProducts);
-
   const [newfiles, newFiles] = React.useState({});
   
-// console.log("newfiles",newfiles)
 
 
 //  let  productVariation = data && data.productVariations?data.productVariations:""
@@ -309,12 +315,12 @@ console.log("variation",i)
  
    }
   // console.log("dataaaaid",productid)
-  const categories = data1 && data1.getCategory.filter(item => item.parent_id == null)
+  const categories = data1 && data1.getCategoryWithoutFilter.filter(item => item.parent_id == null)
   const Subcategories = []
  data1 && data1.getCategory.map( item => item.subcategories.map( item => Subcategories.push(item) ))
  const getSubCategory = (Subcategories)=>{
   const sub = type.length>0?data && Subcategories.filter(item=>item.parent_id==type[0].id):""
-  console.log("dataaaaaa",sub)
+  // console.log("dataaaaaa",sub)
   return sub
 }
 
@@ -348,7 +354,8 @@ console.log("variation",i)
 
 
   const createdUI = () =>{
-    return variation.map((item,i)=>
+    return variation.length>0?(
+     variation.map((item,i)=>
     ( <>
      <Row>
             <Col md={3}>
@@ -380,9 +387,11 @@ console.log("variation",i)
                     name="variation_sell_price" className="form-control brand-flied"/>
             </Col>
             <Col xl={3} lg={6} md={6}>
-                {
-   i == (variation.length - 1)?  (<Button type="button"   startEnhancer={() => <Plus />} title="add variation"  onClick={()=>AddVariation()} className="nm-bt mt-40">add</Button>)
-   :(<Button type="button" title="add variation"  startEnhancer={() => <Trash />} onClick={()=>removeVariation(i)} className="nm-bt mt-40 red-bg">Remove</Button>)
+            {
+   i == (variation.length - 1)?  (<><Button type="button"   startEnhancer={() => <Plus />} title="add variation"  onClick={()=>AddVariation()} className="nm-bt mt-40"></Button>
+   <Button type="button" title="add variation"  startEnhancer={() => <Trash />} onClick={()=>removeVariation(i)} className="nm-bt mt-40 red-bg"></Button></>
+   )
+   :(<Button type="button" title="add variation"  startEnhancer={() => <Trash />} onClick={()=>removeVariation(i)} className="nm-bt mt-40 red-bg"></Button>)
 
                 }
      
@@ -398,6 +407,9 @@ console.log("variation",i)
     )
         
       )
+    ):(<><Button type="button"   startEnhancer={() => <Plus />} title="add variation"  onClick={()=>AddVariation()} className="nm-bt mt-40">Add Varitation</Button></>
+    )
+    
   } 
 
   const handleVariationChange = (e,index)=>{
@@ -479,7 +491,7 @@ const relatedProducts = []
         qty: data.qty?data.qty:0,
         variation: variation.length > 0 ? JSON.stringify(variation) : "",
         category_id: type[0].id,
-        sub_category_id: tag[0].id,
+        sub_category_id:tag.length>0?tag[0].id:null,
         product_id:productid,
         related_products:relatedProducts.length > 0 ? JSON.stringify(relatedProducts) : ""
       }
@@ -534,8 +546,6 @@ const relatedProducts = []
   
     }
   };
-// console.log("sativariationsprice",variation_price)
-// console.log("sati",variation_price)
 
   return (
     <>
@@ -633,46 +643,21 @@ const relatedProducts = []
                     required="true"
                   />
                 </FormFields>
-                {/* <FormFields>
-                  <FormLabel>Unit</FormLabel>
-                  <Input type="text" inputRef={register} name="unit" />
-                </FormFields> */}
-
-                {/* <FormFields>
-                  <FormLabel>Price</FormLabel>
-                  <Input
-                    type="number"
-                    inputRef={register({ required: true })}
-                    name="price"
-                    step="any"
-                    min="0"
-                  />
-                </FormFields> */}
-
-                {/* <FormFields>
-                  <FormLabel>Sale Price</FormLabel>
-                  <Input type="number" inputRef={register} name="selling_price" step="any"
-                    min="0" />
-                </FormFields> */}
+               
 
                { createdUI()}
      
               
-                {/* <FormFields>
-                  <FormLabel>Product Quantity</FormLabel>
-                  <Input type="number" inputRef={register} min="0" name="qty" />
-                </FormFields> */}
-
-                <FormFields>
+             
+                      <FormFields>
                   <FormLabel>Type</FormLabel>
                   <Select
-                  required={true}
-                    options={data1 && categories}
+                    options={data && categories}
                     labelKey="name"
                     valueKey="id"
-                    placeholder="Product Type"
                     value={type}
-                    searchable={false}
+                    required
+                    // searchable={false}
                     onChange={handleTypeChange}
                     overrides={{
                       Placeholder: {
@@ -728,7 +713,7 @@ const relatedProducts = []
                     options={data1 && getSubCategory(Subcategories)}
                     labelKey="name"
                     valueKey="id"
-                    placeholder="Product Tag"
+                    placeholder="Product SubCategory"
                     value={tag}
                     onChange={handleMultiChange}
                     overrides={{

@@ -25,35 +25,37 @@ import { useQuery } from '@apollo/react-hooks';
 const GET_ORDER_DETAIL = gql`
 query getOrderById($order_id:Int) {
     getOrderById(order_id:$order_id){
-        id
-        customer_id
-        shipping_address_1
-        total
-        created_at
-        payment_method
-        customer_phone
-        status
-        products{
-            id
-             slug
-   price
-   selling_price
-   unit
-   qty
-   actual_size
-   nominal_size
-   name
-   description
-   productVariations{
-   variations{
-       id
-       variation_name
-       variation_quantity
+      id
+      customer_id
+      shipping_address_1
+      total
+      created_at
+      payment_method
+      customer_phone
+      status
+      
+      orderVariation{
+ variations{
+     id
+     variation_name
+     variation_quantity
 variation_price
-   }
-   }
-  
-        }
+variation_sell_price
+ }
+ product{
+          id
+           slug
+ price
+ selling_price
+ unit
+ qty
+ actual_size
+ nominal_size
+ name
+ description
+
+      }
+ }
          
     
 }
@@ -156,7 +158,7 @@ const { data, error, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {
             />
           </BlockTitle>
 
-          <ListItem>
+          {/* <ListItem>
             <ListTitle>
               <Text bold>
                 <FormattedMessage
@@ -166,9 +168,9 @@ const { data, error, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {
               </Text>
             </ListTitle>
             <ListDes>
-              <Text>{data&&data.getOrderById[0].products.length}</Text>
+              <Text></Text>
             </ListDes>
-          </ListItem>
+          </ListItem> */}
      
 
           <ListItem>

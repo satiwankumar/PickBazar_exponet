@@ -36,28 +36,36 @@ const GET_ORDERS = gql`
 query getOrderByCustomer{
   getOrderByCustomer{
     id
-    customer_id
-    shipping_address_1
-    total
-    created_at
-    payment_method
-    customer_phone
-    status
-    products{
-      id
-      slug
-   
-qty
-actual_size
-nominal_size
-name
-description
-productImages{
-  id
-  product_id
-  image
-}
-    }
+        customer_id
+        shipping_address_1
+        total
+        created_at
+        payment_method
+        customer_phone
+        status
+        
+        orderVariation{
+   variations{
+       id
+       variation_name
+       variation_quantity
+variation_price
+  variation_sell_price
+   }
+   product{
+            id
+             slug
+   price
+   selling_price
+   unit
+   qty
+   actual_size
+   nominal_size
+   name
+   description
+  
+        }
+   }
     }
 }
 
@@ -92,32 +100,33 @@ const orderTableColumns = [
     key: 'items',
     width: 250,
     ellipsis: true,
-    render: (text, record) => {
-    console.log("record",record)
+    render: (text, record,key) => {
+    console.log("record",key)
       return (
         <ItemWrapper>
-          <ImageWrapper>
+          {/* <ImageWrapper>
             <img src={record.productImages.length>0&& record.productImages[0].image!==undefined?getURl(record.productImages[0].image):""} alt={record.name} />
-          </ImageWrapper>
+          </ImageWrapper> */}
 
           <ItemDetails>
-            <ItemName>{record.name}</ItemName>
-            {/* <ItemSize>{record.qty}</ItemSize>
-            <ItemPrice>${record.price}</ItemPrice> */}
+            <ItemName>{`${record.variations.variation_name} of ${record.variations.variation_quantity}`}</ItemName>
+            {/* {/* <ItemSize>{record.qty}</ItemSize> */}
+            {/* <ItemPrice>${record.variations.variation_sell_price?record.variations.variation_sell_price:record.variations.variation_price}</ItemPrice>  */}
           </ItemDetails>
         </ItemWrapper>
       );
     },
   },
-  {
-    title: (
-      <FormattedMessage id='intlTableColTitle2' defaultMessage='Quantity' />
-    ),
-    dataIndex: 'qty',
-    key: 'qty',
-    align: 'center',
-    width: 100,
-  },
+  // {
+  //   title: (
+  //     <FormattedMessage id='intlTableColTitle2' defaultMessage='Quantity' />
+  //   ),
+  //   dataIndex: 'variation_quantity',
+  //   key: 'variations.variation_quantity',
+  //   align: 'center',
+  //   width: 100,
+  // },
+  
   {
     title: <FormattedMessage id='intlTableColTitle3' defaultMessage='Price' />,
     dataIndex: 'price',
@@ -125,7 +134,7 @@ const orderTableColumns = [
     align: 'right',
     width: 100,
     render: (text, record) => {
-      return <p>${record.price}</p>;
+      return <p>${record.variations.variation_sell_price?record.variations.variation_sell_price:record.variations.variation_price}</p>;
     },
   },
 ];
@@ -257,7 +266,7 @@ const  getTime = (time)=>{
                 discount={order.discount?order.discount:0}
                 deliveryFee={order.deliveryFee?order.deliveryFee:0}
                 grandTotal={parseFloat(parseFloat(order.total).toFixed(2))}
-                tableData={order.products}
+                tableData={order.orderVariation}
                 columns={orderTableColumns}
               />
             )}

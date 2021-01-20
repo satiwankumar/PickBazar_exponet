@@ -192,7 +192,7 @@ toast.configure()
 export default function Category() {
   const [category, setCategory] = useState([]);
   const [search, setSearch] = useState('');
-  const [isParent, setIsParent] = useState(true);
+  const [isParent, setIsParent] = useState(false);
   const dispatch = useDrawerDispatch();
   const [checkedId, setCheckedId] = useState([]);
   const [checked, setChecked] = useState(false);
@@ -380,8 +380,11 @@ if(checkedId.length>0){
   function onAllCheck(event) {
   
     if (event.target.checked) {
-      const idx = data && Subcategories.map(category =>category.id );
-
+      let idx = []
+      isParent==false?
+       idx= data && Subcategories.map(category =>category.id ):
+       idx= data && categories.map(category =>category.id) 
+      
       // console.log("sati",idx)
       setCheckedId(idx);
       // console.log("sati",checkedId)
@@ -454,7 +457,7 @@ function toggleParent(){
               <Row>
                 <Col md={3} lg={3}>
                   <Select
-                    clearable={false}
+                    // clearable={false}
                     options={data&& categories}
                     labelKey='name'
                     valueKey='id'
@@ -464,6 +467,7 @@ function toggleParent(){
                     onChange={handleCategory}
                   />
                 </Col>
+            
 
                 <Col md={5} lg={6}>
                   <Input

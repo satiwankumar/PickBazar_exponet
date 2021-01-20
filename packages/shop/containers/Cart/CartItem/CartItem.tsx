@@ -50,7 +50,7 @@ console.log("dataaaaaaaaaaaaaaaaa",data)
       /> */}
       <Image src={productImages.length>0?getURl(productImages[0].image):""} />
       <Information>
-        <Name>{variationname}</Name>
+        <Name>{title}</Name>
         <Price>
           {CURRENCY}
           {displayPrice}
