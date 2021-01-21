@@ -36,7 +36,7 @@ const NavLink: React.SFC<NavLinkProps> = ({
   const isCurrentPath = router.pathname === href || router.asPath === href;
   return (
     <div onClick={onClick} className={className ? className : ''}>
-      <Link href={''}>
+      <Link href={href}>
         <a
           className={isCurrentPath ? ' current-page' : ''}
           style={{ display: 'flex', alignItems: 'center' }}
@@ -45,9 +45,15 @@ const NavLink: React.SFC<NavLinkProps> = ({
 
 
           <span className="label">
-            
-             { label}
-          
+            {intlId ? (
+              <FormattedMessage
+                id={intlId ? intlId : 'defaultNavLinkId'}
+                defaultMessage={label}
+              />
+            ) : (
+              label
+            )}
+
           </span>
         </a>
       </Link>

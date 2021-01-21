@@ -112,7 +112,7 @@ const CategoryMenu = ({ onClick,handleClick, data }) => {
               label={item.name}
               icon={<Handbag />}
               iconClass='menu-item-icon'
-              // intlId={String(item.id)}
+              intlId={String(item.id)}
             />
           ))) : "no record found"}
     </>
