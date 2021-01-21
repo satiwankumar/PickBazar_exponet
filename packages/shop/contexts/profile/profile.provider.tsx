@@ -48,8 +48,10 @@ function reducer(state: any, action: Action): any {
         ),
       };
     case 'ADD_OR_UPDATE_ADDRESS':
-    console.log("called",action.payload.id,state) 
-    if (action.payload.id) {
+    console.log("called",action.payload,state) 
+
+
+    if (action.payload.id&& state!=undefined) {
       const s = {...state}
 
 
@@ -58,13 +60,13 @@ function reducer(state: any, action: Action): any {
 
         return {
           ...s
-        //   ...state,
-        //   userAddress: state.userAddress.map((item: any) =>
-        //   // console.log(item),
-        //     item.id == action.payload.id
-        //       ? { ...item, ...action.payload }
-        //       : item
-        //   ),
+          // ...state,
+          // userAddress: state.userAddress.map((item: any) =>
+          // // console.log(item),
+          //   item.id == action.payload.id
+          //     ? { ...item, ...action.payload }
+          //     : item
+          // ),
         };
       }
       const newAdress = {

@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { Modal } from '@redq/reuse-modal';
 import { withApollo } from 'helper/apollo';
 import { SEO } from 'components/seo';
-import Checkout from 'containers/CheckoutWithSidebar/CheckoutWithSidebar';
+import Checkout from 'containers/CheckoutWithSidebar/CheckoutWithSidebar - Copy';
 import { GET_LOGGED_IN_CUSTOMER } from 'graphql/query/customer.query';
 import { AuthContext } from 'contexts/auth/auth.context';
 import AuthenticationForm from '../containers/SignInOutForm/Form';
@@ -71,6 +71,8 @@ const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
   } = React.useContext<any>(AuthContext);
   let data = ""
   console.log("isAuthenticated", isAuthenticated)
+let datass ={}
+
   if (isAuthenticated) {
 
     const { data, error, loading } = useQuery(GET_LOGGED_IN_CUSTOMER);
@@ -78,46 +80,37 @@ const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
       return <div>loading...</div>;
     }
     if (error) return <div>{error} </div>;
-  }
-//   else {
-//     let pathame = Router.pathname
-  
-    
-//     Router.push({
-//       pathname: '/signin',
-//       query: { from: pathame },
-// })
+  datass=data&& data.profile
 
-//   }
+  }
+
 
 
   const token = 'true';
   return (
     <>
       {/* {isAuthenticated ? */}
-        <>
+        {/* <>
           <SEO title='Checkout - Exponet' description='Checkout Details' />
-          <ProfileProvider initData={data}>
+          <ProfileProvider initData={datass}>
             <Modal>
               <Elements stripe={stripePromise}>
               <Checkout token={token} deviceType={deviceType} />
               </Elements>
-              {/* {testing()} */}
+
             </Modal>
-          </ProfileProvider> </> :
+          </ProfileProvider> </> : */}
         <>
           <SEO title='Checkout - Exponet' description='Checkout Details' />
-          <ProfileProvider initData={data}>
+          <ProfileProvider initData={datass}>
             <Modal>
-              {/* <Checkout token={token} deviceType={deviceType} /> */}
-              
-              {/* {testing() */}
-              
-              
-              
+              <Elements stripe={stripePromise}>
+              <Checkout token={token} deviceType={deviceType} />
+              </Elements>
+         
             </Modal>
-          </ProfileProvider> </>
-      {/* } */}
+          </ProfileProvider> </> :
+ 
     </>
   );
 };

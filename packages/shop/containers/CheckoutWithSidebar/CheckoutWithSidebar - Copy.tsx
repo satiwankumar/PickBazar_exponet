@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Router from 'next/router';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+
 import Button from 'components/Button/Button';
 import RadioCard from 'components/RadioCard/RadioCard';
 import RadioGroup from 'components/RadioGroup/RadioGroup';
@@ -52,6 +54,7 @@ import CheckoutWrapper, {
 } from './CheckoutWithSidebar.style';
 
 import { Plus } from 'components/AllSvgIcon';
+import TextField from 'components/TextField/TextField';
 
 import Sticky from 'react-stickynode';
 import { HeaderContext } from 'contexts/header/header.context';
@@ -61,7 +64,8 @@ import { FormattedMessage } from 'react-intl';
 import { useCart } from 'contexts/cart/use-cart';
 import { APPLY_COUPON } from 'graphql/mutation/coupon';
 import { useLocale } from 'contexts/language/language.provider';
-
+import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
+import {CHECK_OUT} from 'graphql/mutation/checkout'
 // The type of props Checkout Form receives
 interface MyFormProps {
   token: string;
@@ -91,10 +95,48 @@ const OrderItem: React.FC<CartItemProps> = ({ product }) => {
 };
 
 const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
+
+  const { register, handleSubmit, errors } = useForm();
+  const stripe = useStripe();
+  const elements = useElements();
   const [hasCoupon, setHasCoupon] = useState(false);
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setError] = useState('');
   const { state, dispatch } = useContext(ProfileContext);
+
+  const [Token,setToken] = useState("")
+
+  const [Billing,setBilling] = useState({
+    first_name:"",
+    last_name:"",
+    email:"",
+    address1:"",
+    address2:"",
+    phone:"",
+    city:"",
+    zip:"",
+    country:"",
+    state:""
+             
+
+  });
+  
+  const [shipping,setShipping] = useState({
+    first_name:"",
+    last_name:"",
+    address1:"",
+    address2:"",
+    phone:"",
+    city:"",
+    zip:"",
+    country:"",
+    state:""
+             
+
+  });
+
+console.log("statesssssssssss",state)
+
   const { isRtl } = useLocale();
   const {
     items,
@@ -111,26 +153,137 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
   } = useCart();
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
-  const { address, contact, card, schedules } = state;
-
+  const { userAddress, contact, card, schedules } = state;
   const [deleteContactMutation] = useMutation(DELETE_CONTACT);
   const [deleteAddressMutation] = useMutation(DELETE_ADDRESS);
   const [deletePaymentCardMutation] = useMutation(DELETE_CARD);
   const [appliedCoupon] = useMutation(APPLY_COUPON);
 
+  const handleBilling = (e)=>{
+    setBilling({...Billing,[e.target.name]:e.target.value  })
+}
+
+
+  const [checkout] = useMutation(CHECK_OUT);
+
   const { headerState } = useContext<any>(HeaderContext);
 
   const totalHeight =
     headerState?.desktopHeight > 0 ? headerState.desktopHeight + 30 : 76 + 30;
+    let orderItems  = []
+  
+    items.forEach(item=> {
+    let variation = item.productVariations.find((variation)=>variation.variations.id == item.variationId);
+    // console.log('items reducer',variation);
+    if(variation){
+      // console.log('items reducer',variation.);product_id: 58,
+                
+      let data  =  { "product_id":"" ,"unit_price":"","qty":"","variation_id":""}
+    data.product_id  = item.id
+    data.unit_price = variation.variations.variation_price
+    data.qty  = variation.variations.variation_quantity
+    data.variation_id  = variation.variations.id
+    orderItems.push(data)
+  
+  }
+  
+       
+  }
+  
+  );
+  const handleCheckout = async (e) => {
+    // e.preventDefault();
+    if (!stripe || !elements) {
+      return;
+    }
+    const cardElement = elements.getElement(CardElement);
+    const result = await stripe.createToken(cardElement);
+    console.log("result",result)
+    let stripeToken = result.token.id;
+    setToken(stripeToken)
+    // console.log(result.token.id);
+    // console.log(stripeToken);
+   ;
 
-  const handleSubmit = async () => {
+// console.log("billing",Billing)
+// console.log("shipping",shipping)
     setLoading(true);
     if (isValid) {
+      const result =  await checkout({
+        variables:{
+          input:{
+            token: stripeToken?stripeToken:"",
+            customer_email:Billing.email,
+            customer_phone: "+1 (772) 895-7472",
+            is_billing: "false",
+            is_shipping: "false",
+            sub_total: calculateSubTotalPrice(),
+            shipping_cost: 0,
+            coupon_id: couponCode,
+            discount: 0,
+            total: calculatePrice(),
+            currency: "$",
+            currency_rate: "27.5",
+            billing:{
+              first_name: Billing.first_name,
+              last_name: Billing.last_name,
+              address_1: Billing.address1,
+              address_2: Billing.address2,
+              city: Billing.city,
+              zip: Billing.zip,
+              country: Billing.country,
+              state: Billing.state
+            },
+            ship_to_a_different_address: "0",
+            shipping:{
+              first_name: shipping.first_name,
+              last_name: shipping.last_name,
+              address_1: shipping.address1,
+              address_2: shipping.address2,
+              city: shipping.city,
+              zip: shipping.zip,
+              country: shipping.country,
+              state: shipping.state
+            },
+            delivery_time:{
+              date: null,
+              min_time: null,
+              max_time: null,
+          },
+          locale: "en",
+          payment_method: "stripe",
+          shipping_method: "free_shipping",
+          terms_and_conditions: "on",
+          service_charge: 0,
+          tax: 0,
+          items:orderItems
+          }
+        }
+      })
       clearCart();
-      Router.push('/order-received');
+      console.log("result",result)
+      
+      const updatedQuery =result.data.checkout?
+      { order_id :parseInt(result.data.checkout.order_id) }
+      : {order_id:null};
+      Router.push({
+        pathname:'/order-received' ,
+        query: updatedQuery,
+      });
+   
     }
     setLoading(false);
   };
+
+
+  // const handleSubmit = async () => {
+  //   setLoading(true);
+  //   if (isValid) {
+  //     clearCart();
+  //     Router.push('/order-received');
+  //   }
+  //   setLoading(false);
+  // };
 
   useEffect(() => {
     if (
@@ -217,13 +370,54 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
   const handleOnUpdate = (couponCode: any) => {
     setCouponCode(couponCode);
   };
+  const CheckoutForm = () => {
+    const stripe = useStripe();
+    return (
+        <CardElement options={{
+          style: {
+            base: {
+              fontSize: '16px',
+              color: '#424770',
+              '::placeholder': {
+                color: '#aab7c4',
+              },
+            },
+            invalid: {
+              color: '#9e2146',
+            },
+          },
+        }}  />
+    );
+  };
 
   return (
     <form>
       <CheckoutWrapper>
         <CheckoutContainer>
+          
           <CheckoutInformation>
             {/* DeliveryAddress */}
+
+
+
+            <InformationBox>
+              <DeliverySchedule>
+                <Heading>
+                  User Details
+                </Heading>
+                
+
+                <h4>FirstName</h4>
+                <TextField placeholder="Please enter First Name" type="text" name="first_name"   onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                {errors.first_name && <span>This field is required</span>}
+                <h4>LastName</h4>
+                <TextField placeholder="Please enter Last Name" type="text" name="last_name" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <h4>Email</h4>
+                <TextField placeholder="Please enter Email " type="email" name="email" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+
+              </DeliverySchedule>
+            </InformationBox>
+
             <InformationBox>
               <Heading>
                 <FormattedMessage
@@ -232,14 +426,14 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                 />
               </Heading>
               <ButtonGroup>
-                {/* <RadioGroup
-                  items={address}
+                <RadioGroup
+                  items={userAddress}
                   component={(item: any) => (
                     <RadioCard
                       id={item.id}
                       key={item.id}
-                      title={item.name}
-                      content={item.info}
+                      title={item.address_type}
+                      content={item.address}
                       name='address'
                       checked={item.type === 'primary'}
                       onChange={() =>
@@ -270,7 +464,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                       }
                     />
                   }
-                /> */}
+                />
               </ButtonGroup>
             </InformationBox>
 
@@ -283,7 +477,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                     defaultMessage='Select Your Delivery Schedule'
                   />
                 </Heading>
-                {/* <RadioGroup
+                <RadioGroup
                   items={schedules}
                   component={(item: any) => (
                     <RadioCard
@@ -302,12 +496,17 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                       }
                     />
                   )}
-                /> */}
+                />
               </DeliverySchedule>
             </InformationBox>
 
+
+           
+
+
+
             {/* Contact number */}
-            <InformationBox>
+            {/* <InformationBox>
               <Heading>
                 <FormattedMessage
                   id='contactNumberText'
@@ -352,9 +551,10 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                       }
                     />
                   }
-                /> */}
+                /> 
               </ButtonGroup>
             </InformationBox>
+             */}
             {/* PaymentOption */}
 
             <InformationBox
@@ -367,7 +567,11 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                   defaultMessage='Select Payment Option'
                 />
               </Heading>
-              <PaymentGroup
+              <div style={{ padding: 10 }} className="stripeDiv">
+                    <CheckoutForm />                  
+
+                </div>
+              {/* <PaymentGroup
                 name='payment'
                 deviceType={deviceType}
                 items={card}
@@ -387,7 +591,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
                     'add-address-modal stripe-modal'
                   );
                 }}
-              />
+              /> */}
 
               {/* Coupon start */}
               {coupon ? (
@@ -462,7 +666,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
               {/* CheckoutSubmit */}
               <CheckoutSubmit>
                 <Button
-                  onClick={handleSubmit}
+                  onClick={handleCheckout}
                   type='button'
                   disabled={!isValid}
                   title='Proceed to Checkout'

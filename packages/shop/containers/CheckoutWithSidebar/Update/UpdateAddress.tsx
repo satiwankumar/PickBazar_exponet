@@ -70,9 +70,15 @@ const UpdateAddress = (props: FormikProps<FormValues> & MyFormProps) => {
 
   const handleSubmit = async () => {
     if (isValid) {
-      const addressData = await updateAddress({variables: { id:values.id, address_type: values.name, address:values.info}});
-      console.log(addressData, 'address data');
+      console.log(values, 'address data');
+
+      const addressData = await updateAddress({
+        variables: { id:values.id,address_type:values.name,address:values.info },
+      });
+      console.log("adress",addressData)
+     
       dispatch({ type: 'ADD_OR_UPDATE_ADDRESS', payload: { id:values.id, address_type: values.name, address:values.info} });
+    
       closeModal();
     }
   };
