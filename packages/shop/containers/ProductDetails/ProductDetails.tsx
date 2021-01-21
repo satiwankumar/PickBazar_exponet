@@ -6,6 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import NoResultFound from 'components/NoResult/NoResult';
 import Breadcrumbs  from './BreadCumbs'
 import Select from 'react-select';
+// import SelectedItem from '../LayoutContainer/Header/Menu/LeftMenu/LeftMenu.style'
 import FormControl from '@material-ui/core/FormControl';
 import Router from 'next/router';
 import Fade from 'react-reveal/Fade';
@@ -189,7 +190,7 @@ const getVariation = (id)=>{
        return( <>
     
     {/* <h1 style={{ "margin": "5px 0px 2.5px 5px" }} >Variations </h1>  */}
-      
+      {/* <Select> */}
         <select id="data" onChange={(value)=>handleRadioChange(value)}  style={{
            "borderRadius":"4px",
            "padding":"10px",
@@ -205,7 +206,9 @@ const getVariation = (id)=>{
             )}
 
         </select>
+        {/* </Select> */}
       </>
+      
      )
     
     }
@@ -250,7 +253,7 @@ const getVariation = (id)=>{
           <ProductTitlePriceWrapper>
             <ProductTitle>{product.name}</ProductTitle><br/>
           
-           <ProductPriceWrapper>
+          
               {/* {product.discountInPercent ? (
                 <SalePrice>
                   {CURRENCY}
@@ -260,13 +263,29 @@ const getVariation = (id)=>{
                 ''
               )} */}
 
-              <ProductPrice>
+              {/* <ProductPrice>
                 {varprice!=""? CURRENCY:""}
                 {product.salePrice ? product.salePrice: `${varprice}`  }
-              </ProductPrice>
-            </ProductPriceWrapper> 
+              </ProductPrice> */}
+              
           </ProductTitlePriceWrapper>
-          <ProductWeight>{`Actual size : ${product.actual_size}`}</ProductWeight><br/>
+
+          
+                                  <ProductWeight>
+                                
+                                  <ProductPrice>
+                                  <p style={{color:"black",float:"left",paddingRight:"10px"}}> {varprice!=""? " "+ "PRICE":""} </p>
+                                        {varprice!=""? " "+ CURRENCY:""}
+                                        {product.salePrice ? product.salePrice: `  ${varprice}`  }
+                                      </ProductPrice>
+   
+              
+              </ProductWeight><br/>
+          <ProductWeight>{`Actual size : ${product.actual_size}`}
+          
+          
+          
+          </ProductWeight><br/>
           <ProductWeight>{`Nominal size : ${product.nominal_size}`}</ProductWeight><br/>
           {variation()}
           <ProductCartBtn>

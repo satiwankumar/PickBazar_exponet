@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { Modal } from '@redq/reuse-modal';
 import { withApollo } from 'helper/apollo';
 import { SEO } from 'components/seo';
-import Checkout from 'containers/CheckoutWithSidebar/CheckoutWithSidebar - Copy';
+import Checkout from 'containers/CheckoutWithSidebar/CheckoutWithSidebar';
 import { GET_LOGGED_IN_CUSTOMER } from 'graphql/query/customer.query';
 import { AuthContext } from 'contexts/auth/auth.context';
 import AuthenticationForm from '../containers/SignInOutForm/Form';

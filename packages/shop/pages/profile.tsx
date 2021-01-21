@@ -52,6 +52,9 @@ let datass ={}
     return <div>loading...</div>;
   }
   datass=data&& data.profile
+
+console.log("datass",datass)
+
   if (error) return <div>{error.message}</div>;
 
 }

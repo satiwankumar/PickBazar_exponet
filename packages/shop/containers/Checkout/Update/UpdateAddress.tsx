@@ -27,8 +27,8 @@ const FormEnhancer = withFormik<MyFormProps, FormValues>({
   mapPropsToValues: props => {
     return {
       id: props.item.id || null,
-      name: props.item.name || '',
-      info: props.item.info || '',
+      name: props.item.address_type || '',
+      info: props.item.address || '',
     };
   },
   validationSchema: Yup.object().shape({
@@ -63,15 +63,23 @@ const UpdateAddress = (props: FormikProps<FormValues> & MyFormProps) => {
   };
   const { state, dispatch } = useContext(ProfileContext);
 
-  const [addressMutation, { data }] = useMutation(UPDATE_ADDRESS);
+  const [updateAddress, { data }] = useMutation(UPDATE_ADDRESS);
 
   const handleSubmit = async () => {
     if (isValid) {
-      const addressData = await addressMutation({
-        variables: { addressInput: JSON.stringify(addressValue) },
+      console.log(values, 'address data');
+
+      const addressData = await updateAddress({
+        variables: { id:values.id,address_type:values.name,address:values.info },
       });
       console.log(addressData, 'address data');
-      dispatch({ type: 'ADD_OR_UPDATE_ADDRESS', payload: addressValue });
+
+
+
+
+      
+      dispatch({ type: 'ADD_OR_UPDATE_ADDRESS', payload: { id:values.id, address_type: values.name, address:values.info} });
+    
       closeModal();
     }
   };

@@ -21,7 +21,7 @@ import {
 } from './Settings.style';
 import RadioGroup from 'components/RadioGroup/RadioGroup';
 import PaymentGroup from 'components/PaymentGroup/PaymentGroup';
-import UpdateAddress from '../../Checkout/Update/UpdateAddress';
+import updateAddress from '../../Checkout/Update/UpdateAddress';
 import UpdateContact from '../../Checkout/Update/UpdateContact';
 import Button from 'components/Button/Button';
 import { UPDATE_PROFILE } from 'graphql/mutation/me';
@@ -47,8 +47,11 @@ const [formData, setFormData] = useState({
   first_name:state.first_name?state.first_name:"",
   last_name:state.last_name?state.last_name:"",
   email:state.email?state.email:""
+  
 })
 
+const {userAddress}  = state
+console.log("state",userAddress)
 
 //  const [first_name, setFirstname] = useState()
 //  const [last_name, setLastname] = useState(state.last_name)
@@ -84,7 +87,7 @@ const [formData, setFormData] = useState({
 
   const handleEditDelete = async (item: any, type: string, name: string) => {
     if (type === 'edit') {
-      const modalComponent = name === 'address' ? UpdateAddress : UpdateContact;
+      const modalComponent = name === 'address' ? updateAddress : UpdateContact;
       handleModal(modalComponent, item);
     } else {
       console.log(name, item, type, 'delete');
@@ -284,22 +287,22 @@ const [formData, setFormData] = useState({
           <Col xs={12} sm={12} md={12} lg={12} style={{ position: 'relative' }}>
             <SettingsFormContent>
               <HeadingSection>
-                {/* <Title>
+                <Title>
                   <FormattedMessage
                     id="deliveryAddresTitle"
                     defaultMessage="Delivery Address"
                   />
-                </Title> */}
+                </Title>
               </HeadingSection>
-              {/* <ButtonGroup>
+              <ButtonGroup>
                 <RadioGroup
-                  items={address}
+                  items={userAddress}
                   component={(item: any) => (
                     <RadioCard
                       id={item.id}
                       key={item.id}
-                      title={item.name}
-                      content={item.info}
+                      title={item.address_type}
+                      content={item.address}
                       name="address"
                       checked={item.type === 'primary'}
                       onChange={() =>
@@ -324,12 +327,12 @@ const [formData, setFormData] = useState({
                       type="button"
                       intlButtonId="addAddressBtn"
                       onClick={() =>
-                        handleModal(UpdateAddress, {}, 'add-address-modal')
+                        handleModal(updateAddress, {}, 'add-address-modal')
                       }
                     />
                   }
                 />
-              </ButtonGroup> */}
+              </ButtonGroup>
             </SettingsFormContent>
           </Col>
         </Row>

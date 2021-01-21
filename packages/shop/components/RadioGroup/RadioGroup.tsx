@@ -19,10 +19,12 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   containerClassName,
   secondaryComponent,
 }) => {
+console.log("items",items)
+
   return (
     <RadioGroupWrapper className={`radioGroup ${containerClassName}`.trim()}>
       {items.map(
-        (item: any, index: any) => component && component(item[0], index)
+        (item: any, index: any) => component && component(item, index)
       )}
 
       {secondaryComponent && secondaryComponent}

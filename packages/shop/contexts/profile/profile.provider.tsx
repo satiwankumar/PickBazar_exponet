@@ -48,29 +48,38 @@ function reducer(state: any, action: Action): any {
         ),
       };
     case 'ADD_OR_UPDATE_ADDRESS':
-      if (action.payload.id) {
+    console.log("called",action.payload.id,state) 
+    if (action.payload.id) {
+      const s = {...state}
+
+
+      const idx = s.userAddress.findIndex(item => item.id === action.payload.id );
+      s.userAddress[idx] = action.payload
+
         return {
-          ...state,
-          address: state.address.map((item: any) =>
-            item.id === action.payload.id
-              ? { ...item, ...action.payload }
-              : item
-          ),
+          ...s
+        //   ...state,
+        //   userAddress: state.userAddress.map((item: any) =>
+        //   // console.log(item),
+        //     item.id == action.payload.id
+        //       ? { ...item, ...action.payload }
+        //       : item
+        //   ),
         };
       }
       const newAdress = {
         ...action.payload,
         id: uuidV4(),
-        type: state.address.length === '0' ? 'primary' : 'secondary',
+        type: state.userAddress.length === '0' ? 'primary' : 'secondary',
       };
       return {
         ...state,
-        address: [...state.address, newAdress],
+        address: [...state.userAddress, newAdress],
       };
     case 'DELETE_ADDRESS':
       return {
         ...state,
-        address: state.address.filter(
+        address: state.userAddress.filter(
           (item: any) => item.id !== action.payload
         ),
       };
@@ -103,7 +112,7 @@ function reducer(state: any, action: Action): any {
     case 'SET_PRIMARY_ADDRESS':
       return {
         ...state,
-        address: state.address.map((item: any) =>
+        address: state.userAddress.map((item: any) =>
           item.id === action.payload
             ? { ...item, type: 'primary' }
             : { ...item, type: 'secondary' }

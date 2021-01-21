@@ -4,12 +4,17 @@ export const GET_LOGGED_IN_CUSTOMER = gql`
   query profile{
     profile{
       first_name
-        last_name
-        email
-        image
-        
-
+      last_name
+      email
+      image
+      phone_number
+      phone_number_secondary
+      userAddress{
+          id
+          address_type
+          address
       }
+  }
     }
 
   # query getUser($id: String = "1") {

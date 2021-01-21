@@ -40,6 +40,7 @@ const SidebarCategory: React.FC<{}> = () => {
       <SidebarWrapper>
         <SidebarTop>
           {sidebarTopMenu.map((item, index) => (
+
             <SidebarMenu href={item.link} key={index} intlId={item.intlId} />
           ))}
         </SidebarTop>
