@@ -97,7 +97,7 @@ import { object } from 'yup';
 //   },
 // ];
 
-const CategoryMenu = ({ onClick, data }) => {
+const CategoryMenu = ({ onClick,handleClick, data }) => {
   return (
     <>
 
@@ -106,13 +106,13 @@ const CategoryMenu = ({ onClick, data }) => {
           data.getCategory.map((item) => (
             <NavLink
               key={item.id}
-              onClick={() => onClick(item)}
+              onClick={()=>handleClick(item)}
               className='menu-item'
-              href={`/${item.slug.toLowerCase()}`}
+              href={``}
               label={item.name}
               icon={<Handbag />}
               iconClass='menu-item-icon'
-              intlId={String(item.id)}
+              // intlId={String(item.id)}
             />
           ))) : "no record found"}
     </>
@@ -158,11 +158,13 @@ export const LeftMenu: React.FC<Props> = ({ logo }) => {
 
   }
 
-const handleClick = (e) => {
-  setCat(e.target.value);
+const handleClick = (item) => {
+  // setCat(e.target.value);
+
+  setActiveMenu(item)
   router.push({
     pathname : '/home',
-    query : {type:e.target.value}
+    query : {type:item.id}
   })
 }
 
@@ -175,12 +177,12 @@ const handleClick = (e) => {
       />) : ""}
 
       <MainMenu>
-        {/* <Popover
+        <Popover
           className='right'
           handler={
             <SelectedItem>
               <span>
-                <Icon>{activeMenu?.icon}</Icon>
+                <Icon>{<Handbag/>}</Icon>
                 <span>
                   <FormattedMessage
                     id={activeMenu?.name ? activeMenu?.name : "filters"}
@@ -193,15 +195,17 @@ const handleClick = (e) => {
               </Arrow>
             </SelectedItem>
           }
-          content={<CategoryMenu data={data} onClick={setActiveMenu} />}
-        /> */}
+          content={<CategoryMenu data={data} onClick={setActiveMenu} handleClick={handleClick} />}
+        />
 
 
-       {data && <select className='right' value={cat} onChange={handleClick} name="cars" id="cars">
+       {/* {data && 
+        <SelectedItem><select className='right' value={cat} onChange={handleClick} name="cars" id="cars">
           {data && categories.map( (item , index) => (
             <option key={index} value={item.id}>{item.name}</option>
           ))}
-        </select>}
+        </select>
+        </SelectedItem>} */}
       </MainMenu>
       <ToastContainer autoClose={2000} />
 

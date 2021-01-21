@@ -21,6 +21,14 @@ const OrderPage: NextPage<Props> = ({ deviceType }) => {
   const { authState:{isAuthenticated},authDispatch } = useContext<any>(AuthContext);
   const router = useRouter()
 
+//   useEffect(() => {
+//     if(!isAuthenticated){ 
+//     router.push('/');
+//     }
+// }
+
+// , []);
+
   return (
     <>
       <SEO title='Order - Exponet' description='Order Details' />
