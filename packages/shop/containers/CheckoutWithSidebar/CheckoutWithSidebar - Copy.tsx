@@ -14,6 +14,8 @@ import StripePaymentForm from '../Payment/StripePaymentForm';
 import { DELETE_ADDRESS } from 'graphql/mutation/address';
 import { DELETE_CARD } from 'graphql/mutation/card';
 import { DELETE_CONTACT } from 'graphql/mutation/contact';
+import { AuthContext } from 'contexts/auth/auth.context';
+
 import { CURRENCY } from 'helper/constant';
 import { openModal } from '@redq/reuse-modal';
 import { Product } from 'interfaces';
@@ -25,6 +27,7 @@ import CheckoutWrapper, {
   InformationBox,
   DeliverySchedule,
   Heading,
+  Heading2,
   ButtonGroup,
   CheckoutSubmit,
   HaveCoupon,
@@ -67,6 +70,7 @@ import { useLocale } from 'contexts/language/language.provider';
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import {CHECK_OUT} from 'graphql/mutation/checkout'
 import { toast } from 'react-toastify';
+import address from 'data/address';
 // The type of props Checkout Form receives
 interface MyFormProps {
   token: string;
@@ -83,7 +87,7 @@ const OrderItem: React.FC<CartItemProps> = ({ product }) => {
     const { id, quantity, title, name, unit, price, salePrice,productVariations,variationId } = product;
     let filterVariation=  productVariations.length>0?productVariations.filter(item=>item.variations.id==variationId):null
     let filterVariation1 = filterVariation[0]
-    console.log("filter",filterVariation)
+    // console.log("filter",filterVariation)
     let displayPrice = filterVariation.length>0?filterVariation1.variations.variation_price:"";
     let variationname= filterVariation.length>0?filterVariation1.variations.variation_name:title 
     let variationquantity = filterVariation.length>0?filterVariation1.variations.variation_quantity:title 
@@ -105,13 +109,21 @@ const OrderItem: React.FC<CartItemProps> = ({ product }) => {
 
 const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
 
+  const {
+    authState: { isAuthenticated },
+    authDispatch,
+  } = React.useContext<any>(AuthContext);
+
   const { register, handleSubmit, errors } = useForm();
   const stripe = useStripe();
   const elements = useElements();
   const [hasCoupon, setHasCoupon] = useState(false);
+
+
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setError] = useState('');
   const { state, dispatch } = useContext(ProfileContext);
+  const { userAddress, contact, card, schedules } = state;
 
   const [Token,setToken] = useState("")
 
@@ -119,7 +131,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
     first_name:"",
     last_name:"",
     email:"",
-    address1:"",
+    address:"",
     address2:"",
     phone:"",
     city:"",
@@ -144,9 +156,32 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
 
   });
 
-console.log("statesssssssssss",state)
+  const getScheduleById = (id)=>{
+      let data =  state.schedules.filter(item=>item.id==id)
+      console.log("dataaaaaa",data)
+      return data[0].time_slot
+  }
 
-  const { isRtl } = useLocale();
+  useEffect(() => {
+
+    if (isAuthenticated) {
+    // {  toggleRestaurant();
+    //   clearCart();}
+    Billing.first_name = state.first_name?state.first_name:""
+    Billing.last_name = state.last_name?state.last_name:""
+    Billing.email =state.email ?state.email:""
+  }
+    
+
+
+ 
+}, [state,isAuthenticated]);
+// console.log("statesssssssssss",state)
+const [PrimaryId,setPrimary ] = useState(state.userAddress!=undefined && state.userAddress.length>0 ?state.userAddress[0].id:"");
+const [delivery,setDelivery ] = useState(state.schedules!=undefined && state.schedules ?state.schedules[0].id:"");
+const [address,setAddress ] = useState('');
+ 
+const { isRtl } = useLocale();
   const {
     items,
     removeCoupon,
@@ -162,16 +197,19 @@ console.log("statesssssssssss",state)
   } = useCart();
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
-  const { userAddress, contact, card, schedules } = state;
   const [deleteContactMutation] = useMutation(DELETE_CONTACT);
   const [deleteAddressMutation] = useMutation(DELETE_ADDRESS);
   const [deletePaymentCardMutation] = useMutation(DELETE_CARD);
   const [appliedCoupon] = useMutation(APPLY_COUPON);
 
   const handleBilling = (e)=>{
+    console.log(e.target.name,e.target.value)
     setBilling({...Billing,[e.target.name]:e.target.value  })
 }
 
+
+
+// console.log("statessss",state)
 
   const [checkout] = useMutation(CHECK_OUT);
 
@@ -201,13 +239,24 @@ console.log("statesssssssssss",state)
   
   );
   const handleCheckout = async (data , e) => {
+   
     e.preventDefault();
     if (!stripe || !elements) {
       return;
     }
+ try{
+
+ 
+    // console.log(getScheduleById(delivery))
+    // return
     const cardElement = elements.getElement(CardElement);
     const result = await stripe.createToken(cardElement);
-    console.log("result",result)
+    // console.log("result",result)
+
+    if(!isAuthenticated && address==""){
+      toast.error("Please Select Address");
+      return;
+    }
     if(result.error){
       toast.error(result.error.message);
       return;
@@ -220,6 +269,7 @@ console.log("statesssssssssss",state)
     // console.log(result.token.id);
     // console.log(stripeToken);
    ;
+
   
 
 // console.log("billing",Billing)
@@ -230,10 +280,10 @@ console.log("statesssssssssss",state)
         variables:{
           input:{
             token: stripeToken?stripeToken:"",
+            first_name: Billing.first_name,
+            last_name: Billing.last_name,
             customer_email:Billing.email,
             customer_phone: "+1 (772) 895-7472",
-            is_billing: "false",
-            is_shipping: "false",
             sub_total: calculateSubTotalPrice(),
             shipping_cost: 0,
             coupon_id: couponCode,
@@ -241,55 +291,82 @@ console.log("statesssssssssss",state)
             total: calculatePrice(),
             currency: "$",
             currency_rate: "27.5",
-            billing:{
-              first_name: Billing.first_name,
-              last_name: Billing.last_name,
-              address_1: Billing.address1,
-              address_2: Billing.address2,
-              city: Billing.city,
-              zip: Billing.zip,
-              country: Billing.country,
-              state: Billing.state
-            },
-            ship_to_a_different_address: "0",
-            shipping:{
-              first_name: shipping.first_name,
-              last_name: shipping.last_name,
-              address_1: shipping.address1,
-              address_2: shipping.address2,
-              city: shipping.city,
-              zip: shipping.zip,
-              country: shipping.country,
-              state: shipping.state
-            },
-            delivery_time:{
-              date: null,
-              min_time: null,
-              max_time: null,
-          },
-          locale: "en",
-          payment_method: "stripe",
-          shipping_method: "free_shipping",
-          terms_and_conditions: "on",
-          service_charge: 0,
-          tax: 0,
-          items:orderItems
+            address_id: state.id?PrimaryId:null,
+            user_id: state.id?state.id:null,
+            address:state.id?null:address,
+            delivery: getScheduleById(delivery)?getScheduleById(delivery):null,
+            locale: "en",
+            payment_method: "stripe",
+            shipping_method: "free_shipping",
+            terms_and_conditions: "on",
+            service_charge: 0,
+            tax: 0,
+            items:orderItems
           }
         }
       })
-      clearCart();
+
+
       console.log("result",result)
-      
-      const updatedQuery =result.data.checkout?
-      { order_id :parseInt(result.data.checkout.order_id) }
-      : {order_id:null};
-      Router.push({
-        pathname:'/order-received' ,
-        query: updatedQuery,
-      });
+
+      clearCart();
+      // console.log("result",result)
+         
+    if (result.data.checkout.status==200) {
+       
    
-    }
-    setLoading(false);
+              
+      toast.success(`🦄  Order Placed Successfully `, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+
+
+})
+const updatedQuery =result.data.checkout?
+{ order_id :parseInt(result.data.checkout.order_id) }
+: {order_id:null};
+Router.push({
+  pathname:'/order-received' ,
+  query: updatedQuery,
+});
+setLoading(false);
+
+}
+else{
+  toast.error(`🦄 SomeThing Went Wrong`, {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  })
+
+}
+    
+  }
+}
+  catch (error) {
+    console.log("error",error)
+    toast.error(`🦄 SomeThing Went Wrong`, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+
+
+  }
+
   };
 
 
@@ -305,23 +382,16 @@ console.log("statesssssssssss",state)
   useEffect(() => {
     if (
       calculatePrice() > 0 &&
-      cartItemsCount > 0
+      cartItemsCount > 0 &&
       // address.length &&
       // contact.length &&
       // card.length &&
-      // schedules.length
+      schedules.length
     ) {
       setIsValid(true);
     }
   }, [state]);
-  useEffect(() => {
-    return () => {
-      // if (isRestaurant) {
-      //   toggleRestaurant();
-      //   clearCart();
-      // }
-    };
-  }, []);
+
   // Add or edit modal
   const handleModal = (
     modalComponent: any,
@@ -342,7 +412,7 @@ console.log("statesssssssssss",state)
       componentProps: { item: modalProps },
     });
   };
-
+console.log("statesss",state)
   const handleEditDelete = async (item: any, type: string, name: string) => {
     if (type === 'edit') {
       const modalComponent = name === 'address' ? UpdateAddress : UpdateContact;
@@ -423,15 +493,22 @@ console.log("statesssssssssss",state)
                   User Details
                 </Heading>
                 
-
-                <h4>FirstName</h4>
-                <input placeholder="Please enter First Name" type="text" name="first_name"   onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <Heading2>
+                  First Name :
+                </Heading2>
+                <Input 
+                type="text" name="first_name"  value={Billing.first_name}  onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 {errors.first_name && <span className="text-danger">This field is required</span>}
-                <h4>LastName</h4>
-                <input placeholder="Please enter Last Name" type="text" name="last_name" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <Heading2>
+                  Last Name :
+                </Heading2>
+                <Input placeholder="Please enter Last Name" type="text" name="last_name" value={Billing.last_name} onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 {errors.last_name &&  <span className="text-danger">This field is required</span>}
-                <h4>Email</h4>
-                <input placeholder="Please enter Email " type="email" name="email" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <Heading2>
+                  Email :
+                </Heading2>
+
+                <Input placeholder="Please enter Email " type="email" name="email" value={Billing.email} onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 {errors.email &&  <span className="text-danger">This field is required</span>}
               </DeliverySchedule>
             </InformationBox>
@@ -452,14 +529,18 @@ console.log("statesssssssssss",state)
                       key={item.id}
                       title={item.address_type}
                       content={item.address}
+                      
                       name='address'
-                      checked={item.type === 'primary'}
+                      checked={item.id === PrimaryId}
                       onChange={() =>
+                        
+                      {setPrimary(item.id)
+                        setAddress(item.address)
                         dispatch({
                           type: 'SET_PRIMARY_ADDRESS',
                           payload: item.id.toString(),
-                        })
-                      }
+                        })}}
+                      
                       onEdit={() => handleEditDelete(item, 'edit', 'address')}
                       onDelete={() =>
                         handleEditDelete(item, 'delete', 'address')
@@ -504,13 +585,15 @@ console.log("statesssssssssss",state)
                       title={item.title}
                       content={item.time_slot}
                       name='schedule'
-                      checked={item.type === 'primary'}
+                      checked={item.id === delivery}
                       withActionButtons={false}
-                      onChange={() =>
+                      
+                      onChange={()=>
+                      {  setDelivery(item.id)
                         dispatch({
                           type: 'SET_PRIMARY_SCHEDULE',
                           payload: item.id.toString(),
-                        })
+                        })}
                       }
                     />
                   )}

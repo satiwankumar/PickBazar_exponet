@@ -69,6 +69,24 @@ export const Heading = styled.h3`
   }
 `;
 
+
+export const Heading2 = styled.h3`
+  font-family: 'Lato', sans-serif;
+  font-size: 17px;
+  font-weight: ${themeGet('fontWeights.3', '400')};
+  color: ${themeGet('colors.darkBold', '#0D1136')};
+  line-height: 1.4;
+  margin-bottom: 5px;
+  position: relative;
+  width: calc(100% - 100px);
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    font-size: 19px;
+  }
+`;
+
 export const InformationBox = styled.div`
   background-color: #ffffff;
   padding: 30px;

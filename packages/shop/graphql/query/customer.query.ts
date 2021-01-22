@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 export const GET_LOGGED_IN_CUSTOMER = gql`
   query profile{
     profile{
+      id
       first_name
       last_name
       email

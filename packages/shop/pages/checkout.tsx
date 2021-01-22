@@ -82,6 +82,8 @@ let datass ={}
     if (error) return <div>{error} </div>;
   datass=data&& data.profile
 
+  }else{
+    datass ={userAddress:[]}
   }
 
 

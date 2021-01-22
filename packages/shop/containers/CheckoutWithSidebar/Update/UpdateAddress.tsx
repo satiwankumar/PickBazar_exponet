@@ -8,6 +8,8 @@ import { useMutation } from '@apollo/react-hooks';
 import { UPDATE_ADDRESS } from 'graphql/mutation/address';
 import { FieldWrapper, Heading } from './Update.style';
 import { ProfileContext } from 'contexts/profile/profile.context';
+import { AuthContext } from 'contexts/auth/auth.context';
+
 
 // Shape of form values
 interface FormValues {
@@ -63,7 +65,8 @@ const UpdateAddress = (props: FormikProps<FormValues> & MyFormProps) => {
     address_type: values.name,
     address: values.info,
   }
-  
+  const {
+    authState: { isAuthenticated }} = React.useContext<any>(AuthContext);
   const { state, dispatch } = useContext(ProfileContext);
 
   const [updateAddress, { data }] = useMutation(UPDATE_ADDRESS);
@@ -71,16 +74,19 @@ const UpdateAddress = (props: FormikProps<FormValues> & MyFormProps) => {
   const handleSubmit = async () => {
     if (isValid) {
       console.log(values, 'address data');
-
+if(isAuthenticated){
       const addressData = await updateAddress({
         variables: { id:values.id,address_type:values.name,address:values.info },
       });
+      
       console.log("adress",addressData)
+    }
      
       dispatch({ type: 'ADD_OR_UPDATE_ADDRESS', payload: { id:values.id, address_type: values.name, address:values.info} });
     
       closeModal();
     }
+    
   };
   return (
     <Form>

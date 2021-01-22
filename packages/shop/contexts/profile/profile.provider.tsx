@@ -69,14 +69,22 @@ function reducer(state: any, action: Action): any {
           // ),
         };
       }
+      console.log("action.payload",action.payload)
+
       const newAdress = {
         ...action.payload,
         id: uuidV4(),
+        // address_type:action.payload.address_type
         type: state.userAddress.length === '0' ? 'primary' : 'secondary',
       };
+      console.log("action.payload",action.payload)
+      
+
+
       return {
         ...state,
-        address: [...state.userAddress, newAdress],
+
+        userAddress: [...state.userAddress, newAdress],
       };
     case 'DELETE_ADDRESS':
       return {
