@@ -55,6 +55,8 @@ type Props = {
   value;
   onChange;
   className;
+  name;
+ref;
 };
 const TextField: React.FC<Props & any> = ({
   type,
@@ -64,6 +66,7 @@ const TextField: React.FC<Props & any> = ({
   value,
   onChange,
   className,
+
   ...props
 }) => {
   return (
@@ -74,7 +77,7 @@ const TextField: React.FC<Props & any> = ({
         </label>
       )}
 
-      <Input id={id} type={type} value={value} onChange={onChange} {...props} />
+      <Input id={id} type={type} value={value}  onChange={onChange}  {...props} />
       {error && <InputFeedback>{error}</InputFeedback>}
     </FieldWrapper>
   );

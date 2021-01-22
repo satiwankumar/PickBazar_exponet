@@ -66,6 +66,7 @@ import { APPLY_COUPON } from 'graphql/mutation/coupon';
 import { useLocale } from 'contexts/language/language.provider';
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import {CHECK_OUT} from 'graphql/mutation/checkout'
+import { toast } from 'react-toastify';
 // The type of props Checkout Form receives
 interface MyFormProps {
   token: string;
@@ -73,26 +74,34 @@ interface MyFormProps {
 }
 
 type CartItemProps = {
-  product: Product;
+  product: any;
 };
 
 const OrderItem: React.FC<CartItemProps> = ({ product }) => {
-  const { id, quantity, title, name, unit, price, salePrice } = product;
-  const displayPrice = salePrice ? salePrice : price;
-  return (
-    <Items key={id}>
-      <Quantity>{quantity}</Quantity>
-      <Multiplier>x</Multiplier>
-      <ItemInfo>
-        {name ? name : title} {unit ? `| ${unit}` : ''}
-      </ItemInfo>
-      <Price>
-        {CURRENCY}
-        {(displayPrice * quantity).toFixed(2)}
-      </Price>
-    </Items>
-  );
-};
+  
+  // console.log("product",productVariations)
+    const { id, quantity, title, name, unit, price, salePrice,productVariations,variationId } = product;
+    let filterVariation=  productVariations.length>0?productVariations.filter(item=>item.variations.id==variationId):null
+    let filterVariation1 = filterVariation[0]
+    console.log("filter",filterVariation)
+    let displayPrice = filterVariation.length>0?filterVariation1.variations.variation_price:"";
+    let variationname= filterVariation.length>0?filterVariation1.variations.variation_name:title 
+    let variationquantity = filterVariation.length>0?filterVariation1.variations.variation_quantity:title 
+    return (
+      <Items key={id}>
+        {/* <Quantity>{quantity}</Quantity>
+        <Multiplier>For</Multiplier> */}
+        <ItemInfo>
+          {`${variationname} of ${variationquantity} `} 
+        </ItemInfo>
+      {/* <Multiplier>For</Multiplier> */}
+        <Price>
+          {CURRENCY}
+          {displayPrice}
+        </Price>
+      </Items>
+    );
+  };
 
 const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
 
@@ -191,19 +200,27 @@ console.log("statesssssssssss",state)
   }
   
   );
-  const handleCheckout = async (e) => {
-    // e.preventDefault();
+  const handleCheckout = async (data , e) => {
+    e.preventDefault();
     if (!stripe || !elements) {
       return;
     }
     const cardElement = elements.getElement(CardElement);
     const result = await stripe.createToken(cardElement);
     console.log("result",result)
+    if(result.error){
+      toast.error(result.error.message);
+      return;
+    }
+    
+
+
     let stripeToken = result.token.id;
     setToken(stripeToken)
     // console.log(result.token.id);
     // console.log(stripeToken);
    ;
+  
 
 // console.log("billing",Billing)
 // console.log("shipping",shipping)
@@ -399,7 +416,7 @@ console.log("statesssssssssss",state)
             {/* DeliveryAddress */}
 
 
-
+            <form onSubmit={handleSubmit(handleCheckout)}>
             <InformationBox>
               <DeliverySchedule>
                 <Heading>
@@ -408,13 +425,14 @@ console.log("statesssssssssss",state)
                 
 
                 <h4>FirstName</h4>
-                <TextField placeholder="Please enter First Name" type="text" name="first_name"   onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
-                {errors.first_name && <span>This field is required</span>}
+                <input placeholder="Please enter First Name" type="text" name="first_name"   onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                {errors.first_name && <span className="text-danger">This field is required</span>}
                 <h4>LastName</h4>
-                <TextField placeholder="Please enter Last Name" type="text" name="last_name" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <input placeholder="Please enter Last Name" type="text" name="last_name" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                {errors.last_name &&  <span className="text-danger">This field is required</span>}
                 <h4>Email</h4>
-                <TextField placeholder="Please enter Email " type="email" name="email" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
-
+                <input placeholder="Please enter Email " type="email" name="email" onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                {errors.email &&  <span className="text-danger">This field is required</span>}
               </DeliverySchedule>
             </InformationBox>
 
@@ -666,8 +684,7 @@ console.log("statesssssssssss",state)
               {/* CheckoutSubmit */}
               <CheckoutSubmit>
                 <Button
-                  onClick={handleCheckout}
-                  type='button'
+                  type='submit'
                   disabled={!isValid}
                   title='Proceed to Checkout'
                   intlButtonId='proceesCheckout'
@@ -676,6 +693,7 @@ console.log("statesssssssssss",state)
                 />
               </CheckoutSubmit>
             </InformationBox>
+            </form>
           </CheckoutInformation>
 
           <CartWrapper>

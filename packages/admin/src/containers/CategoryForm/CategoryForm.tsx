@@ -76,7 +76,7 @@ const AddCategory: React.FC<Props> = props => {
   const closeDrawer = useCallback(() => dispatch({ type: 'CLOSE_DRAWER' }), [
     dispatch,
   ]);
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit,errors, setValue } = useForm();
   const [category, setCategory] = useState([]);
   React.useEffect(() => {
     register({ name: 'parent' });
@@ -120,7 +120,7 @@ try{
     // };
  const resulting = await createCategory({
       variables: { 
-        parent_id:parent.length>0?parent[0].id:null,
+        parent_id:parent!=undefined&& parent.length>0?parent[0].id:null,
         name:name,
         slug:slug,
         content:content,
@@ -239,7 +239,7 @@ else{
                   },
                 }}
               >
-                <Uploader  onChange={handleUploader} required={false}/>
+                <Uploader  onChange={handleUploader} />
               </DrawerBox>
             </Col>
           </Row>
@@ -260,21 +260,27 @@ else{
                     inputRef={register({ required: true, maxLength: 20 })}
                     name="name"
                   />
-                </FormFields>
+                    {errors.name && <span style={{color: "red"}}>This field  is required</span>}
 
+                </FormFields>
+              
                 <FormFields>
                   <FormLabel>Slug</FormLabel>
                   <Input
                     inputRef={register({ required: true, maxLength: 20 })}
                     name="slug"
                   />
+                {errors.content && <span style={{color: "red"}}>This field  is required</span>}
+
                 </FormFields>
                 <FormFields>
                   <FormLabel>Content</FormLabel>
                   <Input
-                    inputRef={register({ required: true, maxLength: 20 })}
+                    inputRef={register({ required: true})}
                     name="content"
                   />
+                {errors.content && <span style={{color: "red"}}>This field  is required</span>}
+
                 </FormFields>
                 <ToastContainer autoClose={2000} />
 

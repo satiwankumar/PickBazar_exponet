@@ -495,8 +495,9 @@ data && data.getproducts.map(item=>
                     inputRef={register({ required: true })}
                     name="name"
                   />
-                </FormFields>
+                {errors.name && <span style={{color: "red"}}>This field  is required</span>}
 
+                </FormFields>
                 <FormFields>
                   <FormLabel >Brand Name </FormLabel>
                   <input type="text" list="data" name="brand" ref={register({ required: true })} className="form-control brand-flied"   onChange={(value) => SelectChange(value)}  />
@@ -523,6 +524,7 @@ data && data.getproducts.map(item=>
                     onChange={handleDescriptionChange}
                     required="true"
                   /> */}
+                  
                 </FormFields>
 
                 <CKEditor 
@@ -542,6 +544,8 @@ data && data.getproducts.map(item=>
                     name="actual_size"
                    
                   />
+                {errors.name && <span style={{color: "red"}}>This field  is required</span>}
+                  
                 </FormFields>
                 <FormFields>
                   <FormLabel>Nominal Size</FormLabel>
@@ -550,6 +554,8 @@ data && data.getproducts.map(item=>
                     name="nominal_size"
                     
                   />
+                {errors.name && <span style={{color: "red"}}>This field  is required</span>}
+
                 </FormFields>
                 {/* <FormFields>
                   <FormLabel>Unit</FormLabel>
@@ -697,6 +703,7 @@ data && data.getproducts.map(item=>
                   <Select
                     options={data &&products}
                     labelKey="brandWithName"
+
                     valueKey="id"
                     // placeholder="Product Tag"
                     value={Related}
