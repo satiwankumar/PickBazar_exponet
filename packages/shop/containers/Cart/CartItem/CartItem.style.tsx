@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import css from '@styled-system/css';
+import { fontWeight } from 'styled-system';
 export const ItemBox = styled.div(
   css({
     fontSize: 2,
@@ -23,7 +24,7 @@ export const Image = styled.img({
   width: 60,
   height: 60,
   objectFit: 'cover',
-  margin: '0 15px',
+  margin: '0',
 });
 export const Name = styled.span(
   css({
@@ -35,9 +36,7 @@ export const Name = styled.span(
 );
 export const Price = styled.span(
   css({
-    color: 'primary',
-    mt: '10px',
-    mb: '10px',
+    color: 'primary'
   })
 );
 export const Weight = styled.span(

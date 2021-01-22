@@ -146,24 +146,28 @@ button.view-pass-btn {
 }
 .breadcrumb li:nth-child(2) a {
   background: #009e7f;
+  color: white;
 }
 .breadcrumb li:nth-child(2) a:after {
   border-left-color: #009e7f;
 }
 .breadcrumb li:nth-child(3) a {
   background: #009e7f;
+  color: white;
 }
 .breadcrumb li:nth-child(3) a:after {
   border-left-color: #009e7f;
 }
 .breadcrumb li:nth-child(4) a {
   background: #009e7f;
+  color: white;
 }
 .breadcrumb li:nth-child(4) a:after {
   border-left-color: #009e7f;
 }
 .breadcrumb li:nth-child(5) a {
   background: #009e7f;
+  color: white;
 }
 .breadcrumb li:nth-child(5) a:after {
   border-left-color: #009e7f;
@@ -195,6 +199,10 @@ button.cat-del-btn .ae.hj {
   color: black;
   pointer-events: none;
   cursor: default;
+  font-weight: 600;
+}
+input.user-form {
+  color: black !important;
 }
 .breadcrumb li:last-child a::after {
   border: 0;
@@ -202,6 +210,7 @@ button.cat-del-btn .ae.hj {
 
 .breadcrumb li a:hover {
   background: #065041;
+  color: white !important;
 }
 .breadcrumb li a:hover:after {
   border-left-color: #065041 !important;
@@ -217,4 +226,12 @@ button.cat-del-btn .ae.hj {
 }
 .iAvmwD {
   padding: 140px 60px 0 !important;
+}
+select.filter-by {
+  color: black;
+  font-weight: 600;
+  border: 1px solid #f1f1f1 !important;
+}
+h1.filter-heading {
+  color: #009e7f;
 }

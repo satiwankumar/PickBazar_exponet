@@ -540,16 +540,40 @@ button.cat-del-btn .ae.fa {
               </Button>                
               </div>
               <div className="col-md-3 col-sm-6 col-12 ">
+
+              {/* <Button
+                    onClick={openDrawer}
+                    startEnhancer={() => <Plus />}
+                    overrides={{
+                      BaseButton: {
+                        style: () => ({
+                          width: '100%',
+                          borderTopLeftRadius: '3px',
+                          borderTopRightRadius: '3px',
+                          borderBottomLeftRadius: '3px',
+                          borderBottomRightRadius: '3px',
+                        }),
+                      },
+                    }}
+                  >
+                    Add Category
+                  </Button> */}
                   <Button
                     onClick={toggleParent}
                     // startEnhancer={() => <Trash />}
-                    className="cat-del-btn"
+                    // className="cat-del-btn"
 
                     overrides={{
                       BaseButton: {
                         style: () => ({
                           marginBottom: '10px',
+                          marginTop:'30px',
                           color:'white',
+                          width: '100%',
+                          borderTopLeftRadius: '3px',
+                          borderTopRightRadius: '3px',
+                          borderBottomLeftRadius: '3px',
+                          borderBottomRightRadius: '3px',
                            
                         }),
                       },

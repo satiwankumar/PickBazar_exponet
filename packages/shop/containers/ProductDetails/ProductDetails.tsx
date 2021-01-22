@@ -274,7 +274,7 @@ const getVariation = (id)=>{
                                   <ProductWeight>
                                 
                                   <ProductPrice>
-                                  <p style={{color:"black",float:"left",paddingRight:"10px"}}> {varprice!=""? " "+ "PRICE":""} </p>
+                                  <p  style={{color:"black",float:"left",paddingRight:"10px"}}> {varprice!=""? " "+ "PRICE":""} </p>
                                         {varprice!=""? " "+ CURRENCY:""}
                                         {product.salePrice ? product.salePrice: `  ${varprice}`  }
                                       </ProductPrice>
