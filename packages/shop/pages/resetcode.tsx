@@ -64,7 +64,7 @@ function ForgotCode() {
             })
             console.log("resetcode",code)
             router.push({
-                pathname:'/resetcode',
+                pathname:'/resetpassword',
                 query:{resetCode:code}
             })
           // authDispatch({ type: 'SIGNIN_SUCCESS' });
