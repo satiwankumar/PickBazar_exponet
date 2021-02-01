@@ -92,6 +92,7 @@ query getProductBySlug($slug: String!){
              variation_name
              variation_quantity
             variation_price
+            variation_sell_price
          }
          }
       categories{

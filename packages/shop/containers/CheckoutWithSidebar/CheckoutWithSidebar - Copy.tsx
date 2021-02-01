@@ -186,7 +186,7 @@ const { isRtl } = useLocale();
     items,
     removeCoupon,
     coupon,
-    applyCoupon,
+    appliedCoupon,
     clearCart,
     cartItemsCount,
     calculatePrice,
@@ -200,7 +200,7 @@ const { isRtl } = useLocale();
   const [deleteContactMutation] = useMutation(DELETE_CONTACT);
   const [deleteAddressMutation] = useMutation(DELETE_ADDRESS);
   const [deletePaymentCardMutation] = useMutation(DELETE_CARD);
-  const [appliedCoupon] = useMutation(APPLY_COUPON);
+  const [applyCoupon] = useMutation(APPLY_COUPON);
 
   const handleBilling = (e)=>{
     console.log(e.target.name,e.target.value)
@@ -444,11 +444,11 @@ console.log("statesss",state)
   };
 
   const handleApplyCoupon = async () => {
-    const { data }: any = await appliedCoupon({
-      variables: { code: couponCode },
+    const { data }: any = await applyCoupon({
+      variables: { coupon: couponCode },
     });
-    if (data.applyCoupon && data.applyCoupon.discountInPercent) {
-      applyCoupon(data.applyCoupon);
+    if (data.applyCoupon && data.applyCoupon.is_percent) {
+      appliedCoupon(data.applyCoupon);
       setCouponCode('');
     } else {
       setError('Invalid Coupon');

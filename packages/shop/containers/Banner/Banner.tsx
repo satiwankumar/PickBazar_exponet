@@ -18,22 +18,40 @@ type BannerProps = {
   imageUrl: string;
   intlTitleId: string;
   intlDescriptionId: string;
-  data:any
+  data:any,
+  target:any,
 };
 
 const Banner: React.FC<BannerProps> = ({
   imageUrl,
   intlTitleId,
   data,
+  target,
   intlDescriptionId,
 }) => {
   const { state, dispatch } = useContext(SearchContext);
   const router = useRouter();
   // const { text } = state;
 
+  // const targetRef = React.useRef(null);
+  React.useEffect(() => {
+    
+
+  
+
+    if ((router.query.text || router.query.brand) && target.current) {
+      window.scrollTo({
+        top: target.current.offsetTop - 110,
+        behavior: 'smooth',
+      });
+    }
+  }, [router.query]);
+
   const { pathname } = router;
+  // const targetRef = React.useRef(null);
 
   const handleSearchInput = (text: string) => {
+   
     dispatch({
       type: 'UPDATE',
       payload: {
@@ -112,7 +130,7 @@ const Banner: React.FC<BannerProps> = ({
         <Waypoint
           onEnter={removeSticky}
           onLeave={setSticky}
-          // onPositionChange={onWaypointPositionChange}
+          onPositionChange={onWaypointPositionChange}
         />
       </BannerComponent>
     </BannerWrapper>

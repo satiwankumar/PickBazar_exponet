@@ -52,7 +52,7 @@ const Checkout: React.FC<MyFormProps> = ({ token, deviceType }) => {
   const {
     removeCoupon,
     coupon,
-    applyCoupon,
+    appliedCoupon,
     clearCart,
     cartItemsCount,
     calculatePrice,
@@ -71,7 +71,7 @@ const Checkout: React.FC<MyFormProps> = ({ token, deviceType }) => {
   const [deleteContactMutation] = useMutation(DELETE_CONTACT);
   const [deleteAddressMutation] = useMutation(DELETE_ADDRESS);
   const [deletePaymentCardMutation] = useMutation(DELETE_CARD);
-  const [appliedCoupon] = useMutation(APPLY_COUPON);
+  const [applyCoupon] = useMutation(APPLY_COUPON);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -154,11 +154,11 @@ const Checkout: React.FC<MyFormProps> = ({ token, deviceType }) => {
   };
 
   const handleApplyCoupon = async () => {
-    const { data }: any = await appliedCoupon({
-      variables: { code: couponCode },
+    const { data }: any = await applyCoupon({
+      variables: { coupon: couponCode },
     });
-    if (data.applyCoupon && data.applyCoupon.discountInPercent) {
-      applyCoupon(data.applyCoupon);
+    if (data.applyCoupon && data.applyCoupon.is_percent) {
+      appliedCoupon(data.applyCoupon);
       setCouponCode('');
     } else {
       setError('Invalid Coupon');

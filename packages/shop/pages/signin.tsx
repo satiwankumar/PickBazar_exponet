@@ -62,7 +62,7 @@ import PickBazar from '../../image/PickBazar.png';
       });
       console.log("dataaaa",result.data)
   
-      if (result.data) {
+      if (result.data.login.status==200) {
           
         // console.log(result)
           localStorage.setItem('access_token', `${result.data.login.token}`);
@@ -90,8 +90,8 @@ import PickBazar from '../../image/PickBazar.png';
         router.push('/')
     }
         //   closeModal();
-        }else{
-          toast.warn(`🦄  Invalid Credentials `, {
+        }else if (result.data.login.status==422){
+          toast.error(`🦄  Invalid Credentials `, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,

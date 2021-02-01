@@ -21,7 +21,7 @@ export const cartItemsTotalPrice = (items, coupon = null) => {
   console.log("items total",total)
   // return ;
   const discount = coupon
-    ? (total * Number(coupon.discountInPercent)) / 100
+    ? (total * Number(coupon.is_percent)) / 100
     : 0;
   return total - discount;
 };

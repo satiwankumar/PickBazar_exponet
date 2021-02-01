@@ -75,7 +75,9 @@ const Header: React.FC<Props> = ({ className }) => {
       query: updatedQuery,
     });
   };
+  // const showSearch = isCategoryPage(pathname);
   const showSearch = isCategoryPage(pathname);
+
   return (
     <HeaderWrapper className={className}>
       <LeftMenu logo={LogoImage} />

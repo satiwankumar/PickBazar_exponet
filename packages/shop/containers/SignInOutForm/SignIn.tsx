@@ -54,9 +54,9 @@ export default function SignInModal() {
   
         variables: {input:LoginInput}
       });
-      console.log("dataaaa",result.data)
-  
-      if (result.data) {
+      console.log("dataaaaaaaaaaaaaaa",result.data.login.status)
+  return
+      if (result.data.login.status===200) {
         // console.log(result)
           localStorage.setItem('access_token', `${result.data.login.token}`);
           // alert("toast")

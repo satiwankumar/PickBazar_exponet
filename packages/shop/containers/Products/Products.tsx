@@ -54,6 +54,7 @@ const GET_PRODUCTS = gql`
            variation_name
            variation_quantity
           variation_price
+          variation_sell_price
        }
        }
     categories{
@@ -86,6 +87,7 @@ const GET_PRODUCTS = gql`
       variation_name
       variation_quantity
      variation_price
+     variation_sell_price
   }
   }
   categories{
@@ -98,93 +100,6 @@ const GET_PRODUCTS = gql`
   
   }
 
-#  getProductByCategory( input : {category_id: $category_id }){
-#         products{
-#           id
-#    brand{
-#        name
-#    }
-#    slug
-#    price
-#    selling_price
-#    unit
-#    qty
-#    actual_size
-#    nominal_size
-#    name
-#    description
-#    image
-#    categories{
-#        id
-#        name
-#    }
-#     }
-# }
-# }
-
-# query  categoryProduct($category_id: Int!) {
-#   categoryProduct(category_id: $category_id){
-
-#     products{
-#     id
-#     brand_id
-#     slug
-#     tax_class_id
-#     sku
-#     price
-#     special_price
-#     special_price_type
-#     special_price_start
-#     special_price_end
-#     selling_price
-#     manage_stock
-#     qty
-#     in_stock
-#     }
-
-#   }
-  
-#   }
-  
-
-  
-
-#   query getProducts(
-#     $type: String
-#     $text: String
-#     $category: String
-#     $offset: Int
-#     $limit: Int
-#   ) {
-#     products(
-#       type: $type
-#       text: $text
-#       category: $category
-#       offset: $offset
-#       limit: $limit
-#     ) {
-#       items {
-#         id
-#         title
-#         slug
-#         unit
-#         price
-#         salePrice
-#         description
-#         discountInPercent
-#         type
-#         image
-#         gallery {
-#           url
-#         }
-#         categories {
-#           id
-#           title
-#           slug
-#         }
-#       }
-#       hasMore
-#     }
   
   
 `;

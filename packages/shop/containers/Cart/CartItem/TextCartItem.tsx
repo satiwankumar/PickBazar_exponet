@@ -26,6 +26,8 @@ export const TextCartItem: React.FC<Props> = ({
   onIncrement,
   onRemove,
 }) => {
+
+  console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",data)
   const { name, price, salePrice, unit, quantity } = data;
   const displayPrice = salePrice ? salePrice : price;
   // const totalPrice = quantity * displayPrice;

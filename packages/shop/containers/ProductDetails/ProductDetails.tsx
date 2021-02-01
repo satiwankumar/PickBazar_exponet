@@ -201,7 +201,7 @@ const getVariation = (id)=>{
           }}>
           {data && product.productVariations.map((item, key) =>
           key!==0?
-            <option key={item.variations.id} value={item.variations.id} >{`${item.variations.variation_name} of ${item.variations.variation_quantity} for ${item.variations.variation_price}`}</option>
+            <option key={item.variations.id} value={item.variations.id} >{`${item.variations.variation_name} of ${item.variations.variation_quantity} ${`  `} ${   CURRENCY}${item.variations.variation_price}`}</option>
           : <option key={item.variations.id} value={item.variations.id} >{`${item.variations.variation_name} `}</option>
             )}
 
@@ -281,12 +281,12 @@ const getVariation = (id)=>{
    
               
               </ProductWeight><br/>
-          <ProductWeight>{`Actual size : ${product.actual_size}`}
+          <ProductWeight>{`Actual size: ${product.actual_size}`}
           
           
           
           </ProductWeight><br/>
-          <ProductWeight>{`Nominal size : ${product.nominal_size}`}</ProductWeight><br/>
+          <ProductWeight>{`Nominal size: ${product.nominal_size}`}</ProductWeight><br/>
           {variation()}
           <ProductCartBtn>
                 <Button

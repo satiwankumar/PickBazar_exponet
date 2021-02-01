@@ -22,5 +22,5 @@ const arr = [
 ];
 export function isCategoryPage(pathname) {
   console.log("querypathname",pathname)
-  return arr.includes(pathname);
+  return true
 }

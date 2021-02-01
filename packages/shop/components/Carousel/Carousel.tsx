@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { themeGet } from '@styled-system/theme-get';
 import { ArrowNext, ArrowPrev } from '../AllSvgIcon';
 import { useLocale } from 'contexts/language/language.provider';
-
+import Link from 'next/link'
 const ButtonPrev = styled('button')`
   height: 40px;
   width: 40px;
@@ -155,6 +155,9 @@ export default function CustomCarousel({
   if (tablet) {
     deviceType = 'tablet';
   }
+
+console.log("DataCArousel",data)
+
   return (
     <div dir="ltr">
       <Carousel
@@ -179,10 +182,13 @@ export default function CustomCarousel({
           if (component) return component(item);
           return (
             <div style={{ padding: '0 15px', overflow: 'hidden' }} key={index}>
-              <a
-                href={item.link}
-                style={{ display: 'flex', cursor: 'pointer' }}
+             <a style={{ display: 'flex', cursor: 'pointer' }}>
+                <Link
+                href='/offer'
+                 
               >
+               
+
                 <img
                   key={item.id}
                   src={item.imgSrc}
@@ -194,7 +200,8 @@ export default function CustomCarousel({
                     position: 'relative',
                   }}
                 />
-              </a>
+              </Link>
+                  </a>
             </div>
           );
         })}

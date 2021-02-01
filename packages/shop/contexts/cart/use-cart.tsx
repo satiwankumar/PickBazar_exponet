@@ -122,7 +122,7 @@ export const CartProvider = ({ children }) => {
         toggleCart: toggleCartHandler,
         calculatePrice: getCartItemsTotalPrice,
         calculateSubTotalPrice: getCartItemsPrice,
-        applyCoupon: couponHandler,
+        appliedCoupon: couponHandler,
         removeCoupon: removeCouponHandler,
         calculateDiscount: getDiscount,
         toggleRestaurant,

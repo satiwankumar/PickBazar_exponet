@@ -1,8 +1,23 @@
 import gql from 'graphql-tag';
 
 export const APPLY_COUPON = gql`
-mutation applyCoupon($code: String!){
-  applyCoupon(coupon: $code)
+mutation applyCoupon($coupon: String!){
+  applyCoupon(coupon: $coupon){
+    data{
+          id
+          name
+          code
+          value
+          is_percent
+          free_shipping
+          start_date
+          end_date
+          is_active
+          used
+    }
+    message
+    status
+}
 }
 
 `;
