@@ -263,7 +263,7 @@ try{
                   overrides={{
                     BaseButton: {
                       style: ({ $theme }) => ({
-                        width: '50%',
+                        width: '100%',
                         marginLeft: 'auto',
                         borderTopLeftRadius: '3px',
                         borderTopRightRadius: '3px',

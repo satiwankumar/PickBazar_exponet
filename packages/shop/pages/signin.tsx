@@ -240,13 +240,14 @@ router.push('/')
 
       <OfferSection>
         <Offer>
+        <LinkButton onClick={()=>router.push('/forgot')}>
           <FormattedMessage
             id='forgotPasswordText'
             defaultMessage='Forgot your password?'
           />{' '}
-          <LinkButton onClick={()=>router.push('/forgot')}>
-            <FormattedMessage id='resetText' defaultMessage='Reset It' />
           </LinkButton>
+       
+            {/* <FormattedMessage id='resetText' defaultMessage='Reset It' /> */}
         </Offer>
       </OfferSection>
     </Wrapper>

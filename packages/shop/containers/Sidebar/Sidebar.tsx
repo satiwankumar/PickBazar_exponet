@@ -124,7 +124,7 @@ const [brands, setBrands] = React.useState([]);
     <CategoryWrapper>
   
 
-        <h1 style={{
+        <h1 className="filter-heading" style={{
            "margin": "25px 0px 10px 20px",
            "fontSize": "24px"
           }} >Filter By Brand </h1> 
@@ -138,7 +138,7 @@ const [brands, setBrands] = React.useState([]);
           }}
          className="form-control brand-flied"  onChange={(value) => handleBrandSelection(value)} />  */}
 
-        <select id="data" onChange={(value)=>handleBrandSelection(value)} style={{
+        <select id="data" onChange={(value)=>handleBrandSelection(value)} className="filter-by" style={{
            "borderRadius":"4px",
            "padding":"10px",
             "display": "block !important",

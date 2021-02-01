@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import Link from 'next/link';
 import {REGISTER} from '../graphql/mutation/Auth'
 import { withApollo } from 'helper/apollo';
+import { useForm } from 'react-hook-form';
 
 import {useMutation} from '@apollo/react-hooks'
 import {
@@ -28,6 +29,7 @@ import PickBazar from '../../image/PickBazar.png';
 
  function SignUp() {
     const router = useRouter()
+  const { register:validation, handleSubmit,errors, setValue } = useForm();
      
   const { authDispatch } = useContext<any>(AuthContext);
   const [email, setEmail] = React.useState('');
@@ -37,6 +39,10 @@ import PickBazar from '../../image/PickBazar.png';
 
   const [first_name, setfirstname] = React.useState('');
   const [last_name, setlastname] = React.useState('');
+  const [phone_number, setPhoneNumber] = React.useState('');
+  const [phone_number_secondary, setSecondaryPhone] = React.useState('');
+
+
   const toggleSignInForm = () => {
     authDispatch({
       type: 'SIGNIN',
@@ -52,11 +58,11 @@ import PickBazar from '../../image/PickBazar.png';
 
 
 const [register,{data}]  = useMutation(REGISTER)
-  const SigupCallback = async (e)=>{
+  const SigupCallback = async (data,e)=>{
     
     try {
       e.preventDefault()
-      console.log("dataaa",email,password,first_name,last_name,confirmpassword)
+      console.log("dataaa",email,password,first_name,last_name,confirmpassword,phone_number,phone_number_secondary)
 
       if(confirmpassword!==password){
 
@@ -75,7 +81,7 @@ const [register,{data}]  = useMutation(REGISTER)
 
   
       const result =  await register({
-        variables: {input:{ first_name:first_name,last_name:last_name,email: email, password: password,roles:"2"}}
+        variables: {input:{ first_name:first_name,last_name:last_name,email: email, password: password,roles:"2",phone_number:phone_number??0,phone_number_secondary:phone_number_secondary??0}}
       })
       console.log("dataaa",result)
         if(result.data){
@@ -84,7 +90,7 @@ const [register,{data}]  = useMutation(REGISTER)
          
           
          
-              toast.success(`🦄  ${result.data.register.message} `, {
+              toast.success(`🦄 You are Registered Successfylly Please Login to proceed`, {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -132,7 +138,7 @@ const [register,{data}]  = useMutation(REGISTER)
         {/* <LogoWrapper>
           <Image url={PickBazar} />
         </LogoWrapper> */}
-<form  onSubmit={(e) => SigupCallback(e)}>
+<form  onSubmit={handleSubmit(SigupCallback)}>
           <Heading>
           <FormattedMessage id='signUpBtnText' defaultMessage='Sign Up' />
         </Heading>
@@ -145,39 +151,38 @@ const [register,{data}]  = useMutation(REGISTER)
         </SubHeading>
 
         
-        <FormattedMessage
-          id='firstname'
-          defaultMessage='Last name'
-        >
-          {placeholder => <Input type='text' value={first_name} name="first_name" placeholder="First name" onChange={(e)=>setfirstname(e.target.value)} required/>}
-        </FormattedMessage><FormattedMessage
-          id='lastname'
-          defaultMessage='First name'
-        >
-          {placeholder => <Input type='text' value={last_name} name="last_name" placeholder="Last name" onChange={(e)=>setlastname(e.target.value)} required/>}
-        </FormattedMessage>
-        <FormattedMessage
-          id='emailAddressPlaceholder'
-          defaultMessage='Email Address'
-        >
-          {placeholder => <Input type='email' value={email} name="email" placeholder="Email" onChange={(e)=>setEmail(e.target.value)} required/>}
-        </FormattedMessage>
-        <div className="position-relative">
-        <FormattedMessage
-          id='passwordPlaceholder'
-          defaultMessage='Password (min 6 characters)'
-        >
-          {placeholder => <Input type='password' value={password} name="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} minlength="8" required/>}
-        </FormattedMessage>
+    
+       <Input type='text' value={first_name} name="first_name" placeholder="First name" onChange={(e)=>setfirstname(e.target.value)}  ref={validation({ required: true })} />
+       {errors.first_name && <span  style={{color: "red",margin:" 0px 326px 0px 0px"}}>This field  is required</span>}
+       
+    
+        
+        
+   
+      <Input type='text' value={last_name} name="last_name" placeholder="Last name"  onChange={(e)=>setlastname(e.target.value)} ref={validation({ required: true })} />
+      {errors.last_name && <span  style={{color: "red",margin:" 0px 326px 0px 0px"}}>This field  is required</span>}
+      
+    
+        <Input type='email' value={email} name="email" placeholder="Email" onChange={(e)=>setEmail(e.target.value)} ref={validation({ required: true })} />
+       {errors.email && <span  style={{color: "red",margin:" 0px 326px 0px 0px"}}>This field  is required</span>}
+        
+   
+     <Input type='password' value={password} name="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} ref={validation({ required: true })} minlength="8" />
+          {errors.password && <span  style={{color: "red",margin:" 0px 326px 0px 0px"}}>This field  is required</span>}
+
         <button className="view-pass-btn" ><i className="fa fa-eye"></i></button>
-        </div>
+   
         <div className="position-relative">
-        <FormattedMessage
-          id='passwordPlaceholder'
-          defaultMessage='Password (min 6 characters)'
-        >
-          {placeholder => <Input type='password' value={confirmpassword} name="confirmpassword" placeholder="Confirm Password" onChange={(e)=>setConfirmPassword(e.target.value)} minlength="8" required/>}
-        </FormattedMessage>
+      <Input type='password' value={confirmpassword} name="confirmpassword" placeholder="Confirm Password" onChange={(e)=>setConfirmPassword(e.target.value)} ref={validation({ required: true })} minlength="8" />
+      {errors.password && <span  style={{color: "red",margin:" 0px 326px 0px 0px"}}>This field  is required</span>}
+   
+
+    
+          <Input type='text' value={phone_number} name="phone_number" placeholder="Phone no" onChange={(e)=>setPhoneNumber(e.target.value)}  />
+   
+    
+         <Input type='text' value={phone_number_secondary} name="phone_number_secondary" placeholder="Secondary Phone no" onChange={(e)=>setSecondaryPhone(e.target.value)}  />
+   
         <button className="view-pass-btn" ><i className="fa fa-eye"></i></button>
         </div>
 

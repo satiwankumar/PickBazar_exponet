@@ -496,19 +496,19 @@ console.log("statesss",state)
                 <Heading2>
                   First Name :
                 </Heading2>
-                <Input 
-                type="text" name="first_name"  value={Billing.first_name}  onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <input 
+                type="text" name="first_name" className="user-form form-control" placeholder="Please enter First Name"  value={Billing.first_name}  onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 {errors.first_name && <span className="text-danger">This field is required</span>}
                 <Heading2>
                   Last Name :
                 </Heading2>
-                <Input placeholder="Please enter Last Name" type="text" name="last_name" value={Billing.last_name} onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <input placeholder="Please enter Last Name" className="user-form form-control" type="text" name="last_name" value={Billing.last_name} onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 {errors.last_name &&  <span className="text-danger">This field is required</span>}
                 <Heading2>
                   Email :
                 </Heading2>
 
-                <Input placeholder="Please enter Email " type="email" name="email" value={Billing.email} onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <input placeholder="Please enter Email " className="user-form form-control" type="email" name="email" value={Billing.email} onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 {errors.email &&  <span className="text-danger">This field is required</span>}
               </DeliverySchedule>
             </InformationBox>

@@ -154,3 +154,9 @@ button.add-pro-btn {
 .mr-10 {
   margin-right: 10px !important;
 }
+
+button.add-vari div,
+button.del-vari span,
+button.del-vari div {
+  margin: 0 0 0 0;
+}

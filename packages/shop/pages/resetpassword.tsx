@@ -81,7 +81,7 @@ let code = router.query.resetCode
 
       const result = await resetPassword({
   
-        variables: {code:"2GSF" , password:newpassword}
+        variables: {code:router.query.resetCode, password:newpassword}
       })
    
     //   console.log("dataaaa",result.data)

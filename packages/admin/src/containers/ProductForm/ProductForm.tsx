@@ -388,36 +388,33 @@ data && data.getproducts.map(item=>
                     onChange={((e)=>handleVariationChange(e,i))}
                     name="variation_sell_price" className="form-control brand-flied"/>
             </Col>
-                <Col md={12}>
-                {
-   i == (variation.length - 1)?  (
-   
-   <>
-  <Row>
-  <Col xl={3} lg={6} md={6}>
-   <Button type="button"   startEnhancer={() => <Plus />} title="add variation"  onClick={()=>AddVariation()} className="nm-bt mt-40"></Button>
-   </Col>
-   <Col xl={3} lg={6} md={6}>
-   <Button type="button" title="add variation"  startEnhancer={() => <Trash />} onClick={()=>removeVariation(i)} className="nm-bt mt-40 red-bg"></Button>
-   </Col>
-   
-   </Row>
-   </>
-   )
-   :(
-   <Row>
-  <Col xl={3} lg={6} md={6}>
+            <Col md={12}>
+            {
+              i == (variation.length - 1) ? (
 
-   <Button type="button" title="add variation"  startEnhancer={() => <Trash />} onClick={()=>removeVariation(i)} className="nm-bt mt-40 red-bg"></Button>
-  </Col>
+                <>
+                  <Row>
+                    <Col xl={3} lg={6} md={6}>
+                      <Button type="button" startEnhancer={() => <Plus />} title="add variation" onClick={() => AddVariation()} className="add-vari nm-bt mt-40"></Button>
+                    </Col>
+                    <Col xl={3} lg={6} md={6}>
+                      <Button type="button" title="add variation" startEnhancer={() => <Trash />} onClick={() => removeVariation(i)} className="del-vari nm-bt mt-40 red-bg"></Button>
+                    </Col>
 
-   </Row>
-   )
+                  </Row>
+                </>
+              )
+                : (
+                  <Row>
+                    <Col xl={3} lg={6} md={6}>
 
-                }
-     
+                      <Button type="button" title="add variation" startEnhancer={() => <Trash />} onClick={() => removeVariation(i)} className="del-vari nm-bt mt-40 red-bg"></Button>
+                    </Col>
 
-            </Col>
+                  </Row>
+                ) 
+            } 
+          </Col>
            
   </Row>
 

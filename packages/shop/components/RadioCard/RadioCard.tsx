@@ -62,6 +62,7 @@ const CardWrapper = styled.label`
   }
 `;
 const CardTitle = styled.span`
+  word-break:break-all;
   font-family: 'Lato', sans-serif;
   font-size: ${themeGet('fontSizes.1', '13')}px;
   font-weight: ${themeGet('fontWeights.6', '700')};
@@ -71,6 +72,7 @@ const CardTitle = styled.span`
   text-transform: capitalize;
 `;
 const CardContent = styled.span`
+word-break:break-all;
   font-family: 'Lato', sans-serif;
   font-size: ${themeGet('fontSizes.2', '15')}px;
   font-weight: ${themeGet('fontWeights.3', '400')};

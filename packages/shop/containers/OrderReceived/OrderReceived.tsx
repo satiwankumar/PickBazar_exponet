@@ -92,7 +92,7 @@ const { data, error, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {
       <OrderRecivedContainer>
         <Link href="/">
           <a className="home-btn">
-            <FormattedMessage id="backHomeBtn" defaultMessage="Back to Home" />
+            <i className="fa fa-angle-left"></i><FormattedMessage id="backHomeBtn" defaultMessage="Back to Home" />
           </a>
         </Link>
 
