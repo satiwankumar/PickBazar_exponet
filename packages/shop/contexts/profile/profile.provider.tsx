@@ -48,7 +48,7 @@ function reducer(state: any, action: Action): any {
         ),
       };
     case 'ADD_OR_UPDATE_ADDRESS':
-    console.log("called",action.payload,state) 
+    // console.log("called",action.payload,state) 
 
 
     if (action.payload.id&& state!=undefined) {
@@ -69,7 +69,7 @@ function reducer(state: any, action: Action): any {
           // ),
         };
       }
-      console.log("action.payload",action.payload)
+      // console.log("action.payload",action.payload)
 
       const newAdress = {
         ...action.payload,
@@ -77,7 +77,7 @@ function reducer(state: any, action: Action): any {
         // address_type:action.payload.address_type
         type: state.userAddress.length === '0' ? 'primary' : 'secondary',
       };
-      console.log("action.payload",action.payload)
+      // console.log("action.payload",action.payload)
       
 
 

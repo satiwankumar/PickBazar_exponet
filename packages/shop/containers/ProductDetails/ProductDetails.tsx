@@ -138,6 +138,7 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   const [vari, setVari] = useState('');
   const [qty, setQty] = useState('');
   const [varprice, setVariPrice] = useState('');
+  const [variSale,setVariSale] = useState(0)
   
   console.log("vari",vari)
   console.log("qty",qty)
@@ -145,6 +146,7 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   const { isRtl } = useLocale();
   const { addItem, removeItem, isInCart, getItem, items } = useCart();
   const data = product;
+  console.log("dataaaaaDetail",data)
   // ata && product.productVariations.filter((item, key) =>{return item.variations.id==id})
   const handleAddClick = (e) => {
     e.stopPropagation();
@@ -177,6 +179,8 @@ const getVariation = (id)=>{
     let selected = getVariation(e.target.value)
     setVari(selected.variations.id);
     setVariPrice(selected.variations.variation_price)
+    setVariSale(selected.variations.variation_sell_price?selected.variations.variation_sell_price:"")
+    
   //  console.log("selected",selected.variations.id)
     // console.log("qty",selected.variations.variation_quantity)
     setQty(selected.variations.variation_quantity);
@@ -201,7 +205,7 @@ const getVariation = (id)=>{
           }}>
           {data && product.productVariations.map((item, key) =>
           key!==0?
-            <option key={item.variations.id} value={item.variations.id} >{`${item.variations.variation_name} of ${item.variations.variation_quantity} ${`  `} ${   CURRENCY}${item.variations.variation_price}`}</option>
+            <option key={item.variations.id} value={item.variations.id} >{`${item.variations.variation_name} of ${item.variations.variation_quantity} ${"                     "} ${   CURRENCY}${item.variations.variation_sell_price>0?item.variations.variation_sell_price:item.variations.variation_price}`}</option>
           : <option key={item.variations.id} value={item.variations.id} >{`${item.variations.variation_name} `}</option>
             )}
 
@@ -251,17 +255,17 @@ const getVariation = (id)=>{
 
         <ProductInfo dir={isRtl ? 'rtl' : 'ltr'}>
           <ProductTitlePriceWrapper>
-            <ProductTitle>{product.name}</ProductTitle><br/>
+            <ProductTitle>{ product.brand.name +" "+product.name}</ProductTitle><br/>
           
           
-              {/* {product.discountInPercent ? (
+              {variSale>0? (
                 <SalePrice>
                   {CURRENCY}
                   {varprice?varprice:0}
                 </SalePrice>
               ) : (
                 ''
-              )} */}
+              )}
 
               {/* <ProductPrice>
                 {varprice!=""? CURRENCY:""}
@@ -276,8 +280,8 @@ const getVariation = (id)=>{
                                   <ProductPrice>
                                   <p  style={{color:"black",float:"left",paddingRight:"10px"}}> {varprice!=""? " "+ "PRICE":""} </p>
                                         {varprice!=""? " "+ CURRENCY:""}
-                                        {product.salePrice ? product.salePrice: `  ${varprice}`  }
-                                      </ProductPrice>
+                                        {variSale >0? variSale: `  ${varprice}`  }
+                                  </ProductPrice>
    
               
               </ProductWeight><br/>

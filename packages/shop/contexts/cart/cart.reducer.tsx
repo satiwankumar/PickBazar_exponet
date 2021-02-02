@@ -7,7 +7,7 @@ export const cartItemsTotalPrice = (items, coupon = null) => {
     // console.log('items reducer',variation);
     if(variation){
       // console.log('items reducer',variation.);
-      return price = parseFloat(price) + parseFloat(variation.variations.variation_price);
+      return price = parseFloat(price) + parseFloat(variation.variations.variation_sell_price?variation.variations.variation_sell_price:variation.variations.variation_price);
       // console.log('items reducer',variation);
     }else if (product.salePrice) {
       return price = parseFloat(price) + parseFloat(product.salePrice) ;
@@ -17,13 +17,16 @@ export const cartItemsTotalPrice = (items, coupon = null) => {
 
 
 
-
-  console.log("items total",total)
+// console.log("carreducer",coupon && coupon.is_percent)
   // return ;
   const discount = coupon
     ? (total * Number(coupon.is_percent)) / 100
     : 0;
-  return total - discount;
+  // console.log("items total",total)
+  // console.log("items discount",discount)
+
+
+  return total -discount ;
 };
 // cartItems, cartItemToAdd
 const addItemToCart = (state, action) => {
@@ -61,7 +64,7 @@ const removeItemFromCart = (state, action) => {
 };
 
 const clearItemFromCart = (state, action) => {
-  console.log("state: ",action.payload);
+  // console.log("state: ",action.payload);
   return state.items.filter((item , index) => index !== action.payload);
 
 };

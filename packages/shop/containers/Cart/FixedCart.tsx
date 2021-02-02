@@ -28,7 +28,7 @@ import CouponBox from 'components/CouponBox/CouponBox';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useCart } from 'contexts/cart/use-cart';
 import { TextCartItem } from './CartItem/TextCartItem';
-
+import { APPLY_COUPON } from 'graphql/mutation/coupon';
 type CartPropsType = {
   style?: any;
   className?: string;
@@ -42,15 +42,15 @@ type CartPropsType = {
   };
 };
 
-const APPLY_COUPON = gql`
-  mutation applyCoupon($code: String!) {
-    applyCoupon(code: $code) {
-      id
-      code
-      discountInPercent
-    }
-  }
-`;
+// const APPLY_COUPON = gql`
+//   mutation applyCoupon($code: String!) {
+//     applyCoupon(code: $code) {
+//       id
+//       code
+//       discountInPercent
+//     }
+//   }
+// `;
 
 const FixedCart: React.FC<CartPropsType> = ({
   style,
@@ -67,21 +67,24 @@ const FixedCart: React.FC<CartPropsType> = ({
     removeItemFromCart,
     cartItemsCount,
     calculatePrice,
-    applyCoupon,
+    appliedCoupon,
   } = useCart();
   const [couponText, setCoupon] = useState('');
   const [displayCoupon, showCoupon] = useState(false);
   const [error, setError] = useState('');
-  const [appliedCoupon] = useMutation(APPLY_COUPON);
+  const [applyCoupon] = useMutation(APPLY_COUPON);
   const { isRtl } = useLocale();
 
   const handleApplyCoupon = async () => {
-    const { data }: any = await appliedCoupon({
-      variables: { code: couponText },
+    const { data }: any = await applyCoupon({
+      variables: { coupon: couponText },
     });
-    if (data.applyCoupon && data.applyCoupon.discountInPercent) {
+console.log("couponfixedcartdata",data)
+
+    if (data.applyCoupon && data.applyCoupon.data.is_percent) {
+      console.log("data.applucoupopn",data.applyCoupon)
       setError('');
-      applyCoupon(data.applyCoupon);
+      appliedCoupon(data.applyCoupon);
       setCoupon('');
     } else {
       setError('Invalid Coupon');
@@ -157,7 +160,7 @@ const FixedCart: React.FC<CartPropsType> = ({
 
       <CheckoutButtonWrapper>
         <PromoCode>
-          {!coupon?.discountInPercent ? (
+          {!coupon?.is_percent ? (
             <>
               {!displayCoupon ? (
                 <button onClick={toggleCoupon}>

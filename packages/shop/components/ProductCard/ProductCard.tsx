@@ -64,6 +64,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   ...props
 }) => {
   const { addItem, removeItem, getItem, isInCart, items } = useCart();
+
   const handleAddClick = (e) => {
     e.stopPropagation();
     addItem(data);
@@ -75,7 +76,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     e.stopPropagation();
     removeItem(data);
   };
-  // console.log("imageaaaaaaaaaaaaaaaaaaaa",image)
+  console.log("variations",variations[0].variations.variation_name)
   return (
     <ProductCardWrapper onClick={onClick} className="product-card">
       <ProductImageWrapper>
@@ -85,9 +86,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           style={{ position: 'relative' }}
           alt="noimage"
         />
-        {discountInPercent ? (
+        {variations[0].variations.variation_sell_price>0  ? (
           <>
-            <DiscountPercent>{discountInPercent}%</DiscountPercent>
+            <DiscountPercent>{"onSale"}</DiscountPercent>
           </>
         ) : (
           ''
@@ -100,22 +101,24 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {/* {Object.keys(variations).length>0?} */}
 
         <div className="product-meta">
-          <div className="productPriceWrapper">
-            {discountInPercent ? (
-              <span className="discountedPrice">
-                {currency}
-                {price}
-              </span>
-            ) : (
-              ''
-            )}
+          {
+          // <div className="productPriceWrapper">
+          //   {variations[0].variations.variation_sell_price>0 ? (
+          //     <span className="discountedPrice">
+          //       {"onSale"}
+          //       {variations[0].variation_sell_price>0?variations[0].variation_price:""}
+          //     </span>
+          //   ) : (
+          //     ''
+          //   )}
 
-          {/* {  <span className="product-price">
+          /* {  <span className="product-price">
               {currency}
               {salePrice ? salePrice : price}
-            </span>} */}
-          </div>
-
+            </span>} 
+          </div> 
+          */
+}
           {/* {!isInCart(data.id) ? (
             <Button
               title="Cart"

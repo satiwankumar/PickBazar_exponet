@@ -21,10 +21,4 @@ mutation applyCoupon($coupon: String!){
 }
 
 `;
-  // mutation applyCoupon($code: String!) {
-  //   applyCoupon(code: $code) {
-  //     id
-  //     code
-  //     discountInPercent
-  //   }
-  // }
+ 

@@ -88,7 +88,7 @@ const OrderItem: React.FC<CartItemProps> = ({ product }) => {
     let filterVariation=  productVariations.length>0?productVariations.filter(item=>item.variations.id==variationId):null
     let filterVariation1 = filterVariation[0]
     // console.log("filter",filterVariation)
-    let displayPrice = filterVariation.length>0?filterVariation1.variations.variation_price:"";
+    let displayPrice = filterVariation.length>0?filterVariation1.variations.variation_sell_price>0?filterVariation1.variations.variation_sell_price:filterVariation1.variations.variation_price:price
     let variationname= filterVariation.length>0?filterVariation1.variations.variation_name:title 
     let variationquantity = filterVariation.length>0?filterVariation1.variations.variation_quantity:title 
     return (
@@ -286,7 +286,7 @@ const { isRtl } = useLocale();
             customer_phone: "+1 (772) 895-7472",
             sub_total: calculateSubTotalPrice(),
             shipping_cost: 0,
-            coupon_id: couponCode,
+            coupon_id: coupon?coupon.id:null,
             discount: 0,
             total: calculatePrice(),
             currency: "$",
@@ -443,19 +443,23 @@ console.log("statesss",state)
     }
   };
 
-  const handleApplyCoupon = async () => {
+  const handleApplyCoupon = async (e) => {
+    e.preventDefault()
     const { data }: any = await applyCoupon({
       variables: { coupon: couponCode },
     });
-    if (data.applyCoupon && data.applyCoupon.is_percent) {
-      appliedCoupon(data.applyCoupon);
+
+    console.log("dataaaaaaaaaCoppoonfsdf",data.applyCoupon.data)
+
+    if (data.applyCoupon && data.applyCoupon.data) {
+      appliedCoupon(data.applyCoupon.data);
       setCouponCode('');
     } else {
-      setError('Invalid Coupon');
+      setError('Invalid  Coupon Code');
     }
   };
-  const handleOnUpdate = (couponCode: any) => {
-    setCouponCode(couponCode);
+  const handleOnUpdate = (e: any) => {
+    setCouponCode(e.target.value);
   };
   const CheckoutForm = () => {
     const stripe = useStripe();
@@ -668,10 +672,7 @@ console.log("statesss",state)
                   defaultMessage='Select Payment Option'
                 />
               </Heading>
-              <div style={{ padding: 10 }} className="stripeDiv">
-                    <CheckoutForm />                  
-
-                </div>
+            
               {/* <PaymentGroup
                 name='payment'
                 deviceType={deviceType}
@@ -692,8 +693,11 @@ console.log("statesss",state)
                     'add-address-modal stripe-modal'
                   );
                 }}
-              /> */}
+              />  */}
+            <div style={{ padding: 10 }} className="stripeDiv">
+                    <CheckoutForm  />                  
 
+                </div>
               {/* Coupon start */}
               {coupon ? (
                 <CouponBoxWrapper>
@@ -725,12 +729,12 @@ console.log("statesss",state)
                     <>
                       <CouponInputBox>
                         <Input
-                          onUpdate={handleOnUpdate}
+                          onChange={(e)=>handleOnUpdate(e)}
                           value={couponCode}
                           intlPlaceholderId='couponPlaceholder'
                         />
                         <Button
-                          onClick={handleApplyCoupon}
+                          onClick={(e)=>handleApplyCoupon(e)}
                           title='Apply'
                           intlButtonId='voucherApply'
                         />

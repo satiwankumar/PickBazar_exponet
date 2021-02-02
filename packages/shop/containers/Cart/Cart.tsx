@@ -28,6 +28,7 @@ import CouponBox from 'components/CouponBox/CouponBox';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useCart } from 'contexts/cart/use-cart';
 import { CartItem } from './CartItem/CartItem';
+import { APPLY_COUPON } from 'graphql/mutation/coupon';
 
 type CartPropsType = {
   style?: any;
@@ -36,15 +37,15 @@ type CartPropsType = {
   onCloseBtnClick?: (e: any) => void;
 };
 
-const APPLY_COUPON = gql`
-  mutation applyCoupon($code: String!) {
-    applyCoupon(code: $code) {
-      id
-      code
-      discountInPercent
-    }
-  }
-`;
+// const APPLY_COUPON = gql`
+//   mutation applyCoupon($code: String!) {
+//     applyCoupon(code: $code) {
+//       id
+//       code
+//       discountInPercent
+//     }
+//   }
+// `;
 
 const Cart: React.FC<CartPropsType> = ({
   style,
@@ -60,21 +61,26 @@ const Cart: React.FC<CartPropsType> = ({
     removeItemFromCart,
     cartItemsCount,
     calculatePrice,
-    applyCoupon,
+    appliedCoupon,
   } = useCart();
+
+  console.log("couponnCart",coupon)
+
   const [couponText, setCoupon] = useState('');
   const [displayCoupon, showCoupon] = useState(false);
   const [error, setError] = useState('');
-  const [appliedCoupon] = useMutation(APPLY_COUPON);
+  const [applyCoupon] = useMutation(APPLY_COUPON);
+
   const { isRtl } = useLocale();
   // console.log('calculatePrice',calculatePrice())
   const handleApplyCoupon = async () => {
-    const { data }: any = await appliedCoupon({
-      variables: { code: couponText },
+    const { data }: any = await applyCoupon({
+      variables: { coupon: couponText },
     });
-    if (data.applyCoupon && data.applyCoupon.discountInPercent) {
+console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",data.applyCoupon.data.is_percent)
+    if (data.applyCoupon && data.applyCoupon.data.is_percent) {
       setError('');
-      applyCoupon(data.applyCoupon);
+      appliedCoupon(data.applyCoupon.data);
       setCoupon('');
     } else {
       setError('Invalid Coupon');
@@ -149,7 +155,7 @@ const Cart: React.FC<CartPropsType> = ({
 
       <CheckoutButtonWrapper>
         <PromoCode>
-          {!coupon?.discountInPercent ? (
+          {!coupon?.is_percent ? (
             <>
               {!displayCoupon ? (
                 <button onClick={toggleCoupon}>
@@ -181,7 +187,7 @@ const Cart: React.FC<CartPropsType> = ({
                 id='couponApplied'
                 defaultMessage='Coupon Applied'
               />
-              <span>{coupon.code}</span>
+              {/* <span>{coupon.code}</span> */}
             </CouponCode>
           )}
         </PromoCode>

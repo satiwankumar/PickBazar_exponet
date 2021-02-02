@@ -34,7 +34,7 @@ console.log("dataaaaaaaaaaaaaaaaaINCART",data)
   let filterVariation=  productVariations.length>0?productVariations.filter(item=>item.variations.id==variationId):null
   let filterVariation1 = filterVariation[0]
   // console.log("dataaaaaaaaaaaaaaaa",filterVariation.length>0?filterVariation1.variations.variation_price:false)
-  let displayPrice = filterVariation.length>0?filterVariation1.variations.variation_price:salePrice ? salePrice : price;
+  let displayPrice = filterVariation.length>0?filterVariation1.variations.variation_sell_price >0?filterVariation1.variations.variation_sell_price : filterVariation1.variations.variation_price :price
   let variationname= filterVariation.length>0?filterVariation1.variations.variation_name:title 
   let variation_quantity = filterVariation.length>0?filterVariation1.variations.variation_quantity:quantity 
 // console.log("display price",displayPrice)

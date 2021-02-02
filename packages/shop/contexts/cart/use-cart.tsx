@@ -12,7 +12,7 @@ const INITIAL_STATE = {
 const useCartActions = (initialCart = INITIAL_STATE) => {
   const [state, dispatch] = useReducer(reducer, initialCart);
 
-  const addItemHandler = (item, quantity = 2,variationid) => {
+  const addItemHandler = (item, quantity = 0,variationid) => {
     dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity,"variationId":variationid } });
   };
 
@@ -55,8 +55,9 @@ const useCartActions = (initialCart = INITIAL_STATE) => {
   const getDiscount = () => {
     const total = cartItemsTotalPrice(state.items);
     const discount = state.coupon
-      ? (total * Number(state.coupon?.discountInPercent)) / 100
+      ? (total * Number(state.coupon?.is_percent)) / 100
       : 0;
+      // console.log("disocount",discount)
     return discount.toFixed(2);
   };
   const getItemsCount = state.items?.reduce(

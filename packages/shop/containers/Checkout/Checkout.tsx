@@ -88,7 +88,7 @@ const Checkout: React.FC<MyFormProps> = ({ token, deviceType }) => {
       cartItemsCount > 0 &&
       address.length &&
       contact.length &&
-      card.length &&
+      // card.length &&
       schedules.length
     ) {
       setIsValid(true);
@@ -157,7 +157,9 @@ const Checkout: React.FC<MyFormProps> = ({ token, deviceType }) => {
     const { data }: any = await applyCoupon({
       variables: { coupon: couponCode },
     });
-    if (data.applyCoupon && data.applyCoupon.is_percent) {
+    // console.log("dataaaaaaaaaaaaaaaaaaaaaacpupmn",data)
+  
+    if (data.applyCoupon && data.applyCoupon.data.is_percent) {
       appliedCoupon(data.applyCoupon);
       setCouponCode('');
     } else {
