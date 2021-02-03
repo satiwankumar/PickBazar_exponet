@@ -140,13 +140,13 @@ const ProductDetails: React.FunctionComponent<ProductDetailsProps> = ({
   const [varprice, setVariPrice] = useState('');
   const [variSale,setVariSale] = useState(0)
   
-  console.log("vari",vari)
-  console.log("qty",qty)
+  // console.log("vari",vari)
+  // console.log("qty",qty)
   
   const { isRtl } = useLocale();
   const { addItem, removeItem, isInCart, getItem, items } = useCart();
   const data = product;
-  console.log("dataaaaaDetail",data)
+  // console.log("dataaaaaDetail",data)
   // ata && product.productVariations.filter((item, key) =>{return item.variations.id==id})
   const handleAddClick = (e) => {
     e.stopPropagation();
@@ -255,7 +255,7 @@ const getVariation = (id)=>{
 
         <ProductInfo dir={isRtl ? 'rtl' : 'ltr'}>
           <ProductTitlePriceWrapper>
-            <ProductTitle>{ product.brand.name +" "+product.name}</ProductTitle><br/>
+            <ProductTitle>{product.name}</ProductTitle><br/>
           
           
               {variSale>0? (

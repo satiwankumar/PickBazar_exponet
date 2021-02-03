@@ -13,7 +13,6 @@ import CartPopUp from 'containers/Cart/CartPopUp';
 import { withApollo } from 'helper/apollo';
 import { GET_PRODUCT_DETAILS } from 'graphql/query/product.query';
 import { Breadcrumbs } from 'nextjs-breadcrumbs'
-import { CURRENCY } from 'helper/constant';
 
 type Props = {
   deviceType?: {

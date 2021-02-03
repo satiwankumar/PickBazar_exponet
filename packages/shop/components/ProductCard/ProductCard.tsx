@@ -72,6 +72,25 @@ const ProductCard: React.FC<ProductCardProps> = ({
       cartAnimation(e);
     }
   };
+    const handleIsSale = () => { 
+      let isSale = false
+      // variations.forEach(item=> {
+      //     if(item.variations.vvariation_sell_price > 0){
+      //       isSale = true
+
+      //     }
+      // });
+      for (const [index, val] of variations.entries()) {
+        console.log('item:', { index, val });
+        if (val.variations.variation_sell_price >0) {
+            isSale =true
+          break;
+        }
+      }
+      return isSale
+    }
+    console.log("abc",handleIsSale())
+
   const handleRemoveClick = (e) => {
     e.stopPropagation();
     removeItem(data);
@@ -86,16 +105,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
           style={{ position: 'relative' }}
           alt="noimage"
         />
-        {variations[0].variations.variation_sell_price>0  ? (
+
+  
+
+
+        {handleIsSale ()===true? (
           <>
-            <DiscountPercent>{"onSale"}</DiscountPercent>
+            <DiscountPercent>{"on Sale"}</DiscountPercent>
           </>
         ) : (
           ''
         )}
       </ProductImageWrapper>
       <ProductInfo>
-        <h3 className="product-title">{`${brand }   ${ title}`}</h3>
+        <h3 className="product-title">{` ${ title}`}</h3>
         <span className="product-weight">Actual size: &nbsp;&nbsp;&nbsp; {actual_size}</span><br></br>
         <span className="product-weight">{`Nominal size:  ${nominal_size}`}</span>
         {/* {Object.keys(variations).length>0?} */}
