@@ -258,14 +258,14 @@ const getVariation = (id)=>{
             <ProductTitle>{product.name}</ProductTitle><br/>
           
           
-              {variSale>0? (
+              {/* {variSale>0? (
                 <SalePrice>
                   {CURRENCY}
                   {varprice?varprice:0}
                 </SalePrice>
               ) : (
                 ''
-              )}
+              )} */}
 
               {/* <ProductPrice>
                 {varprice!=""? CURRENCY:""}
@@ -279,6 +279,15 @@ const getVariation = (id)=>{
                                 
                                   <ProductPrice>
                                   <p  style={{color:"black",float:"left",paddingRight:"10px"}}> {varprice!=""? " "+ "PRICE":""} </p>
+                                  {variSale>0? (
+                                  <SalePrice>
+                                    {CURRENCY}
+                                    {varprice?varprice:0}
+                                  </SalePrice>
+                                ) : (
+                                  ''
+                                )}
+
                                         {varprice!=""? " "+ CURRENCY:""}
                                         {variSale >0? variSale: `  ${varprice}`  }
                                   </ProductPrice>
