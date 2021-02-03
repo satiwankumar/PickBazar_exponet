@@ -455,9 +455,9 @@ console.log("statesss",state)
       variables: { coupon: couponCode },
     });
 
-    console.log("dataaaaaaaaaCoppoonfsdf",data.applyCoupon.data)
+    console.log("dataaaaaaaaaCoppoonfsdf",data.applyCoupon)
 
-    if (data.applyCoupon && data.applyCoupon.data) {
+    if (data.applyCoupon && data.applyCoupon.status==200) {
       appliedCoupon(data.applyCoupon.data);
       setCouponCode('');
     } else {
