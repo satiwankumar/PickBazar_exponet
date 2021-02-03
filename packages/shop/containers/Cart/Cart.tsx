@@ -187,8 +187,10 @@ console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
                 id='couponApplied'
                 defaultMessage='Coupon Applied'
               />
-              {/* <span>{coupon.code}</span> */}
+              <span>{coupon.code}</span>
+              
             </CouponCode>
+            
           )}
         </PromoCode>
 

@@ -71,6 +71,7 @@ import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import {CHECK_OUT} from 'graphql/mutation/checkout'
 import { toast } from 'react-toastify';
 import address from 'data/address';
+import CheckoutForm from './CheckoutForm';
 // The type of props Checkout Form receives
 interface MyFormProps {
   token: string;
@@ -195,7 +196,7 @@ const { isRtl } = useLocale();
     isRestaurant,
     toggleRestaurant,
   } = useCart();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isValid, setIsValid] = useState(false);
   const [deleteContactMutation] = useMutation(DELETE_CONTACT);
   const [deleteAddressMutation] = useMutation(DELETE_ADDRESS);
@@ -274,7 +275,8 @@ const { isRtl } = useLocale();
 
 // console.log("billing",Billing)
 // console.log("shipping",shipping)
-    setLoading(true);
+    // setLoading(true);
+    if(loading){<div className="loading"></div>}
     if (isValid) {
       const result =  await checkout({
         variables:{
@@ -310,6 +312,8 @@ const { isRtl } = useLocale();
       console.log("result",result)
 
       clearCart();
+      e.preventDefault();
+     
       // console.log("result",result)
          
     if (result.data.checkout.status==200) {
@@ -335,7 +339,8 @@ Router.push({
   query: updatedQuery,
 });
 setLoading(false);
-
+removeCoupon();
+setHasCoupon(false);
 }
 else{
   toast.error(`🦄 SomeThing Went Wrong`, {
@@ -442,6 +447,7 @@ console.log("statesss",state)
       }
     }
   };
+ 
 
   const handleApplyCoupon = async (e) => {
     e.preventDefault()
@@ -460,25 +466,6 @@ console.log("statesss",state)
   };
   const handleOnUpdate = (e: any) => {
     setCouponCode(e.target.value);
-  };
-  const CheckoutForm = () => {
-    const stripe = useStripe();
-    return (
-        <CardElement options={{
-          style: {
-            base: {
-              fontSize: '16px',
-              color: '#424770',
-              '::placeholder': {
-                color: '#aab7c4',
-              },
-            },
-            invalid: {
-              color: '#9e2146',
-            },
-          },
-        }}  />
-    );
   };
 
   return (
@@ -776,7 +763,7 @@ console.log("statesss",state)
                   title='Proceed to Checkout'
                   intlButtonId='proceesCheckout'
                   loader={<Loader />}
-                  isLoading={loading}
+                  // isLoading={loading}
                 />
               </CheckoutSubmit>
             </InformationBox>
