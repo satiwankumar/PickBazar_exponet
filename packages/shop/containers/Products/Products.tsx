@@ -22,7 +22,7 @@ import Placeholder from 'components/Placeholder/Placeholder';
 import Fade from 'react-reveal/Fade';
 import NoResultFound from 'components/NoResult/NoResult';
 import { object } from 'yup';
-
+// import Loader from 'components/Loader'
 const QuickView = dynamic(() => import('../QuickView/QuickView'));
 
 const GET_PRODUCTS = gql`
@@ -141,6 +141,24 @@ export const Products: React.FC<ProductsProps> = ({
   });
 // console.log("updatedata",data)
 
+if (loading) {
+  return (
+    <>
+    <div className="loading">loading</div>
+    <LoaderWrapper>
+      <LoaderItem>
+        <Placeholder />
+      </LoaderItem>
+      <LoaderItem>
+        <Placeholder />
+      </LoaderItem>
+      <LoaderItem>
+        <Placeholder />
+      </LoaderItem>
+    </LoaderWrapper>
+    </>
+  );
+}
 
   // Quick View Modal
   const handleModalClose = () => {

@@ -25,6 +25,7 @@ import storeType from 'constants/storeType';
 import { AuthContext } from 'contexts/auth/auth.context';
 import { useQuery } from '@apollo/react-hooks';
 import signin from './signin';
+import Loader from 'components/Loader/Loader';
 
 
 
@@ -71,12 +72,19 @@ function HomePage({ deviceType }) {
 
   const PAGE_TYPE = query.type ? query.type.toString() : "1";
  
-  const { data, error, refetch } =  useQuery(GET_CATEGORIES, {
+  const { data, error,loading, refetch } =  useQuery(GET_CATEGORIES, {
     variables : {category_id:parseInt(PAGE_TYPE),filter_by_name: null}
 })
 // console.log("dataaaaaaaaaaaaaaaa",data && data.getCategory)
 
-
+if (loading) {
+  return (
+    <>
+    <div className="loading">loading</div>
+    <Loader/>
+    </>
+  );
+}
   return (
     <>
       <SEO title='Home - Exponent' description='Filters Details' />

@@ -5,6 +5,7 @@ import Moment from 'react-moment';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useQuery } from '@apollo/react-hooks';
 import {getURl} from '../../../utils'
+// import Loading from 'components/Loader/Loader'
 import {
   OrderBox,
   OrderListWrapper,
@@ -27,6 +28,7 @@ import OrderCardMobile from './OrderCard/orderCardMobile';
 import useComponentSize from 'helper/useComponentSize';
 import { FormattedMessage } from 'react-intl';
 import {useRouter} from 'next/router'
+import Loader from 'components/Loader/Loader';
 const progressData = ['Order Received', 'Order On The Way', 'Order Delivered'];
 
 
@@ -178,7 +180,12 @@ const OrdersContent: React.FC<OrderTableProps> = ({
   }, [data && data.getOrderByCustomer]);
 
   if (loading) {
-    return <div>loading...</div>;
+    return (
+      <>
+      <div className="loading">loading</div>
+      <Loader/>
+      </>
+    );
   }
 
   if (error) return <div>{error.message}</div>;

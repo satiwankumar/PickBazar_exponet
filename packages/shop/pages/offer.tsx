@@ -7,7 +7,7 @@ import { SEO } from 'components/seo';
 import CartPopUp from 'containers/Cart/CartPopUp';
 import { withApollo } from 'helper/apollo';
 import { Modal } from '@redq/reuse-modal';
-
+import Loader from 'components/Loader/Loader'
 import {
   OfferPageWrapper,
   ProductsRow,
@@ -41,9 +41,17 @@ type GiftCardProps = {
 };
 
 const GiftCardPage: NextPage<GiftCardProps> = ({ deviceType }) => {
-  const { data, error } = useQuery(GET_COUPON,{
+  const { data, error,loading } = useQuery(GET_COUPON,{
     variables:{filter_by_status:null,filter_by_name:null}
   });
+  if (loading) {
+    return (
+      <>
+      <div className="loading">loading</div>
+      <Loader/>
+      </>
+    );
+  }
   
   if (error) return <div>{error.message}</div>;
 

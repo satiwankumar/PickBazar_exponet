@@ -2,6 +2,7 @@ import React,{useContext,useEffect} from 'react';
 import Link from 'next/link';
 import gql from 'graphql-tag';
 import { AuthContext, } from 'contexts/auth/auth.context';
+import Loader from 'components/Loader/Loader';
 
 import Router,{useRouter} from 'next/router'
 import OrderRecivedWrapper, {
@@ -75,11 +76,19 @@ const router = useRouter()
 //   }})
 
 
-const { data, error, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {
+const { data, error,loading, refetch, fetchMore } = useQuery(GET_ORDER_DETAIL, {
 
   variables: { order_id:router.query.order_id?router.query.order_id:null}
 
 });
+if (loading) {
+  return (
+    <>
+    <div className="loading">loading</div>
+    <Loader/>
+    </>
+  );
+}
   if(error){
     return <div>Error! {error.message}</div>;
   }

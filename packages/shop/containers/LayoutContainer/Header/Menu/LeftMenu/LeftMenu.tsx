@@ -43,7 +43,7 @@ import Logo from 'components/Logo/Logo';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_CATEGORIES } from '../../../../../graphql/query/category.query';
 import { object } from 'yup';
-
+import Loader from 'components/Loader/Loader'
 
 
 // const MENU_ITEMS = [
@@ -127,7 +127,7 @@ type Props = {
 export const LeftMenu: React.FC<Props> = ({ logo }) => {
   const [cat , setCat] = useState("");
 
-  const { data, error, refetch } = useQuery(GET_CATEGORIES, {
+  const { data, error,loading, refetch } = useQuery(GET_CATEGORIES, {
     variables: { category_id: null, filter_by_name: null }
   });
 
@@ -169,14 +169,15 @@ const handleClick = (item) => {
 }
 
   return (
+    
     <LeftMenuBox>
       {data && data.getSiteSetting ? (<Logo
-        imageUrl={data && data.getSiteSetting.image}
+        imageUrl={data && !loading && data.getSiteSetting.image}
         alt={data && data.getSiteSetting.image}
         onClick={() => setActiveMenu(data && data.getCategory[0])}
       />) : ""}
 
-      <MainMenu>
+{!loading? (<> <MainMenu>
         <Popover
           className='right'
           handler={
@@ -206,7 +207,8 @@ const handleClick = (item) => {
           ))}
         </select>
         </SelectedItem>} */}
-      </MainMenu>
+      </MainMenu></>):<div> </div>
+}
       <ToastContainer autoClose={2000} />
 
     </LeftMenuBox>

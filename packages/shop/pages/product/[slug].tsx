@@ -13,7 +13,7 @@ import CartPopUp from 'containers/Cart/CartPopUp';
 import { withApollo } from 'helper/apollo';
 import { GET_PRODUCT_DETAILS } from 'graphql/query/product.query';
 import { Breadcrumbs } from 'nextjs-breadcrumbs'
-
+import Loader from 'components/Loader/Loader'
 type Props = {
   deviceType?: {
     mobile: boolean;
@@ -31,11 +31,14 @@ const ProductPage: NextPage<Props> = ({ deviceType }) => {
   const { data, error, loading } = useQuery(GET_PRODUCT_DETAILS, {
     variables: { slug },
   });
-
   if (loading) {
-    return <div>loading...</div>;
+    return (
+      <>
+      <div className="loading">loading</div>
+      <Loader/>
+      </>
+    );
   }
-
   if (error) return <div>Error: {error.message}</div>;
 
   // let content;

@@ -15,6 +15,7 @@ import Router from 'next/router'
 import { ProfileProvider } from 'contexts/profile/profile.provider';
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
+import Loader from 'components/Loader/Loader'
 const stripePromise = loadStripe('pk_test_HAorAMBpZdnSy3XeSoEc7EHZ00GmySthxL');
 
 type Props = {
@@ -72,13 +73,20 @@ const CheckoutPage: NextPage<Props> = ({ deviceType }) => {
   let data = ""
   console.log("isAuthenticated", isAuthenticated)
 let datass ={}
-
+let loadings = false;
   if (isAuthenticated) {
 
     const { data, error, loading } = useQuery(GET_LOGGED_IN_CUSTOMER);
     if (loading) {
-      return <div>loading...</div>;
+      return (
+        <>
+        <div className="loading">loading</div>
+        <Loader/>
+        </>
+      );
     }
+    loadings=loading
+    
     if (error) return <div>{error} </div>;
   datass=data&& data.profile
 
@@ -103,7 +111,9 @@ let datass ={}
             </Modal>
           </ProfileProvider> </> : */}
         <>
-          <SEO title='Checkout - Exponet' description='Checkout Details' />
+        {!loadings?
+         ( 
+         <><SEO title='Checkout - Exponet' description='Checkout Details' />
           <ProfileProvider initData={datass}>
             <Modal>
               <Elements stripe={stripePromise}>
@@ -111,8 +121,11 @@ let datass ={}
               </Elements>
          
             </Modal>
-          </ProfileProvider> </> :
- 
+          </ProfileProvider>
+          </>):<Loader/>
+          
+          } </> :
+
     </>
   );
 };

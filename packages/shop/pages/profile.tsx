@@ -20,6 +20,7 @@ import { SEO } from 'components/seo';
 import SiteFooter from 'components/SiteFooter/SiteFooter';
 import { FormattedMessage } from 'react-intl';
 import { withApollo } from 'helper/apollo';
+import Loader from 'components/Loader/Loader';
 
 type Props = {
   deviceType?: {
@@ -48,8 +49,13 @@ let datass ={}
   if(isAuthenticated){
   const { data, error, loading } = useQuery(GET_LOGGED_IN_CUSTOMER);
 
-  if (!data || loading) {
-    return <div>loading...</div>;
+  if (loading) {
+    return (
+      <>
+      <div className="loading">loading</div>
+      <Loader/>
+      </>
+    );
   }
   datass=data&& data.profile
 
