@@ -123,6 +123,7 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
 
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setError] = useState('');
+  
   const { state, dispatch } = useContext(ProfileContext);
   const { userAddress, contact, card, schedules } = state;
 
@@ -199,7 +200,7 @@ const { isRtl } = useLocale();
   const [loading, setLoading] = useState(true);
   const [isValid, setIsValid] = useState(false);
   const [deleteContactMutation] = useMutation(DELETE_CONTACT);
-  const [deleteAddressMutation] = useMutation(DELETE_ADDRESS);
+  const [deleteAddress] = useMutation(DELETE_ADDRESS);
   const [deletePaymentCardMutation] = useMutation(DELETE_CARD);
   const [applyCoupon] = useMutation(APPLY_COUPON);
 
@@ -437,10 +438,12 @@ console.log("statesss",state)
             variables: { contactId: JSON.stringify(item.id) },
           });
         case 'address':
-          dispatch({ type: 'DELETE_ADDRESS', payload: item.id });
+          // alert("item.id",item.id)
+          console.log("item.id",item.id)
+          dispatch({ type: 'DELETE_ADDRESS', payload : {id: item.id} });
 
-          return await deleteAddressMutation({
-            variables: { addressId: JSON.stringify(item.id) },
+          return await deleteAddress({
+            variables: { id: item.id },
           });
         default:
           return false;

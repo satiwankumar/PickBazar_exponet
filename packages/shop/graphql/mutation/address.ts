@@ -9,15 +9,11 @@ updateAddress(id:$id, address_type: $address_type, address:$address ){
 }
 `;
 export const DELETE_ADDRESS = gql`
-  mutation($addressId: String!) {
-    deleteAddress(addressId: $addressId) {
-      id
-      name
-      address {
-        id
-        name
-        info
-      }
-    }
-  }
+mutation deleteAddress($id :Int) {
+    deleteAddress(id:$id){
+    status
+    message
+}
+}
+
 `;

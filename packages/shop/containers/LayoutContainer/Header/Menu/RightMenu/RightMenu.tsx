@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import NavLink from 'components/NavLink/NavLink';
 import Button from 'components/Button/Button';
 import Popover from 'components/Popover/Popover';
@@ -8,6 +8,7 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { HelpIcon } from 'components/AllSvgIcon';
 import { RightMenuBox } from './RightMenu.style';
 import {useRouter} from 'next/router'
+import { ProfileContext } from 'contexts/profile/profile.context';
 type Props = {
   onLogout: () => void;
   onJoin: () => void;
@@ -22,6 +23,8 @@ export const RightMenu: React.FC<Props> = ({
   onJoin
 }) => {
   const router = useRouter()
+const { state } = useContext(ProfileContext);
+
   return (
     <RightMenuBox>
       <NavLink
@@ -53,7 +56,7 @@ export const RightMenu: React.FC<Props> = ({
         <Popover
           direction="right"
           className="user-pages-dropdown"
-          handler={<img src={`https://ui-avatars.com/api/?name=Test Test&rounded=2`} alt="user" />}
+          handler={<img src={`https://ui-avatars.com/api/?name=${state.first_name } Test&rounded=2`} alt="user" />}
           content={<AuthorizedMenu onLogout={onLogout} />}
         />
       )}

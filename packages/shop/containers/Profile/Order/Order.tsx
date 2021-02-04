@@ -168,7 +168,7 @@ const OrdersContent: React.FC<OrderTableProps> = ({
   const orderListHeight = size.height - 79;
 
   const { data, error, loading } = useQuery(GET_ORDERS);
-  console.log("dataaaa",data)
+  console.log("dataaaaTTTTTTTTTTTTTTTTTTTTT",data)
 
 
  

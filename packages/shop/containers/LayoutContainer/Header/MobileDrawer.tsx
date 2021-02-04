@@ -8,6 +8,8 @@ import NavLink from 'components/NavLink/NavLink';
 import { CloseIcon } from 'components/AllSvgIcon';
 import { DrawerContext } from 'contexts/drawer/drawer.context';
 import { AuthContext } from 'contexts/auth/auth.context';
+import { ProfileContext } from 'contexts/profile/profile.context';
+
 import AuthenticationForm from '../../SignInOutForm/Form';
 import { FormattedMessage } from 'react-intl';
 import {useRouter} from 'next/router'
@@ -41,7 +43,7 @@ const DrawerMenuItems = [
     id: 1,
     intlLabelId: 'navLinkHome',
     label: 'Home',
-    href: '/home/type=1',
+    href: '/home?type=1',
   },
   
   // {
@@ -77,7 +79,7 @@ const AuthenticatedItems = [
     id: 1,
     intlLabelId: 'navLinkHome',
     label: 'Home',
-    href: '/home/type=1',
+    href: '/home?type=1',
   },
   {
     id: 2,
@@ -131,10 +133,15 @@ const MobileDrawer: React.FunctionComponent = () => {
   const router = useRouter()
 
   const { state, dispatch } = useContext<any>(DrawerContext);
+
+  console.log("state",state)
   const {
     authState: { isAuthenticated },
     authDispatch,
   } = useContext<any>(AuthContext);
+  const { state:data } = useContext(ProfileContext);
+  const { userAddress, contact, card, schedules } = state;
+  console.log("daaaaaatttaaa",data)
   // Toggle drawer
   const toggleHandler = React.useCallback(() => {
     dispatch({
@@ -207,8 +214,8 @@ const MobileDrawer: React.FunctionComponent = () => {
                   <img src={UserImage} alt='user_avatar' />
                 </UserAvatar>
                 <UserDetails>
-                  <h3>David Kinderson</h3>
-                  <span>+990 374 987</span>
+                  <h3>{data&&data.first_name}</h3>
+                  <span>{data&&data.phone_number}</span>
                 </UserDetails>
               </LoginView>
             ) : (

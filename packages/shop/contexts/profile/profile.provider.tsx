@@ -84,14 +84,19 @@ function reducer(state: any, action: Action): any {
       return {
         ...state,
 
-        userAddress: [...state.userAddress, newAdress],
+        userAddress: [...state.userAddress, newAdress]
       };
+
     case 'DELETE_ADDRESS':
+      const s = {...state}
+      const addresses = s.userAddress.filter(item => item.id === action.payload.id );
+      s.userAddress = addresses
+
       return {
-        ...state,
-        address: state.userAddress.filter(
-          (item: any) => item.id !== action.payload
-        ),
+        ...s,
+        // userAddress: state.userAddress.filter(
+        //   (item) =>item.id !== action.payload.Id
+        // ),
       };
     case 'ADD_CARD':
       const newCard = {

@@ -31,6 +31,11 @@ import '@redq/reuse-modal/lib/index.css';
 import { GlobalStyle } from 'styled/global.style';
 import { parseCookies } from 'helper/parse-cookies';
 import './style.css'
+import { useQuery } from '@apollo/react-hooks';
+
+import { ProfileProvider } from 'contexts/profile/profile.provider';
+import { AuthContext } from 'contexts/auth/auth.context';
+import { GET_LOGGED_IN_CUSTOMER } from 'graphql/query/customer.query';
 
 
 // Language translation Config
@@ -51,6 +56,8 @@ export default function ExtendedApp({
   query,
 }) {
   const deviceType = useDeviceType(userAgent);
+
+
   return (
     <ThemeProvider theme={theme}>
         <Head>
@@ -71,22 +78,28 @@ export default function ExtendedApp({
                     />
                           </Head>
       <LanguageProvider messages={messages} initLocale={locale}>
+        
         <CartProvider>
           <SearchProvider query={query}>
             <HeaderProvider>
               <StickyProvider>
                 <AuthProvider>
+                <ProfileProvider initData={{}}>
                   <>
-                    <AppLayout deviceType={deviceType}>
+                    <AppLayout   apolloClient={''}
+          apolloState={''} deviceType={deviceType}>
                       <Component {...pageProps} deviceType={deviceType} />
                     </AppLayout>
                     <GlobalStyle />
                   </>
-                </AuthProvider>
+                  </ProfileProvider>
+                  </AuthProvider>
               </StickyProvider>
             </HeaderProvider>
           </SearchProvider>
         </CartProvider>
+ 
+
       </LanguageProvider>
     </ThemeProvider>
   );
