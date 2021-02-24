@@ -8,7 +8,7 @@ import {
   Details,
 } from './Notification.style';
 
-export default function NotificationCard({ title, time, message }) {
+export default function NotificationCard({ title, time, body }) {
   return (
     <Message>
       <TitleWrapper>
@@ -17,7 +17,7 @@ export default function NotificationCard({ title, time, message }) {
         <Time>{time}</Time>
       </TitleWrapper>
 
-      <Details>{message}</Details>
+      <Details>{body}</Details>
     </Message>
   );
 }

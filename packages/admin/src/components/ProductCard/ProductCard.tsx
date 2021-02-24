@@ -107,7 +107,7 @@ let getImage = (image)=>{
 
 
       <ProductInfo>
-        <ProductTitle>{`${brand=="Others"?"":brand   } ${  title}`}</ProductTitle>
+        <ProductTitle>{  title}</ProductTitle>
         <ProductWeight>{`Actual: ${ actual_size}`}</ProductWeight><br/>
         <ProductWeight>{`Nominal: ${ nominal_size}`}</ProductWeight>
         <ProductMeta>

@@ -11,6 +11,11 @@ updateAddress(id:$id, address_type: $address_type, address:$address ){
 export const DELETE_ADDRESS = gql`
 mutation deleteAddress($id :Int) {
     deleteAddress(id:$id){
+      data{
+        id
+        address_type
+        address
+    }
     status
     message
 }

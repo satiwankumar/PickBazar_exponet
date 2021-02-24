@@ -47,7 +47,14 @@ const GET_PROFILE = gql`
         site_description
         image
     }
+    notifications{
+      id
+      title
+      body
+  }
+
 }
+
 
 `
    
@@ -128,7 +135,7 @@ if (error) {
         {/* {<Button onClick={openDrawer}>Add Products</Button>} */}
 
         <Popover
-          content={({ close }) => <Notification data={data2} onClear={close} />}
+          content={({ close }) => <Notification data={data.notifications&& data.notifications} onClear={close} />}
           accessibilityType={'tooltip'}
           placement={PLACEMENT.bottomRight}
           overrides={{
