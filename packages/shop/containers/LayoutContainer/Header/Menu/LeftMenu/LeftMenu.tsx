@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
-
 import Select from 'components/Select/Select/Select'
 // import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -177,8 +176,8 @@ const handleClick = (item) => {
         onClick={() => setActiveMenu(data && data.getCategory[0])}
       />) : ""}
 
-{!loading? (<> <MainMenu>
-        <Popover
+{!loading && !(router.pathname == "/signup" || router.pathname == "/signin"||router.pathname == "/forgot" )?(<> <MainMenu>
+    <Popover
           className='right'
           handler={
             <SelectedItem>

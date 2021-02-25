@@ -647,7 +647,7 @@ button.cat-del-btn .ae.fa {
                           <StyledCell>{subItem.slug}</StyledCell>
                           <StyledCell>{subItem.parent_id}</StyledCell>
                           
-                          <StyledCell><Button startEnhancer={() => <PencilIcon/>}  onClick={()=>openCategoryEditDrawer(subItem)} className="edit-btn">Edit</Button>
+                          <StyledCell><Button startEnhancer={() => <PencilIcon/>}  onClick={()=>openCategoryEditDrawer(subItem)} className="edit-btn"></Button>
                         
                   <Button
                     onClick={()=>handleSingleDelete(subItem.id)}
@@ -663,7 +663,7 @@ button.cat-del-btn .ae.fa {
                     }}
                   >
                     
-                Delete
+                
               </Button>   </StyledCell>              
              
                         </React.Fragment>

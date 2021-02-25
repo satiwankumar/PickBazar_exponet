@@ -21,6 +21,7 @@ import {
   ButtonGroup,
 } from '../DrawerItems/DrawerItems.style';
 import { FormFields, FormLabel } from '../../components/FormFields/FormFields';
+import InputMask from 'react-input-mask';
 
 const GET_COUPONS = gql`
  query coupon{
@@ -67,68 +68,68 @@ const AddCampaing: React.FC<Props> = props => {
     dispatch,
   ]);
 
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, errors, setValue } = useForm();
   const [category, setCategory] = useState([]);
   React.useEffect(() => {
     register({ name: 'category' });
   }, [register]);
-  const {data} = useQuery(GET_CATEGORIES)
-  console.log(data )
-  const categories= data && data.getCategoryWithoutFilter.filter(item=> item.parent_id==null)
-  console.log("category ",typeof(categories),categories)
+  const { data } = useQuery(GET_CATEGORIES)
+  console.log(data)
+  const categories = data && data.getCategoryWithoutFilter.filter(item => item.parent_id == null)
+  console.log("category ", typeof (categories), categories)
 
 
 
   const [createCoupon] = useMutation(CREATE_COUPON);
-    // update(cache, { data: { createCoupon } }) {
-    //   const { coupon } = cache.readQuery({
-    //     query: GET_COUPONS,
-    //   });
+  // update(cache, { data: { createCoupon } }) {
+  //   const { coupon } = cache.readQuery({
+  //     query: GET_COUPONS,
+  //   });
 
-    //   // cache.writeQuery({
-    //   //   query: GET_COUPONS,
-    //   //   data: { coupon: coupon.concat([createCoupon]) },
-    //   // });
-  
-
-    var now = new Date();
-    var dateString = moment(now).format('YYYY-MM-DD');
-  const onSubmit =async data => {
-try{
-
-    // console.log(data)
-    const newCoupon = {
-      // id:1,
-      name: data.name,
-      code: data.code,
-      category_id: category[0].id,
-      is_percent: Number(data.discount_in_percent),
-      number_of_coupon: Number(data.number_of_coupon),
-      minimum_spend: Number(data.minimum_amount),
-      free_shipping:0,
-      start_date:data.start_date,
-      end_date:data.end_date
-      // creation_date: new Date(),
-    };
-  const result = await  createCoupon({
-      variables: { input: newCoupon },
-    });
-    
-    closeDrawer();
-    console.log(newCoupon, 'newCoupon');
+  //   // cache.writeQuery({
+  //   //   query: GET_COUPONS,
+  //   //   data: { coupon: coupon.concat([createCoupon]) },
+  //   // });
 
 
-  } catch (error) {
-    toast.error(`🦄 SomeThing Went Wrong`, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
-  }
+  var now = new Date();
+  var dateString = moment(now).format('YYYY-MM-DD');
+  const onSubmit = async data => {
+    try {
+
+      // console.log(data)
+      const newCoupon = {
+        // id:1,
+        name: data.name,
+        code: data.code,
+        category_id: category[0].id,
+        is_percent: Number(data.discount_in_percent),
+        number_of_coupon: Number(data.number_of_coupon),
+        minimum_spend: Number(data.minimum_amount),
+        free_shipping: 0,
+        start_date: data.start_date,
+        end_date: data.end_date
+        // creation_date: new Date(),
+      };
+      const result = await createCoupon({
+        variables: { input: newCoupon },
+      });
+
+      closeDrawer();
+      console.log(newCoupon, 'newCoupon');
+
+
+    } catch (error) {
+      toast.error(`🦄 SomeThing Went Wrong`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
 
   };
   const handleCategoryChange = ({ value }) => {
@@ -165,20 +166,40 @@ try{
             </Col>
 
             <Col lg={8}>
+
               <DrawerBox>
+                {/* <input name="test" ref={register({required:true, pattern: {
+                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                            message: "Invalid email address"
+                                        }})}  />
+                                         {errors.test && <span className="text-danger">{errors.test.message}</span>} */}
                 <FormFields>
                   <FormLabel>Coupon Name</FormLabel>
-                  <Input inputRef={register} name="name" />
+
+                  <Input inputRef={register({ required: true })} name="name" />
                 </FormFields>
+                {errors.name && <span className="text-danger">This Field is required</span>}
 
                 <FormFields>
                   <FormLabel>Discount Percent</FormLabel>
+                  <InputMask mask="99.99">
+                    {(inputProps) => <Input
+                      {...inputProps}
+                      type="text"
+                      inputRef={register({ required: true })}
+                      name="discount_in_percent"
+                      min="0"
+                    />}
+                  </InputMask>
                   <Input
                     type="number"
                     inputRef={register({ required: true })}
                     name="discount_in_percent"
+                    min="0"
+
                   />
                 </FormFields>
+                {errors.discount_in_percent && <span style={{ color: "red" }}>{errors.discount_in_percent.message}</span>}
 
                 <FormFields>
                   <FormLabel>Discount Code</FormLabel>
@@ -273,7 +294,7 @@ try{
                   <FormLabel>Minimum Amount Required</FormLabel>
                   <Input
                     type="number"
-                    inputRef={register}
+                    inputRef={register({ required: true })}
                     name="minimum_amount"
                   />
                 </FormFields>
@@ -320,7 +341,7 @@ try{
             Create Coupon
           </Button>
         </ButtonGroup>
-        <ToastContainer autoClose={2000}/>
+        <ToastContainer autoClose={2000} />
       </Form>
     </>
   );

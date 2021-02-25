@@ -209,7 +209,7 @@ console.log("state",userAddress)
             />
           </Col>
 
-          <Col xs={12} sm={5} md={5} lg={5}>
+          <Col xs={12} sm={5} md={5} lg={5} style={{  marginTop: '50px' }}>
             <Input
               type="email"
               label="Email Address"

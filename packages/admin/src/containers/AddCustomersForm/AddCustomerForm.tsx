@@ -172,6 +172,7 @@ const StaffMemberForm : React.FC<Props> = (props) => {
                     inputRef={form.register({ required: true, maxLength: 20 })}
                     name="first_name"
                   />
+                   {form.errors.first_name && <span className="text-danger">This field is required</span>}
                 </FormFields>
 
                 <FormFields>
@@ -180,6 +181,8 @@ const StaffMemberForm : React.FC<Props> = (props) => {
                     inputRef={form.register({ required: true, maxLength: 20 })}
                     name="last_name"
                   />
+                   {form.errors.last_name && <span className="text-danger">This field is required</span>}
+
                 </FormFields>
 
                 {/* <FormFields>
@@ -201,6 +204,8 @@ const StaffMemberForm : React.FC<Props> = (props) => {
                     inputRef={form.register({ required: true })}
                     name="email"
                   />
+                   {form.errors.last_name && <span className="text-danger">This field is required</span>}
+
                 </FormFields>
                 <FormFields>
                   <FormLabel>Password</FormLabel>
@@ -209,7 +214,19 @@ const StaffMemberForm : React.FC<Props> = (props) => {
                     inputRef={form.register({ required: true })}
                     name="password"
                   />
+                   {form.errors.last_name && <span className="text-danger">This field is required</span>}
+
                 </FormFields>
+                {/* <FormFields>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <Input
+                    type="password"
+                    inputRef={form.register({ required: true })}
+                    name="password"
+                  />
+                   {form.errors.last_name && <span className="text-danger">This field is required</span>}
+
+                </FormFields> */}
               </DrawerBox>
             </Col>
           </Row>

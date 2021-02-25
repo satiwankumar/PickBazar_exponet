@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-
+import { SEO } from 'components/seo';
 import { LOGIN } from '../graphql/mutation/Auth'
 import { useMutation } from '@apollo/react-hooks';
 import { ToastContainer, toast } from 'react-toastify';
@@ -131,6 +131,7 @@ router.push('/')
   return (
  <div className="">
 <div className="container">
+<SEO title='Sign In - Exponent' description='Sign in Details' />
    <div className="row">
      <div className="col-lg-6 offset-lg-3">
     <Wrapper>

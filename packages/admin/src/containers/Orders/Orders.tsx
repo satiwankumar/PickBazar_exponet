@@ -277,7 +277,7 @@ export default function Orders() {
                 </StyledHeadCell> */}
                 <StyledHeadCell>ID</StyledHeadCell>
                 <StyledHeadCell>Customer ID</StyledHeadCell>
-                <StyledHeadCell>Time</StyledHeadCell>
+                <StyledHeadCell>Date</StyledHeadCell>
                 <StyledHeadCell>Delivery Address</StyledHeadCell>
                 <StyledHeadCell>Amount</StyledHeadCell>
                 <StyledHeadCell>Payment Method</StyledHeadCell>

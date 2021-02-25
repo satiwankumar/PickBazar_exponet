@@ -20,6 +20,7 @@ import { AuthContext } from 'contexts/auth/auth.context';
 import Image from 'components/Image/Image';
 import PickBazar from '../../image/PickBazar.png';
 import { FORGOT_CODE } from 'graphql/mutation/Auth';
+import { SEO } from 'components/seo';
 
 
 
@@ -122,7 +123,10 @@ function ForgotCode() {
 
   return (
     <div className="">
+
     <div className="container">
+    <SEO title='Reset Password - Exponent' description='Reset Password Details' />
+
        <div className="row">
          <div className="col-lg-6 offset-lg-3">
     <Wrapper>

@@ -618,17 +618,19 @@ const relatedProducts = []
                     name="name"
                   />
                 </FormFields>
-
+                {errors.name && <span style={{color: "red"}}>This field  is required</span>}
                 <FormFields>
                   <FormLabel >Brand Name </FormLabel>
-                  <input type="text" list="data" className="form-control brand-flied" value={brand.name}  onChange={(value)=>SelectChange(value)} />
-                <datalist id="data">
+                  <input type="text" name="brandname" list="data" ref={register({ required: true })}  className="form-control brand-flied" value={brand.name}  onChange={(value)=>SelectChange(value)} />
+                <datalist id="data" >
                 {data1 && brandsOptions.map((item, key) =>
                                 <option key={key} value={item.name} />
                                 )}
                 </datalist> 
-                </FormFields>
                 
+                </FormFields>
+                {errors.brandname && <span style={{color: "red"}}>This field  is required</span>}
+
 
 
                 <FormFields>
@@ -653,6 +655,7 @@ const relatedProducts = []
                     required="true"
                   />
                 </FormFields>
+                {errors.actual_size && <span style={{color: "red"}}>This field  is required</span>}
                 <FormFields>
                   <FormLabel>Nominal Size</FormLabel>
                   <Input
@@ -661,6 +664,7 @@ const relatedProducts = []
                     required="true"
                   />
                 </FormFields>
+                {errors.nominal_size && <span style={{color: "red"}}>This field  is required</span>}
                
 
                { createdUI()}

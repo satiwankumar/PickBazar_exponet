@@ -172,6 +172,8 @@ const CheckoutWithSidebar: React.FC<MyFormProps> = ({ token, deviceType }) => {
     Billing.first_name = state.first_name?state.first_name:""
     Billing.last_name = state.last_name?state.last_name:""
     Billing.email =state.email ?state.email:""
+    Billing.phone =state.phone_number ?state.phone_number:""
+    
   }
     
 
@@ -286,7 +288,7 @@ const { isRtl } = useLocale();
             first_name: Billing.first_name,
             last_name: Billing.last_name,
             customer_email:Billing.email,
-            customer_phone: "+1 (772) 895-7472",
+            customer_phone: Billing.phone ,
             sub_total: calculateSubTotalPrice(),
             shipping_cost: 0,
             coupon_id: coupon?coupon.id:null,
@@ -491,18 +493,18 @@ console.log("statesss",state)
                   First Name :
                 </Heading2>
                 <input 
-                type="text" name="first_name" className="user-form form-control" placeholder="Please enter First Name"  value={Billing.first_name}  onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                type="text" name="first_name" className="user-form form-control" placeholder="First Name"  value={Billing.first_name}  onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 {errors.first_name && <span className="text-danger">This field is required</span>}
                 <Heading2>
                   Last Name :
                 </Heading2>
-                <input placeholder="Please enter Last Name" className="user-form form-control" type="text" name="last_name" value={Billing.last_name} onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <input placeholder="Last Name" className="user-form form-control" type="text" name="last_name" value={Billing.last_name} onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 {errors.last_name &&  <span className="text-danger">This field is required</span>}
                 <Heading2>
                   Email :
                 </Heading2>
 
-                <input placeholder="Please enter Email " className="user-form form-control" type="email" name="email" value={Billing.email} onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
+                <input placeholder="Email " className="user-form form-control" type="email" name="email" value={Billing.email} onChange={(e)=>handleBilling(e)} ref={register({ required: true })}  /><br/>
                 {errors.email &&  <span className="text-danger">This field is required</span>}
               </DeliverySchedule>
             </InformationBox>

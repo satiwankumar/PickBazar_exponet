@@ -147,10 +147,10 @@ const AddProduct: React.FC<Props> = props => {
   const { data, refetch } = useQuery(GET_PRODUCTS, {
     variables: { filter_category_id: null, filter_by_name: null }
   })
-  console.log("dataaaa",data)
+  // console.log("dataaaa",data)
   const categories = data && data.getCategory.filter(item => item.parent_id == null)
   const brandsOptions = data && data.getBrand.map(item => { return item })
-  console.log("brandoptiopns",brandsOptions)
+  // console.log("brandoptiopns",brandsOptions)
   const Subcategories = []
   data && data.getCategory.map(
     item => item.subcategories.map(
@@ -162,7 +162,7 @@ data && data.getproducts.map(item=>
       let branditems = {...item,"brandWithName":`${item.brand.name} ${item.name} `}
 
   products.push(branditems)}) 
-   console.log("productssssssssssssssssssssssss",products)
+  //  console.log("productssssssssssssssssssssssss",products)
   const AddVariation  = () =>{
     setVariations((previous)=>[...previous,{variation_name:"",variation_price:0,variation_quantity:0,variation_sell_price:0}])
 
@@ -176,7 +176,7 @@ data && data.getproducts.map(item=>
   }
   const handleMultiChange = ({ value }) => {
     setValue('categories', value);
-    console.log(value)
+    // console.log(value)
     setTag(value);
   };
   const handleMultiProductsChange = ({ value }) => {
@@ -185,7 +185,7 @@ data && data.getproducts.map(item=>
     setRelatedProducts(value);
   };
   const handleTypeChange = ({ value }) => {
-    console.log("value", value)
+    // console.log("value", value)
     // setValue('type', value);
     setType(value)
     refetch({
@@ -197,13 +197,13 @@ data && data.getproducts.map(item=>
 
   const getSubCategory = (Subcategories)=>{
     const sub = type.length>0?data && Subcategories.filter(item=>item.parent_id==type[0].id):""
-    console.log("dataaaaaa",sub)
+    // console.log("dataaaaaa",sub)
     return sub
   }
 // getSubCategory(data && Subcategories)
 
   // const handleVariationChange = ({ value }, _id) => {
-  //   // console.log("variation", value)
+    // console.log("variation", value)
   //   setVariations({
   //     ...variation,
   //     [_id]: {
@@ -214,7 +214,7 @@ data && data.getproducts.map(item=>
 
   // };
   // const handlePriceChange = (e, _id) => {
-  //   // console.log("change", e.target.name, e.target.value)
+    // console.log("change", e.target.name, e.target.value)
   //   let newvalue = e.target.value
   //   setVariationsPrice({
   //     ...variation_price,
@@ -251,14 +251,14 @@ data && data.getproducts.map(item=>
   }
   
   const  onBlur= (evt)=>{
-    console.log("onBlur event called with event info: ", evt);
+    // console.log("onBlur event called with event info: ", evt);
   }
   
   const afterPaste = (evt)=>{
-    console.log("afterPaste event called with event info: ", evt);
+    // console.log("afterPaste event called with event info: ", evt);
   }
   const onSubmit = async data => {
-    console.log("dataaaaaaaaaa",data,errors)
+    // console.log("dataaaaaaaaaa",data,errors)
 
 
     let variationsData = []
@@ -277,7 +277,7 @@ data && data.getproducts.map(item=>
     for (const property in Related) {
       relatedProducts.push(Related[property].id)
     }
-    console.log("Related",variation)
+    // console.log("Related",variation)
 
     try {
       const result = await createProduct({
@@ -338,7 +338,7 @@ data && data.getproducts.map(item=>
       }, 2000);
 
     } catch (error) {
-      console.log("error", error)
+      // console.log("error", error)
       toast.error(`🦄 SomeThing Went Wrong`, {
         position: "top-right",
         autoClose: 3000,
@@ -431,7 +431,7 @@ data && data.getproducts.map(item=>
   const handleVariationChange = (e,index)=>{
       e.preventDefault()
       let newArr = [...variation]; // copying the old datas array
-      console.log(newArr[index][e.target.name])
+      // console.log(newArr[index][e.target.name])
       newArr[index] = {...newArr[index],[e.target.name]:e.target.value};
 
       setVariations(newArr)
@@ -443,10 +443,10 @@ data && data.getproducts.map(item=>
     
       
       
-      console.log("e",e)
+      // console.log("e",e)
   }
 
-  console.log("after add", files)
+  // console.log("after add", files)
   // console.log("after add", variation_price)
 
   return (

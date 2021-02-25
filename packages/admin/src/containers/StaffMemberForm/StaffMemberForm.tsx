@@ -49,7 +49,7 @@ const StaffMemberForm: React.FC<Props> = (props) => {
   const closeDrawer = useCallback(() => dispatch({ type: 'CLOSE_DRAWER' }), [
     dispatch,
   ]);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit,errors } = useForm();
   const [role, setRole] = React.useState([]);
 
   const [country, setCountry] = React.useState(undefined);
@@ -185,7 +185,9 @@ setTimeout(() => {
                   <Input
                     inputRef={register({ required: true, maxLength: 20 })}
                     name="first_name"
+                    
                   />
+                    {errors.first_name && <span className="text-danger">This field is required</span>}
                 </FormFields>
 
                 <FormFields>
@@ -194,6 +196,7 @@ setTimeout(() => {
                     inputRef={register({ required: true, maxLength: 20 })}
                     name="last_name"
                   />
+                   {errors.last_name && <span className="text-danger">This field is required</span>}
                 </FormFields>
 
                 <div className="contact-field">
@@ -208,7 +211,10 @@ setTimeout(() => {
                     inputRef={register({ required: true })}
                     name="phone_number"
                     required="true"
+                    
                   />
+                   {errors.phone_number && <span className="text-danger">This field is required</span>}
+                  
                 </FormFields>
                 </div>
                 <FormFields>
@@ -218,6 +224,8 @@ setTimeout(() => {
                     inputRef={register({ required: true })}
                     name="email"
                   />
+                   {errors.email && <span className="text-danger">This field is required</span>}
+
                 </FormFields>
                 <FormFields>
                   <FormLabel>Role</FormLabel>
@@ -231,8 +239,14 @@ setTimeout(() => {
                     value={role}
                     searchable={false}
                     onChange={handleCategory}
-                
+                    inputRef={register({
+                      required: true
+                   })}
+                    name="Role"
+                    required="required"
                   />
+                   {errors.Role && <span className="text-danger">This field is required</span>}
+
                 </Col>
                 </FormFields> 
              

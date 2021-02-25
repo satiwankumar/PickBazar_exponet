@@ -26,6 +26,7 @@ import { AuthContext } from 'contexts/auth/auth.context';
 import { FormattedMessage } from 'react-intl';
 import Image from 'components/Image/Image';
 import PickBazar from '../../image/PickBazar.png';
+import { SEO } from 'components/seo';
 
  function SignUp() {
     const router = useRouter()
@@ -130,6 +131,8 @@ const [register,{data}]  = useMutation(REGISTER)
 
   return (
     <div className="">
+<SEO title='Sign Up - Exponent' description='Sign Up Details' />
+
     <div className="container">
        <div className="row">
          <div className="col-lg-6 offset-lg-3">
@@ -195,7 +198,7 @@ const [register,{data}]  = useMutation(REGISTER)
             <a>
               <FormattedMessage
                 id='termsConditionText'
-                defaultMessage='Terms &amp; Condtion'
+                defaultMessage='Terms &amp; Conditions'
               />
             </a>
           </Link>

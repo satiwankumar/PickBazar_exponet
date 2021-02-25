@@ -1,4 +1,5 @@
 import React, { useState,useCallback } from 'react';
+import {useForm} from 'react-hook-form'
 import Moment from 'react-moment';
 import '../../style.css'
 import {
@@ -122,6 +123,7 @@ export default function Customers() {
   const { data, error, refetch } = useQuery(GET_CUSTOMERS, {
     variables: { filter_by_name: "" }
   });
+  const { register, handleSubmit,errors } = useForm();
 
   const [stock, setStock] = useState([]);
   const [search, setSearch] = useState([]);

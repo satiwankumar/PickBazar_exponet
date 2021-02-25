@@ -20,6 +20,7 @@ import { AuthContext } from 'contexts/auth/auth.context';
 import Image from 'components/Image/Image';
 import PickBazar from '../../image/PickBazar.png';
 import { RESET_PASSWORD } from 'graphql/mutation/Auth';
+import { SEO } from 'components/seo';
 
 
 
@@ -141,6 +142,8 @@ let code = router.query.resetCode
      }
   return (
     <div className="">
+<SEO title='Forgot Password - Exponent' description='Forgot Password Details' />
+
     <div className="container">
        <div className="row">
          <div className="col-lg-6 offset-lg-3">
